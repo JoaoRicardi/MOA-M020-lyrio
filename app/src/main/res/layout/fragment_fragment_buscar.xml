@@ -45,24 +45,108 @@
                 android:id="@+id/top_div"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="16dp"
-                app:layout_goneMarginTop="64dp"
+                android:layout_marginTop="64dp"
                 android:background="@color/cinza"
-                app:layout_constraintTop_toBottomOf="@id/buscar_botao_busca"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/buscar_recycler"
-                app:layout_constraintTop_toBottomOf="@id/top_div"
+            <ScrollView
+                android:id="@+id/buscar_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp">
+                app:layout_constraintTop_toBottomOf="@id/top_div"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
 
-            </androidx.recyclerview.widget.RecyclerView>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/busca_resultado_linear_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:id="@+id/buscar_friendly_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginStart="32dp"
+                        android:text="Olá!"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/buscar_letras_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="8dp"
+                        android:text="Letras:"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/buscar_letras_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/buscar_letras_text_view">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <View
+                        android:id="@+id/busca_resultado_div"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@color/cinza"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/buscar_letras_recycler"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/buscar_artistas_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="8dp"
+                        android:text="Artistas:"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/busca_resultado_div"
+                        />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/buscar_artistas_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/buscar_artistas_text_view"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

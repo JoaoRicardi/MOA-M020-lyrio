@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -13,7 +15,10 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.lyrio.adapters.ListaMusicasSalvasAdapter;
+import com.example.lyrio.api.VagalumeBuscaApi;
 import com.example.lyrio.api.base_vagalume.ApiArtista;
+import com.example.lyrio.api.base_vagalume.ApiItem;
+import com.example.lyrio.api.base_vagalume.VagalumeBusca;
 import com.example.lyrio.models.Album;
 import com.example.lyrio.models.Musica;
 import com.example.lyrio.interfaces.AlbumListener;
@@ -21,7 +26,17 @@ import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
 import com.example.lyrio.util.Constantes;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PaginaArtistaActivity extends AppCompatActivity implements ListaMusicasSalvasListener, AlbumListener {
 
@@ -30,6 +45,10 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     private ToggleButton seguirButton;
     private ImageButton backButton;
     private ImageView artistaBg;
+    private Retrofit retrofit;
+    private ApiArtista artistaSalvo;
+    private ListaMusicasSalvasAdapter listaMusicasSalvasAdapter;
+    private List<Musica> listaDeMusicasSalvas;
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
     private static final String TAG = "VAGALUME";
@@ -39,21 +58,33 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pagina_artista);
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        ApiArtista artistaSalvo = (ApiArtista) bundle.getSerializable("ARTISTA");
+        // Iniciar retrofit para buscar infos da API
+        retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.vagalume.com.br/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
         //Definir as variaveis
         artistaBg = findViewById(R.id.artista_imagem_bg);
         nomeArtistaTextView = findViewById(R.id.artista_nome_artista_text_view);
         imagemArtistaImageView = findViewById(R.id.artista_profile_image_view);
         seguirButton = findViewById(R.id.letras_favorito_button);
-//        backButton = findViewById(R.id.back_button_pagina_artista_image_button);
+//            backButton = findViewById(R.id.back_button_pagina_artista_image_button);
 
-        //Set variaveis
-        nomeArtistaTextView.setText(artistaSalvo.getDesc());
-        Picasso.get().load(artistaSalvo.getPic_small()).into(imagemArtistaImageView);
-        Picasso.get().load(artistaSalvo.getPic_medium()).into(artistaBg);
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        ApiArtista artistaSalvo = (ApiArtista) bundle.getSerializable("ARTISTA");
+
+        if(artistaSalvo.getDesc()!=null){
+            //Set variaveis
+            nomeArtistaTextView.setText(artistaSalvo.getDesc());
+            Picasso.get().load(artistaSalvo.getPic_small()).into(imagemArtistaImageView);
+            Picasso.get().load(artistaSalvo.getPic_medium()).into(artistaBg);
+            listaDeMusicasSalvas = artistaSalvo.getMusicasSalvas();
+        }else{
+            String[] artSplit = artistaSalvo.getUrl().split("/");
+            getApiData(artSplit[1]);
+        }
 
         seguirButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +105,8 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 //        });
 
         //Recycler com a lista de músicas que veio no Bundle
-        ListaMusicasSalvasAdapter listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(artistaSalvo.getMusicasSalvas(), this, artistaSalvo);
+        listaDeMusicasSalvas = new ArrayList<>();
+        listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(listaDeMusicasSalvas, this, artistaSalvo);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView recyclerView = findViewById(R.id.pagina_artista_lista_musicas_recycler_view);
         recyclerView.setAdapter(listaMusicasSalvasAdapter);
@@ -96,15 +128,19 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 //        RecyclerView recyclerView1 = findViewById(R.id.pagina_artista_lista_albuns_recyler_view);
 //        recyclerView1.setAdapter(albumAdapter);
 //        recyclerView1.setLayoutManager(linearLayoutManager);
+
+
     }
 
-    private void voltarParaUltimaPagina() {
-        if (getFragmentManager().getBackStackEntryCount() == 0) {
-            this.finish();
-        } else {
-            getFragmentManager().popBackStack();
-        }
-    }
+
+
+//    private void voltarParaUltimaPagina() {
+//        if (getFragmentManager().getBackStackEntryCount() == 0) {
+//            this.finish();
+//        } else {
+//            getFragmentManager().popBackStack();
+//        }
+//    }
 
     @Override
     public void onAlbumClicado(Album album) {
@@ -124,15 +160,47 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         intent.putExtras(bundle);
 
         startActivity(intent);
-
-
-//        Intent intent = new Intent(this, VagalumeAbrirLink.class);
-//        Bundle bundle = new Bundle();
-//
-//        // Para poder adicionar ao bundle, a classe tem que implementar "Serializable"
-//        bundle.putString("HOTSPOT_LINK", musicaSalva.getUrl());
-//        intent.putExtras(bundle);
-//
-//        startActivity(intent);
     }
+
+
+    private void getApiData(String oQueBuscar) {
+
+        Date curTime = Calendar.getInstance().getTime();
+        oQueBuscar = oQueBuscar.trim().replace(" ", "-");
+        String vagaKey = Constantes.VAGALUME_KEY + curTime.toString().trim().replace(" ","");
+        String buscaFull = "https://www.vagalume.com.br/"+oQueBuscar+"/index.js";
+
+        VagalumeBuscaApi service = retrofit.create(VagalumeBuscaApi.class);
+        Call<VagalumeBusca> vagalumeBuscaCall = service.getBuscaResponse(buscaFull);
+        vagalumeBuscaCall.enqueue(new Callback<VagalumeBusca>() {
+            @Override
+            public void onResponse(Call<VagalumeBusca> call, Response<VagalumeBusca> response) {
+                if(response.isSuccessful()){
+                    VagalumeBusca vagalumeBusca = response.body();
+                        ApiArtista apiArtist = vagalumeBusca.getArtist();
+
+                        nomeArtistaTextView.setText(apiArtist.getDesc());
+                        Picasso.get().load("https://www.vagalume.com.br"+apiArtist.getPic_small()).into(imagemArtistaImageView);
+                        Picasso.get().load("https://www.vagalume.com.br"+apiArtist.getPic_medium()).into(artistaBg);
+
+                        Log.e(TAG, " NOME: "+apiArtist.getDesc());
+
+                        for(int i=0; i<apiArtist.getToplyrics().getItem().size(); i++){
+
+                            ApiItem curApi = apiArtist.getToplyrics().getItem().get(i);
+                            String url = "https://www.vagalume.com.br"+curApi.getUrl();
+                            Musica musicaTemp = new Musica(curApi.getId(),curApi.getDesc(),url);
+                            musicaTemp.setAlbumPic("https://www.vagalume.com.br"+apiArtist.getPic_small());
+
+                            listaMusicasSalvasAdapter.adicionarMusica(musicaTemp);
+                        }
+
+                }else {
+                    Log.e(TAG, " onResponse: "+response.errorBody());}
+            }
+            @Override
+            public void onFailure(Call<VagalumeBusca> call, Throwable t){Log.e(TAG, " onFailure: "+t.getMessage());}
+        });
+    }
+
 }

@@ -40,6 +40,8 @@ import com.example.lyrio.interfaces.NoticiaSalvaListener;
 import com.example.lyrio.util.Constantes;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -339,9 +341,11 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     // Integração com API
     private void getApiData(String oQueBuscar, String artistaOuMusica) {
 
+        Date curTime = Calendar.getInstance().getTime();
+
         oQueBuscar = oQueBuscar.trim().replace(" ", "-");
         String buscaFull = "";
-        String vagaKey = Constantes.VAGALUME_KEY;
+        String vagaKey = Constantes.VAGALUME_KEY + curTime.toString().trim().replace(" ","");
 
         switch (artistaOuMusica){
             case "artista":
