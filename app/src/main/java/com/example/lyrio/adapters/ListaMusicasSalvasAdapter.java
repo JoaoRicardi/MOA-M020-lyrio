@@ -26,6 +26,7 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
         this.listaMusicaSalva = listaMusicaSalva;
         this.listaMusicasSalvasListener = listaMusicasSalvasListener;
         this.apiArtista = apiArtista;
+
     }
 
     @NonNull
@@ -53,6 +54,12 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
     public int getItemCount() {
         return listaMusicaSalva.size();
     }
+
+    public void adicionarMusica(Musica musicaSalva){
+        listaMusicaSalva.add(musicaSalva);
+        notifyDataSetChanged();
+    }
+
 
     class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView imagemMusicaSalvaImageView;

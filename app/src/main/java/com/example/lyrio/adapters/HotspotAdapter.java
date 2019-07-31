@@ -112,7 +112,8 @@ public class HotspotAdapter extends RecyclerView.Adapter<HotspotAdapter.ViewHold
             recyclerChamada.setText(hotspot.getDescr());
             recyclerTags.setText(hotspot.getDate_fmt());
             if(hotspot.getArtUrl()!=null){
-                Picasso.get().load("https://www.vagalume.com.br/"+hotspot.getArtUrl()+"/images/profile.jpg").into(hotCircleArtist);
+//                Picasso.get().load("https://www.vagalume.com.br/"+hotspot.getArtUrl()+"/images/profile.jpg").into(hotCircleArtist);
+                Picasso.get().load(hots.getArt_pic_src()).into(hotCircleArtist);
             }
 
             maisInfo.setOnClickListener(new View.OnClickListener() {

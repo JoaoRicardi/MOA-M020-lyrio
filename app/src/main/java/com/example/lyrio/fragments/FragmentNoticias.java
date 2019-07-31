@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,7 @@ public class FragmentNoticias extends Fragment implements HotspotListener {
     private Retrofit retrofit;
     private RecyclerView recyclerView;
     private HotspotAdapter hotspotAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public FragmentNoticias() {
         // Required empty public constructor
@@ -64,8 +67,18 @@ public class FragmentNoticias extends Fragment implements HotspotListener {
         // Executar retrofit para buscar dados da API
         getRetrofitData();
 
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout_id);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getRetrofitData();
+            }
+        });
+
         return view;
     }
+
+
 
     private void  getRetrofitData(){
         VagalumeHotspotApi service = retrofit.create(VagalumeHotspotApi.class);
@@ -85,6 +98,7 @@ public class FragmentNoticias extends Fragment implements HotspotListener {
                     }
 
                 }else {Log.e(TAG, " onResponse: "+response.errorBody());}
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override

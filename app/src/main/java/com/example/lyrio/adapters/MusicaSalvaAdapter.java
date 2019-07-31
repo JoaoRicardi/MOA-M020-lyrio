@@ -27,6 +27,7 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
     }
 
 
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -76,6 +77,10 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
             listaMusicaSalva.remove(0);
         }
         notifyDataSetChanged();
+    }
+
+    public void exibirMusicaFavorita(List<Musica> listaMusica) {
+
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
