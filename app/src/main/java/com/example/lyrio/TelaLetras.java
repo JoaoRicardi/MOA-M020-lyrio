@@ -15,6 +15,9 @@ import com.example.lyrio.models.Musica;
 import com.example.lyrio.util.Constantes;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -84,8 +87,10 @@ public class TelaLetras extends AppCompatActivity {
 
     private void getApiData(String idDaMusica) {
 
+        Date curTime = Calendar.getInstance().getTime();
+
         idDaMusica = idDaMusica.trim().replace(" ", "-");
-        String vagaKey =  Constantes.VAGALUME_KEY;
+        String vagaKey =  Constantes.VAGALUME_KEY + curTime.toString().trim().replace(" ","");
         String buscaFull = "https://api.vagalume.com.br/search.php?apikey="+vagaKey+"&musid="+idDaMusica;
 
         VagalumeBuscaApi service = retrofit.create(VagalumeBuscaApi.class);
@@ -111,8 +116,5 @@ public class TelaLetras extends AppCompatActivity {
             @Override
             public void onFailure(Call<VagalumeBusca> call, Throwable t){Log.e(TAG, " onFailure: "+t.getMessage());}
         });
-
-
-
     }
 }

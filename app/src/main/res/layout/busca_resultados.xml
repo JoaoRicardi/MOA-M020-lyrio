@@ -4,6 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="72dp">
 
+        <!--<View-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="1dp"-->
+            <!--app:layout_constraintStart_toStartOf="@id/busca_campo_top"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--android:layout_marginEnd="32dp"-->
+            <!--android:background="@color/cinzaClaro"/>-->
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/busca_img_artista"
             android:layout_width="40dp"
@@ -52,16 +61,5 @@
             android:textOn=""
             android:textOff=""
             app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:background="@color/cinzaClaro"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

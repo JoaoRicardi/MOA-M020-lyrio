@@ -54,6 +54,12 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
         return listaMusicaSalva.size();
     }
 
+    public void adicionarMusica(Musica musicaSalva){
+        listaMusicaSalva.add(musicaSalva);
+        notifyDataSetChanged();
+    }
+
+
     class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView imagemMusicaSalvaImageView;
         private TextView nomeMusicaSalvaTextView;
