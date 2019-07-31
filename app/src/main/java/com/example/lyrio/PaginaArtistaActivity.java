@@ -105,7 +105,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 //        });
 
         //Recycler com a lista de músicas que veio no Bundle
-        listaDeMusicasSalvas = new ArrayList<>();
         listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(listaDeMusicasSalvas, this, artistaSalvo);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView recyclerView = findViewById(R.id.pagina_artista_lista_musicas_recycler_view);

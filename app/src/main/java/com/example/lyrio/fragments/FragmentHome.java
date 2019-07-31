@@ -248,6 +248,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         apiArtista.setDesc(artistaSalvo.getDesc());
         apiArtista.setPic_small(artistaSalvo.getPic_small());
         apiArtista.setPic_medium(artistaSalvo.getPic_medium());
+        apiArtista.setUrl(artistaSalvo.getUrl());
+
 
         //Gerar lista para enviar ao bundle
         apiArtista.setMusicasSalvas(gerarListaDeMusicas(artistaSalvo));
