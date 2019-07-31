@@ -68,6 +68,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private TextView verMaisMusica;
     private TextView verMaisArtistas;
     private TextView verMaisNoticias;
+    private TextView irParalogin;
 
     //Interfaces
     private EnviarDeFragmentParaActivity enviarDeFragmentParaActivity;
@@ -92,6 +93,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
+
+
 
 
         // Iniciar retrofit para buscar infos da API
@@ -192,7 +195,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         });
 
 
-        userName = view.findViewById(R.id.txtUserName);
+        userName = view.findViewById(R.id.user_name_id);
         userStatus = view.findViewById(R.id.txtUserStatus);
 
         try{
@@ -209,8 +212,20 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             userStatus.setText("Sem notificações");
         }
 
+        irParalogin = view.findViewById(R.id.user_name_id);
+        irParalogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irParaLogin();
+            }
+        });
 
         return view;
+    }
+
+    private void irParaLogin() {
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
     }
 
     //metodo que direciona para o Fragment que contem a lista de noticias salvas mas não esta direcionando direito
