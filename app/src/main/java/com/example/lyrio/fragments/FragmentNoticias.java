@@ -68,16 +68,12 @@ public class FragmentNoticias extends Fragment implements HotspotListener {
         getRetrofitData();
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout_id);
-
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getRetrofitData();
-
             }
         });
-
 
         return view;
     }
@@ -123,7 +119,4 @@ public class FragmentNoticias extends Fragment implements HotspotListener {
 
         startActivity(intent);
     }
-
-
-
 }

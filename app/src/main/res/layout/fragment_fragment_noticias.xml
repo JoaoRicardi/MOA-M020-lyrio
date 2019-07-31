@@ -6,11 +6,6 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:gravity="center">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/swipe_refresh_layout_id">
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
@@ -58,26 +53,25 @@ android:gravity="center">
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/noticias_top_div"/>
 
-            <ScrollView
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:id="@+id/swipe_refresh_layout_id"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/noticias_top_div"
-                android:scrollbars="none">
+                app:layout_constraintTop_toBottomOf="@id/noticias_top_div">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/noticias_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-
-            </ScrollView>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 </FrameLayout>
