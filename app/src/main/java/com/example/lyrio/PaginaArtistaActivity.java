@@ -75,15 +75,16 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         Bundle bundle = intent.getExtras();
         ApiArtista artistaSalvo = (ApiArtista) bundle.getSerializable("ARTISTA");
 
-        if(artistaSalvo.getDesc()!=null){
+        if(artistaSalvo.getDesc()==null){
+            listaDeMusicasSalvas = new ArrayList<>();
+            String[] artSplit = artistaSalvo.getUrl().split("/");
+            getApiData(artSplit[1]);
+        }else{
             //Set variaveis
             nomeArtistaTextView.setText(artistaSalvo.getDesc());
             Picasso.get().load(artistaSalvo.getPic_small()).into(imagemArtistaImageView);
             Picasso.get().load(artistaSalvo.getPic_medium()).into(artistaBg);
             listaDeMusicasSalvas = artistaSalvo.getMusicasSalvas();
-        }else{
-            String[] artSplit = artistaSalvo.getUrl().split("/");
-            getApiData(artSplit[1]);
         }
 
         seguirButton.setOnClickListener(new View.OnClickListener() {
