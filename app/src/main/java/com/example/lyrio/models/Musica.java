@@ -1,21 +1,65 @@
 package com.example.lyrio.models;
 
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.example.lyrio.api.base_vagalume.ApiArtista;
 
 import java.io.Serializable;
-
+@Entity
 public class Musica  implements Serializable {
 
-    private String name;
+
+    @PrimaryKey(autoGenerate = true)
+    private int pk;
+
+    @ColumnInfo
     private String id;
+    @Ignore
+    private String name;
+    @Ignore
     private String desc;
+    @Ignore
     private String url;
+    @ColumnInfo
     private String albumPic;
+    @Ignore
     private int lang;
+    @Ignore
     private String text;
+    @Ignore
     private String trans;
+    @Ignore
     private ApiArtista artista;
+    @Ignore
+    private String emailUsuario;
+    @Ignore
+    private boolean favoritarMusica;
+
+    public String getEmailUsuario() {
+        return emailUsuario;
+    }
+
+    public Musica() {
+    }
+
+    public Musica(String id, String desc, String url) {
+        this.id = id;
+        this.desc = desc;
+        this.url = url;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -23,6 +67,30 @@ public class Musica  implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getAlbumPic() {
+        return albumPic;
+    }
+
+    public void setAlbumPic(String albumPic) {
+        this.albumPic = albumPic;
     }
 
     public int getLang() {
@@ -57,45 +125,23 @@ public class Musica  implements Serializable {
         this.artista = artista;
     }
 
-    public Musica(){
-
+    public void setEmailUsuario(String emailUsuario) {
+        this.emailUsuario = emailUsuario;
     }
 
-    public Musica(String id, String desc, String url) {
-        this.id = id;
-        this.desc = desc;
-        this.url = url;
+    public boolean isFavoritarMusica() {
+        return favoritarMusica;
     }
 
-    public String getAlbumPic() {
-        return albumPic;
+    public void setFavoritarMusica(boolean favoritarMusica) {
+        this.favoritarMusica = favoritarMusica;
     }
 
-    public void setAlbumPic(String albumPic) {
-        this.albumPic = albumPic;
+    public int getPk() {
+        return pk;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
+    public void setPk(int pk) {
+        this.pk = pk;
     }
 }

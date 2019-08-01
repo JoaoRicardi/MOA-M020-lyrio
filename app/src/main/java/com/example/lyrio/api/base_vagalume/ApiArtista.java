@@ -1,10 +1,12 @@
 package com.example.lyrio.api.base_vagalume;
 
+import androidx.room.Entity;
+
 import com.example.lyrio.models.Musica;
 
 import java.io.Serializable;
 import java.util.List;
-
+@Entity
 public class ApiArtista implements Serializable{
 
     private String name;

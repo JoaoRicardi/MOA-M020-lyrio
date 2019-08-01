@@ -2,9 +2,6 @@ package com.example.lyrio.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -15,28 +12,34 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+
+import com.example.lyrio.ConfiguracoesActivity;
 import com.example.lyrio.ListaArtistasSalvosActivity;
+import com.example.lyrio.ListaMusicaSalvaActivity;
+import com.example.lyrio.ListaNoticiaSalvaActivity;
+import com.example.lyrio.NoticiaActivity;
 import com.example.lyrio.PaginaArtistaActivity;
+import com.example.lyrio.R;
+import com.example.lyrio.TelaLetras;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
 import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.adapters.NoticiaSalvaAdapter;
+import com.example.lyrio.api.VagalumeBuscaApi;
 import com.example.lyrio.api.base_vagalume.ApiArtista;
 import com.example.lyrio.api.base_vagalume.ApiItem;
 import com.example.lyrio.api.base_vagalume.VagalumeBusca;
-import com.example.lyrio.api.VagalumeBuscaApi;
-import com.example.lyrio.ConfiguracoesActivity;
-import com.example.lyrio.ListaMusicaSalvaActivity;
-import com.example.lyrio.ListaNoticiaSalvaActivity;
+import com.example.lyrio.data.LyrioDatabase;
+import com.example.lyrio.interfaces.ArtistaSalvoListener;
 import com.example.lyrio.interfaces.EnviarDeFragmentParaActivity;
+import com.example.lyrio.interfaces.MusicaSalvaListener;
+import com.example.lyrio.interfaces.NoticiaSalvaListener;
 import com.example.lyrio.login.LoginActivity;
 import com.example.lyrio.models.Musica;
 import com.example.lyrio.models.NoticiaSalva;
-import com.example.lyrio.NoticiaActivity;
-import com.example.lyrio.R;
-import com.example.lyrio.TelaLetras;
-import com.example.lyrio.interfaces.ArtistaSalvoListener;
-import com.example.lyrio.interfaces.MusicaSalvaListener;
-import com.example.lyrio.interfaces.NoticiaSalvaListener;
 import com.example.lyrio.util.Constantes;
 
 import java.util.ArrayList;
@@ -44,11 +47,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
@@ -57,7 +65,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         MusicaSalvaListener,
         NoticiaSalvaListener,
-        PopupMenu.OnMenuItemClickListener{
+        PopupMenu.OnMenuItemClickListener {
 
     public FragmentHome() {
         // Required empty public constructor
@@ -86,8 +94,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private Retrofit retrofit;
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
-    private static final String TAG = "VAGALUME";
 
+
+    //Appdatabse
+    private LyrioDatabase lyrioDatabase;
 
 
     @Override
@@ -105,24 +115,25 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         //Inicializar lista de musicas salvas;
         listaMusicaSalva = new ArrayList<>();
 
+        lyrioDatabase = Room.databaseBuilder(getContext(), LyrioDatabase.class, lyrioDatabase.DATABASE_NAME).build();
+
         //Conteudo musica salva
         String[] idDasMusicas = {"l3ade68b7g3be34ea3", "l3ade68b6g3e9aeda3", "l3ade68b8gb0bac0b3", "l3ade68b6g59b6fda3",
                 "l3ade68b8gd9c820b3", "3ade68b8g736ed0b3", "3ade68b8g8371d0b3", "3ade68b8gee4ed0b3"};
         gerarListaDeMusicas(idDasMusicas);
 
         musicaSalvaAdapter = new MusicaSalvaAdapter(this);
-        GridLayoutManager gridMusicas = new GridLayoutManager(view.getContext(),4);
+        GridLayoutManager gridMusicas = new GridLayoutManager(view.getContext(), 4);
         RecyclerView recyclerView = view.findViewById(R.id.musica_salva_recycler_view);
         recyclerView.setAdapter(musicaSalvaAdapter);
         recyclerView.setLayoutManager(gridMusicas);
-
 
 
         //Inicializar lista de artista salvo
         listaArtistaSalvo = new ArrayList<>();
 
         //Conteudo artista salvo
-        String[] nomesDosArtistas = {"u2","skank","imagine-dragons","emicida","skrillex","rita-ora","rita-lee", "ac-dc"};
+        String[] nomesDosArtistas = {"u2", "skank", "imagine-dragons", "emicida", "skrillex", "rita-ora", "rita-lee", "ac-dc"};
         gerarListaDeArtistas(nomesDosArtistas);
 
         artistaSalvoAdapter = new ArtistaSalvoAdapter(this);
@@ -130,9 +141,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         RecyclerView recyclerView1 = view.findViewById(R.id.artistas_salvos_recycler_view);
         recyclerView1.setAdapter(artistaSalvoAdapter);
         recyclerView1.setLayoutManager(gridArtistas);
-
-
-
 
 
         //Conteudo lista noticias
@@ -143,9 +151,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         listaNoticiasSalvas.add(noticiaSalva);
         listaNoticiasSalvas.add(noticiaSalva);
         listaNoticiasSalvas.add(noticiaSalva);
-        listaNoticiasSalvas.add(noticiaSalva);
-        listaNoticiasSalvas.add(noticiaSalva);
-        listaNoticiasSalvas.add(noticiaSalva);
 
         //Recycler noticias
         NoticiaSalvaAdapter noticiaSalvaAdapter = new NoticiaSalvaAdapter(listaNoticiasSalvas, this);
@@ -153,7 +158,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         RecyclerView recyclerView2 = view.findViewById(R.id.noticias_salvas_recycler_view);
         recyclerView2.setAdapter(noticiaSalvaAdapter);
         recyclerView2.setLayoutManager(gridNoticias);
-
 
 
         opcoesUsuario = view.findViewById(R.id.home_user_icon_image_button);
@@ -194,26 +198,37 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         });
 
 
-        userName = view.findViewById(R.id.txtUserName);
+        userName = view.findViewById(R.id.user_name_id);
         userStatus = view.findViewById(R.id.txtUserStatus);
 
-        try{
+        try {
             gotMail = getActivity().getIntent().getExtras().getString("EMAIL");
-        }catch (Exception e){
+        } catch (Exception e) {
             gotMail = null;
         }
 
-        if(gotMail != null){
+        if (gotMail != null) {
             userName.setText(gotMail);
             userStatus.setText("Notificações ativas");
-        }else{
+        } else {
             userName.setText("Faça seu login");
             userStatus.setText("Sem notificações");
         }
 
-
+        exibirMusica();
         return view;
     }
+
+    private void exibirMusica () {
+        lyrioDatabase.musicasFavoritasDao()
+                .getAll()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(listaMusicaFavorita -> musicaSalvaAdapter.exibirMusicaFavorita(listaMusicaFavorita),
+                        throwable -> throwable.printStackTrace());
+
+    }
+
 
     //metodo que direciona para o Fragment que contem a lista de noticias salvas mas não esta direcionando direito
     private void irParaMinhasNoticias() {
@@ -232,9 +247,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private void irParaMeusArtistas() {
 
 //        Log.i(TAG, " RETROFIT: "+listaArtistaSalvo.size());                   // --------------------------------------------------------------------------
-        try{
+        try {
             enviarDeFragmentParaActivity.enviarListaDeArtistas(listaArtistaSalvo);
-        }catch(Exception e){}
+        } catch (Exception e) {
+        }
 
         Intent intent = new Intent(getContext(), ListaArtistasSalvosActivity.class);
         startActivity(intent);
@@ -283,7 +299,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        switch ((menuItem.getItemId())){
+        switch ((menuItem.getItemId())) {
             case R.id.item_sair:
                 Intent intent = new Intent(getContext(), LoginActivity.class);
                 startActivity(intent);
@@ -298,39 +314,38 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     }
 
 
-
-    private void gerarListaDeArtistas(String[] nomesDosArtistas){
+    private void gerarListaDeArtistas(String[] nomesDosArtistas) {
 
         // Iterar nomes de cada artista e buscar cada um na Api do Vagalume
-        for(int i=0; i<nomesDosArtistas.length; i++){
+        for (int i = 0; i < nomesDosArtistas.length; i++) {
 
 //            Log.i(TAG, " NOME RECEBIDO: "+nomesDosArtistas[i]);
-            getApiData(nomesDosArtistas[i],"artista");
+            getApiData(nomesDosArtistas[i], "artista");
 
         }
     }
 
-    private void gerarListaDeMusicas(String[] idDasMusicas){
+    private void gerarListaDeMusicas(String[] idDasMusicas) {
 
         // Iterar nomes de cada artista e buscar cada um na Api do Vagalume
-        for(int i=0; i<idDasMusicas.length; i++){
+        for (int i = 0; i < idDasMusicas.length; i++) {
 
 //            Log.i(TAG, " NOME RECEBIDO: "+nomesDosArtistas[i]);
-            getApiData(idDasMusicas[i],"musica");
+            getApiData(idDasMusicas[i], "musica");
 
         }
     }
 
 
-    private List<Musica> gerarListaDeMusicas(ApiArtista apiArtista){
+    private List<Musica> gerarListaDeMusicas(ApiArtista apiArtista) {
 
         //Gerar lista de musicas para enviar ao bundle
         List<Musica> musicasSalvas = new ArrayList<>();
-        for(int i=0; i<apiArtista.getToplyrics().getItem().size(); i++){
+        for (int i = 0; i < apiArtista.getToplyrics().getItem().size(); i++) {
 
             ApiItem curApi = apiArtista.getToplyrics().getItem().get(i);
-            String url = "https://www.vagalume.com.br"+curApi.getUrl();
-            Musica musicaTemp = new Musica(curApi.getId(),curApi.getDesc(),url);
+            String url = "https://www.vagalume.com.br" + curApi.getUrl();
+            Musica musicaTemp = new Musica(curApi.getId(), curApi.getDesc(), url);
             musicaTemp.setAlbumPic(apiArtista.getPic_small());
 
             musicasSalvas.add(musicaTemp);
@@ -347,14 +362,15 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
         oQueBuscar = oQueBuscar.trim().replace(" ", "-");
         String buscaFull = "";
+
         String vagaKey = Constantes.VAGALUME_KEY + curTime.toString().trim().replace(" ","");
 
-        switch (artistaOuMusica){
+        switch (artistaOuMusica) {
             case "artista":
-                buscaFull = "https://www.vagalume.com.br/"+oQueBuscar+"/index.js";
+                buscaFull = "https://www.vagalume.com.br/" + oQueBuscar + "/index.js";
                 break;
             case "musica":
-                buscaFull = "https://api.vagalume.com.br/search.php?apikey="+vagaKey+"&musid="+oQueBuscar;
+                buscaFull = "https://api.vagalume.com.br/search.php?apikey=" + vagaKey + "&musid=" + oQueBuscar;
                 break;
         }
 
@@ -363,10 +379,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         vagalumeBuscaCall.enqueue(new Callback<VagalumeBusca>() {
             @Override
             public void onResponse(Call<VagalumeBusca> call, Response<VagalumeBusca> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     VagalumeBusca vagalumeBusca = response.body();
 
-                    if(vagalumeBusca.getArt()!=null){
+                    if (vagalumeBusca.getArt() != null) {
                         ApiArtista apiArtista = vagalumeBusca.getArt();
                         ApiItem apiMusica = vagalumeBusca.getMus().get(0);
 
@@ -374,7 +390,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                         artistaRecebido.setId(apiArtista.getId());
                         artistaRecebido.setName(apiArtista.getName());
                         artistaRecebido.setUrl(apiArtista.getUrl());
-                        artistaRecebido.setPic_small(apiArtista.getUrl()+"images/profile.jpg");
+                        artistaRecebido.setPic_small(apiArtista.getUrl() + "images/profile.jpg");
 
                         // Logcat com tag VAGALUME
 //                        Log.i(TAG, " RETROFIT url imagem: "+artistaRecebido.getPic_small());
@@ -395,13 +411,13 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                         musicaSalvaAdapter.adicionarMusica(musicaRecebida);
 
 
-                    }else{
+                    } else {
                         ApiArtista apiArtist = vagalumeBusca.getArtist();
 
                         ApiArtista artistaRecebido = new ApiArtista();
                         artistaRecebido.setDesc(apiArtist.getDesc());
-                        artistaRecebido.setPic_small("https://www.vagalume.com.br"+apiArtist.getPic_small());
-                        artistaRecebido.setPic_medium("https://www.vagalume.com.br"+apiArtist.getPic_medium());
+                        artistaRecebido.setPic_small("https://www.vagalume.com.br" + apiArtist.getPic_small());
+                        artistaRecebido.setPic_medium("https://www.vagalume.com.br" + apiArtist.getPic_medium());
                         artistaRecebido.setQtdMusicas(apiArtist.getLyrics().getItem().size());
                         artistaRecebido.setToplyrics(apiArtist.getToplyrics());
 
@@ -412,11 +428,19 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                         artistaSalvoAdapter.adicionarArtista(artistaRecebido);
                     }
 
-                }else {Log.e(TAG, " onResponse: "+response.errorBody());}
+                } else {
+                    Log.e(TAG, " onResponse: " + response.errorBody());
+                }
             }
 
             @Override
-            public void onFailure(Call<VagalumeBusca> call, Throwable t){Log.e(TAG, " onFailure: "+t.getMessage());}
+            public void onFailure(Call<VagalumeBusca> call, Throwable t) {
+                Log.e(TAG, " onFailure: " + t.getMessage());
+            }
         });
+
+
+
+
     }
 }

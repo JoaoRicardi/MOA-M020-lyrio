@@ -2,42 +2,48 @@ package com.example.lyrio;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.lyrio.adapters.ListaMusicasSalvasAdapter;
+import com.example.lyrio.adapters.MusicaSalvaAdapter;
+import com.example.lyrio.api.base_vagalume.ApiArtista;
+import com.example.lyrio.data.LyrioDatabase;
 import com.example.lyrio.models.Musica;
 import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class ListaMusicaSalvaActivity extends AppCompatActivity implements ListaMusicasSalvasListener {
 
     private ImageButton voltarButton;
+    private List<Musica> listaMusicaSalva;
+    private LyrioDatabase lyrioDatabase;
+    private Musica musica;
+    private MusicaSalvaAdapter musicaSalvaAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_musica_salva);
 
-        List<Musica> listaMusicaSalva = new ArrayList<>();
+        lyrioDatabase = Room.databaseBuilder(this, LyrioDatabase.class, lyrioDatabase.DATABASE_NAME).build();
 
-        Musica musicaSalva1 = new Musica();
-        musicaSalva1.setDesc("Chuva chover");
-        musicaSalva1.setAlbumPic("https://upload.wikimedia.org/wikipedia/pt/a/a5/P%C3%A1ssaro_de_Fogo.jpg");
-        listaMusicaSalva.add(musicaSalva1);
-
-        listaMusicaSalva.add(musicaSalva1);listaMusicaSalva.add(musicaSalva1);listaMusicaSalva.add(musicaSalva1);listaMusicaSalva.add(musicaSalva1);
-        listaMusicaSalva.add(musicaSalva1);listaMusicaSalva.add(musicaSalva1);listaMusicaSalva.add(musicaSalva1);listaMusicaSalva.add(musicaSalva1);
-        listaMusicaSalva.add(musicaSalva1);listaMusicaSalva.add(musicaSalva1);listaMusicaSalva.add(musicaSalva1);listaMusicaSalva.add(musicaSalva1);
-
-
-//        ListaMusicasSalvasAdapter listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(listaMusicaSalva, this);
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//        RecyclerView recyclerView = findViewById(R.id.minhas_musicas_salvas_recycler_view_id);
-//        recyclerView.setAdapter(listaMusicasSalvasAdapter);
-//        recyclerView.setLayoutManager(layoutManager);
+        ListaMusicasSalvasAdapter listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(listaMusicaSalva, this,musica.getArtista());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = findViewById(R.id.minhas_musicas_salvas_recycler_view_id);
+        recyclerView.setAdapter(listaMusicasSalvasAdapter);
+        recyclerView.setLayoutManager(layoutManager);
 
         voltarButton = findViewById(R.id.back_button_minhas_musicas_image_button);
         voltarButton.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +52,18 @@ public class ListaMusicaSalvaActivity extends AppCompatActivity implements Lista
                 voltarParaHome();
             }
         });
+
+        exibirMusica();
+
+
+    }
+    private void exibirMusica () {
+        lyrioDatabase.musicasFavoritasDao()
+                .getAll()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(listaMusicaFavorita -> musicaSalvaAdapter.exibirMusicaFavorita(listaMusicaFavorita),
+                        throwable -> throwable.printStackTrace());
 
     }
 

@@ -8,9 +8,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Database;
+import androidx.room.Room;
+
 import com.example.lyrio.R;
+import com.example.lyrio.data.LyrioDatabase;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.regex.Pattern;
+
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+import static java.security.AccessController.getContext;
 
 public class UserCadastroActivity extends AppCompatActivity {
 
@@ -21,6 +34,9 @@ public class UserCadastroActivity extends AppCompatActivity {
     private TextInputEditText editTextEmail;
     private TextInputEditText editTextSenha;
     private TextInputEditText editTextConfirmarSenha;
+    private LyrioDatabase lyrioDatabase;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +55,19 @@ public class UserCadastroActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.cadastro_edit_text_email);
         editTextSenha = findViewById(R.id.cadastro_edit_text_senha);
         editTextConfirmarSenha = findViewById(R.id.cadastro_edit_text_confirma_senha);
+
+        //lyrioDatabase = Room.databaseBuilder(this, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+
+
     }
+    //private void inserir(){
+        //lyrioDatabase.userDao()
+          //      .inserirUser()
+         //       .getClass(this)
+          //      .observeOn(AndroidSchedulers.mainThread())
+           //     .subscribeOn(Schedulers.newThread());
+  //  }
+
 
 
     public void botaoClicado(View view) {

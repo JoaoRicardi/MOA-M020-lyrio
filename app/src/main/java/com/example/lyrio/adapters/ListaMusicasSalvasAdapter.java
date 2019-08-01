@@ -26,6 +26,7 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
         this.listaMusicaSalva = listaMusicaSalva;
         this.listaMusicasSalvasListener = listaMusicasSalvasListener;
         this.apiArtista = apiArtista;
+
     }
 
     @NonNull

@@ -189,7 +189,13 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 
                             ApiItem curApi = apiArtist.getToplyrics().getItem().get(i);
                             String url = "https://www.vagalume.com.br"+curApi.getUrl();
+
+                            //Conferir se temos problemas ------------------------------------------------------------------------------------
                             Musica musicaTemp = new Musica(curApi.getId(),curApi.getDesc(),url);
+
+//                            //Musica musicaTemp = new Musica(curApi.getId(),curApi.getDesc(),url);
+//                            Musica musicaTemp = new Musica();
+
                             musicaTemp.setAlbumPic("https://www.vagalume.com.br"+apiArtist.getPic_small());
 
                             listaMusicasSalvasAdapter.adicionarMusica(musicaTemp);
