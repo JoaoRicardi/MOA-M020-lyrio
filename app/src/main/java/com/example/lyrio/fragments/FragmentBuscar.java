@@ -275,15 +275,12 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
 
         }else{
 
-            Musica musicaSalva = new Musica();
-            musicaSalva.setId(apiItem.getId());
-
 //            listaMusicasViewModel.favoritarApiItem(musicaSalva);
 
             Intent intent = new Intent(getContext(), TelaLetras.class);
             Bundle bundle = new Bundle();
 
-            bundle.putSerializable("MUSICA", musicaSalva);
+            bundle.putSerializable("MUSICA_ID", apiItem.getId());
             intent.putExtras(bundle);
 
             startActivity(intent);

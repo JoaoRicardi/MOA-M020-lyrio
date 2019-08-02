@@ -287,9 +287,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         Intent intent = new Intent(getContext(), TelaLetras.class);
         Bundle bundle = new Bundle();
 
-        musicaSalva.setFavoritarMusica(true);
-
-        bundle.putSerializable("MUSICA", musicaSalva);
+        bundle.putSerializable("MUSICA_ID", musicaSalva.getId());
         intent.putExtras(bundle);
 
         startActivity(intent);
