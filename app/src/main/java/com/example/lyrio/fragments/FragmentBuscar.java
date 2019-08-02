@@ -4,8 +4,11 @@ package com.example.lyrio.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lyrio.PaginaArtistaActivity;
 import com.example.lyrio.TelaLetras;
@@ -22,16 +26,17 @@ import com.example.lyrio.api.base_vagalume.ApiItem;
 import com.example.lyrio.api.base_vagalume.ApiResponse;
 import com.example.lyrio.api.base_vagalume.VagalumeBusca;
 import com.example.lyrio.api.VagalumeBuscaApi;
-import com.example.lyrio.VagalumeAbrirLink;
 import com.example.lyrio.R;
+import com.example.lyrio.data.LyrioDatabase;
 import com.example.lyrio.interfaces.ApiBuscaListener;
 import com.example.lyrio.models.Musica;
+import com.example.lyrio.modules.musica.viewmodel.ListaMusicasViewModel;
 import com.example.lyrio.util.Constantes;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,6 +63,11 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
     private RecyclerView recyclerArtistas;
     private BuscaAdapter buscaLetrasAdapter;
     private BuscaAdapter buscaArtistasAdapter;
+    private List<Musica> listaMusicasFavoritas;
+
+    //Room ETC
+    private LyrioDatabase db;
+    private ListaMusicasViewModel listaMusicasViewModel;
 
     public FragmentBuscar() {
         // Required empty public constructor
@@ -68,6 +78,12 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_buscar, container, false);
+
+        db = Room.databaseBuilder(getContext(),
+                LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+
+        listaMusicasFavoritas = new ArrayList<>();
+
 
         // Iniciar retrofit para buscar infos da API
         retrofit = new Retrofit.Builder()
@@ -92,6 +108,10 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
         botaoBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+//                Toast.makeText(getContext(), "QTDADE: " + listaMusicasFavoritas.size(), Toast.LENGTH_SHORT).show();
+
+
                 campoLetras.setText("");
                 campoArtista.setText("");
                 campoUserFriendly.setText("");
@@ -104,16 +124,26 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
         });
 
         recyclerLetras = view.findViewById(R.id.buscar_letras_recycler);
-        buscaLetrasAdapter = new BuscaAdapter(this.getActivity(), this); // "this" adicionado por causa do Glide
+        buscaLetrasAdapter = new BuscaAdapter(this.getActivity(), this, listaMusicasFavoritas); // "this" adicionado por causa do Glide
         recyclerLetras.setAdapter(buscaLetrasAdapter);
         RecyclerView.LayoutManager layoutLetrasManager = new LinearLayoutManager(this.getActivity());
         recyclerLetras.setLayoutManager(layoutLetrasManager);
 
         recyclerArtistas = view.findViewById(R.id.buscar_artistas_recycler);
-        buscaArtistasAdapter = new BuscaAdapter(this.getActivity(), this); // "this" adicionado por causa do Glide
+        buscaArtistasAdapter = new BuscaAdapter(this.getActivity(), this, listaMusicasFavoritas); // "this" adicionado por causa do Glide
         recyclerArtistas.setAdapter(buscaArtistasAdapter);
         RecyclerView.LayoutManager layoutArtistasManager = new LinearLayoutManager(this.getActivity());
         recyclerArtistas.setLayoutManager(layoutArtistasManager);
+
+
+        listaMusicasViewModel = ViewModelProviders.of(this).get(ListaMusicasViewModel.class);
+        listaMusicasViewModel.atualizarLista();
+
+        listaMusicasViewModel.getListaMusicasLiveData()
+                .observe(this, listaMusicas -> {
+                    listaMusicasFavoritas = listaMusicas;
+                });
+
 
         return view;
     }
@@ -196,8 +226,8 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
 
                     }
 
-                    buscaLetrasAdapter.adicionarListaDeApiItems(listaDeMusicas);
-                    buscaArtistasAdapter.adicionarListaDeApiItems(listaDeArtistas);
+                    buscaLetrasAdapter.adicionarListaDeApiItems(listaDeMusicas, listaMusicasFavoritas);
+                    buscaArtistasAdapter.adicionarListaDeApiItems(listaDeArtistas, listaMusicasFavoritas);
 
                     if(listaDeMusicas.size()>0 && listaDeArtistas.size()>0){
                         campoLetras.setText("Letras");
@@ -248,8 +278,11 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
             startActivity(intent);
 
         }else{
+
             Musica musicaSalva = new Musica();
             musicaSalva.setId(apiItem.getId());
+
+//            listaMusicasViewModel.favoritarApiItem(musicaSalva);
 
             Intent intent = new Intent(getContext(), TelaLetras.class);
             Bundle bundle = new Bundle();
@@ -259,17 +292,27 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
 
             startActivity(intent);
         }
+    }
 
-//        String url = apiItem.getUrl();
-//        url = "https://www.vagalume.com.br"+url;
-//
-//        Intent intent = new Intent(getActivity(), VagalumeAbrirLink.class);
-//        Bundle bundle = new Bundle();
-//
-//        // Para poder adicionar ao bundle, a classe tem que implementar "Serializable"
-//        bundle.putString("HOTSPOT_LINK", url);
-//        intent.putExtras(bundle);
-//
-//        startActivity(intent);
+    @Override
+    public void favoritarApiItem(ApiItem apiItem) {
+        if(!apiItem.getCampoBottom().equals("Ver músicas")){
+            Musica musicaSalva = new Musica();
+            musicaSalva.setId(apiItem.getId());
+
+            listaMusicasViewModel.favoritarMusica(musicaSalva);
+        }
+    }
+
+    @Override
+    public void removerApiItem(ApiItem apiItem) {
+        if(!apiItem.getCampoBottom().equals("Ver músicas")){
+
+            listaMusicasViewModel.getMusicaPorId(apiItem.getId());
+            listaMusicasViewModel.getMusicaLiveData()
+                    .observe(this, musicaDoBanco -> {
+                        listaMusicasViewModel.removerMusica(musicaDoBanco);
+                    });
+        }
     }
 }

@@ -11,11 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.lyrio.ConfiguracoesActivity;
 import com.example.lyrio.ListaArtistasSalvosActivity;
@@ -40,6 +44,7 @@ import com.example.lyrio.interfaces.NoticiaSalvaListener;
 import com.example.lyrio.login.LoginActivity;
 import com.example.lyrio.models.Musica;
 import com.example.lyrio.models.NoticiaSalva;
+import com.example.lyrio.modules.musica.viewmodel.ListaMusicasViewModel;
 import com.example.lyrio.util.Constantes;
 
 import java.util.ArrayList;
@@ -47,16 +52,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
@@ -78,6 +78,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private TextView verMaisMusica;
     private TextView verMaisArtistas;
     private TextView verMaisNoticias;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     //Interfaces
     private EnviarDeFragmentParaActivity enviarDeFragmentParaActivity;
@@ -89,22 +90,25 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     //Listas
     private List<ApiArtista> listaArtistaSalvo;
     private List<Musica> listaMusicaSalva;
+    private List<Musica> listaMusicaDoBanco;
 
     //Integração Api
     private Retrofit retrofit;
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
+    private static final String TAG = "VAGALUME";
 
-
-    //Appdatabse
-    private LyrioDatabase lyrioDatabase;
-
+    //Room ETC
+    private LyrioDatabase db;
+    private ListaMusicasViewModel listaMusicasViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
 
+        db = Room.databaseBuilder(getContext(),
+                LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
         // Iniciar retrofit para buscar infos da API
         retrofit = new Retrofit.Builder()
@@ -112,15 +116,15 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        //Inicializar lista de musicas salvas;
-        listaMusicaSalva = new ArrayList<>();
+        listaMusicasViewModel = ViewModelProviders.of(this).get(ListaMusicasViewModel.class);
+        listaMusicasViewModel.atualizarLista();
 
-        lyrioDatabase = Room.databaseBuilder(getContext(), LyrioDatabase.class, lyrioDatabase.DATABASE_NAME).build();
-
-        //Conteudo musica salva
-        String[] idDasMusicas = {"l3ade68b7g3be34ea3", "l3ade68b6g3e9aeda3", "l3ade68b8gb0bac0b3", "l3ade68b6g59b6fda3",
-                "l3ade68b8gd9c820b3", "3ade68b8g736ed0b3", "3ade68b8g8371d0b3", "3ade68b8gee4ed0b3"};
-        gerarListaDeMusicas(idDasMusicas);
+        //Gerar lista de musicas a partir do Banco
+        listaMusicasViewModel.getListaMusicasLiveData()
+                .observe(this, listaMusicas -> {
+                    gerarListaDeMusicasPeloBanco(listaMusicas);
+//                    Toast.makeText(this.getContext(), "SIZE: "+listaMusicas.size(), Toast.LENGTH_SHORT).show();
+                });
 
         musicaSalvaAdapter = new MusicaSalvaAdapter(this);
         GridLayoutManager gridMusicas = new GridLayoutManager(view.getContext(), 4);
@@ -215,18 +219,26 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             userStatus.setText("Sem notificações");
         }
 
-        exibirMusica();
+        swipeRefreshLayout = view.findViewById(R.id.home_swipe);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                musicaSalvaAdapter.removerTudo();
+                atualizarTudo();
+//                Toast.makeText(getActivity(), "bla", Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
         return view;
     }
 
-    private void exibirMusica () {
-        lyrioDatabase.musicasFavoritasDao()
-                .getAll()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(listaMusicaFavorita -> musicaSalvaAdapter.exibirMusicaFavorita(listaMusicaFavorita),
-                        throwable -> throwable.printStackTrace());
-
+    private void atualizarTudo() {
+        listaMusicasViewModel.getListaMusicasLiveData()
+                .observe(this, listaMusicas -> {
+                    gerarListaDeMusicasPeloBanco(listaMusicas);
+//                    Toast.makeText(this.getContext(), "SIZE: "+listaMusicas.size(), Toast.LENGTH_SHORT).show();
+                });
     }
 
 
@@ -245,12 +257,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
     //metodo que direciona para o Fragment que contem a lista de artistas salvas mas não esta direcionando direito
     private void irParaMeusArtistas() {
-
-//        Log.i(TAG, " RETROFIT: "+listaArtistaSalvo.size());                   // --------------------------------------------------------------------------
-        try {
-            enviarDeFragmentParaActivity.enviarListaDeArtistas(listaArtistaSalvo);
-        } catch (Exception e) {
-        }
 
         Intent intent = new Intent(getContext(), ListaArtistasSalvosActivity.class);
         startActivity(intent);
@@ -284,6 +290,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
         Intent intent = new Intent(getContext(), TelaLetras.class);
         Bundle bundle = new Bundle();
+
+        musicaSalva.setFavoritarMusica(true);
 
         bundle.putSerializable("MUSICA", musicaSalva);
         intent.putExtras(bundle);
@@ -325,16 +333,16 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         }
     }
 
-    private void gerarListaDeMusicas(String[] idDasMusicas) {
 
-        // Iterar nomes de cada artista e buscar cada um na Api do Vagalume
-        for (int i = 0; i < idDasMusicas.length; i++) {
+    private void gerarListaDeMusicasPeloBanco(List<Musica> musicList) {
 
-//            Log.i(TAG, " NOME RECEBIDO: "+nomesDosArtistas[i]);
-            getApiData(idDasMusicas[i], "musica");
-
+        if(musicList!=null){
+            for (int i = 0; i < musicList.size(); i++) {
+                getApiData(musicList.get(i).getId(), "musica");
+            }
         }
     }
+
 
 
     private List<Musica> gerarListaDeMusicas(ApiArtista apiArtista) {
@@ -405,7 +413,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                         musicaRecebida.setArtista(apiArtista);
 
                         //Adicionar a lista de Musicas
-                        listaMusicaSalva.add(musicaRecebida);
+//                        listaMusicaSalva.add(musicaRecebida);
 
                         //Adicionar ao Adapter do RecyclerView
                         musicaSalvaAdapter.adicionarMusica(musicaRecebida);

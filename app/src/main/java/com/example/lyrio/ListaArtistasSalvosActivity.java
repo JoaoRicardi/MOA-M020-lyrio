@@ -14,7 +14,8 @@ import com.example.lyrio.interfaces.EnviarDeFragmentParaActivity;
 
 import java.util.List;
 
-public class ListaArtistasSalvosActivity extends AppCompatActivity
+public class ListaArtistasSalvosActivity
+        extends AppCompatActivity
         implements ArtistaSalvoListener,
         EnviarDeFragmentParaActivity {
 
@@ -33,11 +34,11 @@ public class ListaArtistasSalvosActivity extends AppCompatActivity
 //
 //        listaArtistaSalvo = artistaBundle.getListaDeArtistas();
 
-        artistaSalvoAdapter = new ArtistaSalvoAdapter(this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
-        RecyclerView recyclerView1 = findViewById(R.id.lista_artistas_salvos_recycler_view_id);
-        recyclerView1.setAdapter(artistaSalvoAdapter);
-        recyclerView1.setLayoutManager(gridLayoutManager);
+//        artistaSalvoAdapter = new ArtistaSalvoAdapter(this);
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
+//        RecyclerView recyclerView1 = findViewById(R.id.lista_artistas_salvos_recycler_view_id);
+//        recyclerView1.setAdapter(artistaSalvoAdapter);
+//        recyclerView1.setLayoutManager(gridLayoutManager);
 
         backButton = findViewById(R.id.back_button_meus_artistas_image_button);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +69,6 @@ public class ListaArtistasSalvosActivity extends AppCompatActivity
 
     @Override
     public void enviarListaDeArtistas(List<ApiArtista> listaDeArtistas) {
-        listaArtistaSalvo = listaDeArtistas;
+//        listaArtistaSalvo = listaDeArtistas;
     }
 }

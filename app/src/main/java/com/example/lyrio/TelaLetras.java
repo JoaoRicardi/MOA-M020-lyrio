@@ -1,7 +1,10 @@
 package com.example.lyrio;
 
+import android.content.Context;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.room.Room;
 
 import android.os.Bundle;
@@ -11,11 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.api.base_vagalume.VagalumeBusca;
 import com.example.lyrio.api.VagalumeBuscaApi;
 import com.example.lyrio.data.LyrioDatabase;
 import com.example.lyrio.models.Musica;
+import com.example.lyrio.modules.musica.viewmodel.ListaMusicasViewModel;
 import com.example.lyrio.util.Constantes;
 import com.squareup.picasso.Picasso;
 
@@ -23,9 +26,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,17 +45,11 @@ public class TelaLetras extends AppCompatActivity {
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
     private static final String TAG = "VAGALUME";
-    private LyrioDatabase lyrioDatabase;
-    private MusicaSalvaAdapter musicaSalvaAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_letras);
-
-        lyrioDatabase = Room.databaseBuilder(this, LyrioDatabase.class, lyrioDatabase.DATABASE_NAME).build();
-
-        exibirMusica();
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -76,12 +70,13 @@ public class TelaLetras extends AppCompatActivity {
         imagemArtista = findViewById(R.id.letras_artist_pic);
         favourite_button = findViewById(R.id.letras_favorito_button);
 
+        favourite_button.setChecked(musicaSalva.isFavoritarMusica());
+
         favourite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(favourite_button.isChecked()){
                     Toast.makeText(TelaLetras.this, Constantes.TOAST_MUSICA_FAVORITA_ADICIONAR, Toast.LENGTH_SHORT).show();
-                    gravarMusica(musicaSalva);
                 }else{
                     Toast.makeText(TelaLetras.this, Constantes.TOAST_MUSICA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
                 }
@@ -97,39 +92,6 @@ public class TelaLetras extends AppCompatActivity {
         }else{
             getApiData(musicaSalva.getId());
         }
-    }
-    private void deletarMusica(Musica musica){
-        Completable.fromAction(() -> lyrioDatabase.musicasFavoritasDao().delete(musica))
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
-    }
-
-    private void exibirMusica () {
-        lyrioDatabase.musicasFavoritasDao()
-                .getAll()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(listaMusicaFavorita -> musicaSalvaAdapter.exibirMusicaFavorita(listaMusicaFavorita),
-                        throwable -> throwable.printStackTrace());
-
-    }
-
-    private void gravarMusica (Musica musica){
-        Completable.fromAction(() -> lyrioDatabase.musicasFavoritasDao().inserir(musica))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe();
-    }
-
-
-    private void atualizarProduto (Musica musica){
-        Completable.fromAction(() -> lyrioDatabase.musicasFavoritasDao().update(musica))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe();
-    }
-    public void favoritarMusica () {
     }
 
     private void getApiData(String idDaMusica) {

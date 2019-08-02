@@ -23,7 +23,9 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class ListaMusicaSalvaActivity extends AppCompatActivity implements ListaMusicasSalvasListener {
+public class ListaMusicaSalvaActivity
+        extends AppCompatActivity
+        implements ListaMusicasSalvasListener {
 
     private ImageButton voltarButton;
     private List<Musica> listaMusicaSalva;
@@ -37,13 +39,13 @@ public class ListaMusicaSalvaActivity extends AppCompatActivity implements Lista
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_musica_salva);
 
-        lyrioDatabase = Room.databaseBuilder(this, LyrioDatabase.class, lyrioDatabase.DATABASE_NAME).build();
+//        lyrioDatabase = Room.databaseBuilder(this, LyrioDatabase.class, lyrioDatabase.DATABASE_NAME).build();
 
-        ListaMusicasSalvasAdapter listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(listaMusicaSalva, this,musica.getArtista());
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        RecyclerView recyclerView = findViewById(R.id.minhas_musicas_salvas_recycler_view_id);
-        recyclerView.setAdapter(listaMusicasSalvasAdapter);
-        recyclerView.setLayoutManager(layoutManager);
+//        ListaMusicasSalvasAdapter listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(listaMusicaSalva, this,musica.getArtista());
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//        RecyclerView recyclerView = findViewById(R.id.minhas_musicas_salvas_recycler_view_id);
+//        recyclerView.setAdapter(listaMusicasSalvasAdapter);
+//        recyclerView.setLayoutManager(layoutManager);
 
         voltarButton = findViewById(R.id.back_button_minhas_musicas_image_button);
         voltarButton.setOnClickListener(new View.OnClickListener() {
@@ -53,17 +55,17 @@ public class ListaMusicaSalvaActivity extends AppCompatActivity implements Lista
             }
         });
 
-        exibirMusica();
+//        exibirMusica();
 
 
     }
     private void exibirMusica () {
-        lyrioDatabase.musicasFavoritasDao()
-                .getAll()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(listaMusicaFavorita -> musicaSalvaAdapter.exibirMusicaFavorita(listaMusicaFavorita),
-                        throwable -> throwable.printStackTrace());
+//        lyrioDatabase.musicasFavoritasDao()
+//                .getAll()
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.newThread())
+//                .subscribe(listaMusicaFavorita -> musicaSalvaAdapter.exibirMusicaFavorita(listaMusicaFavorita),
+//                        throwable -> throwable.printStackTrace());
 
     }
 
@@ -77,7 +79,7 @@ public class ListaMusicaSalvaActivity extends AppCompatActivity implements Lista
 
     @Override
     public void onListaMusicasSalvasClicado(Musica musicaSalva) {
-        Intent intent = new Intent(this, TelaLetras.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, TelaLetras.class);
+//        startActivity(intent);
     }
 }

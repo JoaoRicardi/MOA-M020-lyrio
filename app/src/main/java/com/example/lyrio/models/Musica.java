@@ -10,14 +10,17 @@ import androidx.room.PrimaryKey;
 import com.example.lyrio.api.base_vagalume.ApiArtista;
 
 import java.io.Serializable;
-@Entity
-public class Musica  implements Serializable {
+//@Entity(foreignKeys = @ForeignKey(entity = ListaMusicasFavoritas.class,
+//        parentColumns = "id",
+//        childColumns = "lista_compras_id"))
 
+@Entity
+public class Musica implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int pk;
 
-    @ColumnInfo
+    @ColumnInfo(name = "id_da_musica")
     private String id;
     @Ignore
     private String name;
@@ -25,7 +28,7 @@ public class Musica  implements Serializable {
     private String desc;
     @Ignore
     private String url;
-    @ColumnInfo
+    @Ignore
     private String albumPic;
     @Ignore
     private int lang;
@@ -37,12 +40,8 @@ public class Musica  implements Serializable {
     private ApiArtista artista;
     @Ignore
     private String emailUsuario;
-    @Ignore
+    @ColumnInfo(name = "is_favorita")
     private boolean favoritarMusica;
-
-    public String getEmailUsuario() {
-        return emailUsuario;
-    }
 
     public Musica() {
     }
@@ -51,6 +50,14 @@ public class Musica  implements Serializable {
         this.id = id;
         this.desc = desc;
         this.url = url;
+    }
+
+    public int getPk() {
+        return pk;
+    }
+
+    public void setPk(int pk) {
+        this.pk = pk;
     }
 
     public String getId() {
@@ -125,6 +132,10 @@ public class Musica  implements Serializable {
         this.artista = artista;
     }
 
+    public String getEmailUsuario() {
+        return emailUsuario;
+    }
+
     public void setEmailUsuario(String emailUsuario) {
         this.emailUsuario = emailUsuario;
     }
@@ -135,13 +146,5 @@ public class Musica  implements Serializable {
 
     public void setFavoritarMusica(boolean favoritarMusica) {
         this.favoritarMusica = favoritarMusica;
-    }
-
-    public int getPk() {
-        return pk;
-    }
-
-    public void setPk(int pk) {
-        this.pk = pk;
     }
 }

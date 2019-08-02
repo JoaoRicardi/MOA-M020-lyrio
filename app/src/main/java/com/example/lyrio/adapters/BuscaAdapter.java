@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lyrio.api.base_vagalume.ApiItem;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.ApiBuscaListener;
+import com.example.lyrio.models.Musica;
 import com.example.lyrio.util.Constantes;
 
 import java.util.ArrayList;
@@ -24,12 +25,16 @@ import java.util.List;
 public class BuscaAdapter extends RecyclerView.Adapter<BuscaAdapter.ViewHolder>{
 
     private List<ApiItem> listaDeApiItems;
+    private List<Musica> listaDeMusicasFavoritas;
     private ApiBuscaListener apiBuscaListener;
     private Context context;
 
-    public BuscaAdapter(Context context, ApiBuscaListener apiBuscaListener){
+    public BuscaAdapter(Context context, ApiBuscaListener apiBuscaListener, List<Musica> listaDeFavoritas){
         //Inicializar lista
         listaDeApiItems = new ArrayList<>();
+        listaDeMusicasFavoritas = new ArrayList<>();
+
+        listaDeMusicasFavoritas = listaDeFavoritas;
 
         //Para usar o Glide
         this.context = context;
@@ -78,12 +83,22 @@ public class BuscaAdapter extends RecyclerView.Adapter<BuscaAdapter.ViewHolder>{
         return listaDeApiItems.size();
     }
 
-    public void adicionarListaDeApiItems(ArrayList<ApiItem> listaApiIt) {
+    public void adicionarListaDeApiItems(ArrayList<ApiItem> listaApiIt, List<Musica> musicasFavoritas) {
+        if(musicasFavoritas!=null){
+            listaDeMusicasFavoritas.addAll(musicasFavoritas);
+        }
+
         listaDeApiItems.addAll(listaApiIt);
         notifyDataSetChanged();
     }
 
     public void removerTudo() {
+        if(listaDeMusicasFavoritas!=null){
+            while(listaDeMusicasFavoritas.size()>0){
+                listaDeMusicasFavoritas.remove(0);
+            }
+        }
+
         while(listaDeApiItems.size()>0){
             listaDeApiItems.remove(0);
         }
@@ -109,13 +124,25 @@ public class BuscaAdapter extends RecyclerView.Adapter<BuscaAdapter.ViewHolder>{
         public void setupApiItem(ApiItem apiItem){
             buscaCampoTop.setText(apiItem.getCampoTop());
             buscaCampoBottom.setText(apiItem.getCampoBottom());
+            favourite_button.setChecked(false);
+
+            if(apiItem.getBand()!=null&&listaDeMusicasFavoritas!=null&&listaDeMusicasFavoritas.size()>0){
+                for(int i=0; i<listaDeMusicasFavoritas.size(); i++){
+                    if(listaDeMusicasFavoritas.get(i).getId().equals(apiItem.getId())) {
+                        favourite_button.setChecked(true);
+                    }
+                }
+            }
+
             favourite_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(favourite_button.isChecked()){
                     Toast.makeText(context, Constantes.TOAST_BUSCA_FAVORITA_ADICIONAR, Toast.LENGTH_SHORT).show();
+                    apiBuscaListener.favoritarApiItem(apiItem);
                     }else{
                         Toast.makeText(context, Constantes.TOAST_BUSCA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
+                        apiBuscaListener.removerApiItem(apiItem);
                     }
                 }
             });

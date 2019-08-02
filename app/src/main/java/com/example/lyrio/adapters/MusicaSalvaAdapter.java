@@ -26,8 +26,6 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
         this.musicaSalvaListener = musicaSalvaListener;
     }
 
-
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -63,8 +61,19 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
     }
 
     public void adicionarMusica(Musica musicaSalva){
-        listaMusicaSalva.add(musicaSalva);
-        notifyDataSetChanged();
+        boolean contains = false;
+
+        if(listaMusicaSalva.size()>0){
+            for(int i=0; i<listaMusicaSalva.size(); i++){
+                if(listaMusicaSalva.get(i).getId().equals(musicaSalva.getId())){
+                    contains = true;
+                }
+            }
+        }
+        if(!contains){
+            listaMusicaSalva.add(musicaSalva);
+            notifyDataSetChanged();
+        }
     }
 
     public void adicionarListaDeMusicas(List<Musica> listaDeMusicas) {

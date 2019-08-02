@@ -10,7 +10,7 @@ import com.example.lyrio.models.Musica;
 @Database(entities = {Musica.class}, version = 1, exportSchema = false)
 public abstract class LyrioDatabase extends RoomDatabase {
 
-    public static String DATABASE_NAME = "LyrioApp";
+    public static String DATABASE_NAME = "lyriodb";
 
     public abstract MusicasFavoritasDao musicasFavoritasDao();
 
