@@ -99,16 +99,12 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private static final String TAG = "VAGALUME";
 
     //Room ETC
-    private LyrioDatabase db;
     private ListaMusicasViewModel listaMusicasViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
-
-        db = Room.databaseBuilder(getContext(),
-                LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
         // Iniciar retrofit para buscar infos da API
         retrofit = new Retrofit.Builder()

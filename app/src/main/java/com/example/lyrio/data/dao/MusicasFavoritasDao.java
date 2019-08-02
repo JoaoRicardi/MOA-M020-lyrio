@@ -27,6 +27,9 @@ public interface MusicasFavoritasDao {
     @Delete
     void delete(Musica musica);
 
+    @Query("delete from musica where id_da_musica = :idDaMusica")
+    void deletePorId(String idDaMusica);
+
     @Update
     void update(Musica musica);
 

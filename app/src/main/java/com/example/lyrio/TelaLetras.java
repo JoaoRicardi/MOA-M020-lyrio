@@ -39,8 +39,8 @@ public class TelaLetras extends AppCompatActivity {
     private TextView letraDaMusica;
     private CircleImageView imagemArtista;
     private Retrofit retrofit;
-    private Musica musicaSelecionada;
     private ToggleButton favourite_button;
+    private ListaMusicasViewModel listaMusicasViewModel;
 
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
@@ -55,14 +55,15 @@ public class TelaLetras extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         Musica musicaSalva = (Musica) bundle.getSerializable("MUSICA");
 
+        listaMusicasViewModel = ViewModelProviders.of(this).get(ListaMusicasViewModel.class);
+        listaMusicasViewModel.atualizarLista();
+
 
         // Iniciar retrofit para buscar infos da API
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.vagalume.com.br/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
-        musicaSelecionada = new Musica();
 
         nomeDaMusica = findViewById(R.id.letras_nome_musica_text_view);
         nomeDoArtista = findViewById(R.id.letras_nome_artista_text_view);
@@ -77,8 +78,12 @@ public class TelaLetras extends AppCompatActivity {
             public void onClick(View v) {
                 if(favourite_button.isChecked()){
                     Toast.makeText(TelaLetras.this, Constantes.TOAST_MUSICA_FAVORITA_ADICIONAR, Toast.LENGTH_SHORT).show();
+                    listaMusicasViewModel.favoritarMusica(musicaSalva);
+
                 }else{
                     Toast.makeText(TelaLetras.this, Constantes.TOAST_MUSICA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
+
+                    listaMusicasViewModel.removerMusicaPorId(musicaSalva.getId());
                 }
             }
         });
@@ -126,4 +131,7 @@ public class TelaLetras extends AppCompatActivity {
             public void onFailure(Call<VagalumeBusca> call, Throwable t){Log.e(TAG, " onFailure: "+t.getMessage());}
         });
     }
+
+
+
 }

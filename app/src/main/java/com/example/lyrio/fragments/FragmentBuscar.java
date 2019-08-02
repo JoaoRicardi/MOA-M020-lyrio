@@ -66,7 +66,6 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
     private List<Musica> listaMusicasFavoritas;
 
     //Room ETC
-    private LyrioDatabase db;
     private ListaMusicasViewModel listaMusicasViewModel;
 
     public FragmentBuscar() {
@@ -78,9 +77,6 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_buscar, container, false);
-
-        db = Room.databaseBuilder(getContext(),
-                LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
         listaMusicasFavoritas = new ArrayList<>();
 

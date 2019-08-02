@@ -1,5 +1,6 @@
 package com.example.lyrio.modules.musica.repository;
 
+import android.app.Application;
 import android.content.Context;
 
 import androidx.room.Room;
@@ -48,5 +49,11 @@ public class ListaMusicasRepository {
     }
 
 
+    public Completable removerMusicaPorId(String musicaId, Application context) {
+        LyrioDatabase db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
+        // transformar de void para completable
+        return Completable.fromAction(() -> db.musicasFavoritasDao()
+                .deletePorId(musicaId));
+    }
 }

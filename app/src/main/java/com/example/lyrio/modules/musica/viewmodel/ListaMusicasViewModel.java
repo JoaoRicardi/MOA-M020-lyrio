@@ -80,4 +80,12 @@ public class ListaMusicasViewModel extends AndroidViewModel {
                         .subscribe(() -> atualizarLista())
         );
     }
+    public void removerMusicaPorId(String musicaId){
+        disposable.add(
+                listaMusicasRepository.removerMusicaPorId(musicaId, getApplication())
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> atualizarLista())
+        );
+    }
 }
