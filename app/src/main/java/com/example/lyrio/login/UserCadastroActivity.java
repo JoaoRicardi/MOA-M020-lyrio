@@ -2,14 +2,16 @@ package com.example.lyrio.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.lyrio.R;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.lyrio.R;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserCadastroActivity extends AppCompatActivity {
@@ -48,41 +50,50 @@ public class UserCadastroActivity extends AppCompatActivity {
         editTextSenha.setError(null);
         editTextConfirmarSenha.setError(null);
 
-        if (senhaValida(editTextSenha.getEditableText().toString())) {
-            if (!editTextSenha.getEditableText().toString().equals(editTextConfirmarSenha.getEditableText().toString())) {
-                editTextSenha.setError("As senhas não conferem!");
-                editTextConfirmarSenha.setError("As senhas não conferem!");
-            } else if (editTextNome.getEditableText().toString().equals("")) {
-                editTextNome.setError("Campo obrigatório!");
-            } else if(editTextEmail.getEditableText().toString().equals("")){
-                editTextEmail.setError("Campo Obrigatório");
-            } else if (!editTextEmail.getEditableText().toString().matches(emailRegex)) {
-                editTextEmail.setError("O email deve conter @ e .");
-            } else if (editTextSenha.getEditableText().toString().equals("")) {
-                editTextSenha.setError("Campo obrigatório!");
-            } else if (editTextConfirmarSenha.getEditableText().toString().equals("")) {
-                editTextConfirmarSenha.setError("Campo obrigatório!");
-            } else {
-                Snackbar.make(view, "Cadastro realizado com sucesso!", Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        irParaLogin();
-                    }
-                }).setActionTextColor(getResources().getColor(R.color.azulClaro)).show();
-            }
-        }else{
-            editTextSenha.setError("A senha deve ter tamanho entre 6 a 14 caracteres contendo números, letras maiusculas e minusculas ");
+        if (!editTextSenha.getEditableText().toString().equals(editTextConfirmarSenha.getEditableText().toString())) {
+            editTextSenha.setError("As senhas não conferem");
+            editTextConfirmarSenha.setError("As senhas não conferem");
+        } else if (editTextSenha.getEditableText().toString().equals("")) {
+            editTextSenha.setError("Campo obrigatório");
+        } else if (editTextEmail.getEditableText().toString().equals("")) {
+            editTextEmail.setError("Campo obrigatório");
+        } else {
+
+            Snackbar.make(view, "Cadastro realizado com sucesso!", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("OK", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            irParaLogin();
+                        }
+                    }).setActionTextColor(getResources().getColor(R.color.azulClaro)).show();
         }
     }
 
     private void irParaLogin() {
+        String enviarEmail = String.valueOf(editTextEmail);
         Intent intent = new Intent(this, LoginActivity.class);
-      startActivity(intent);
+        startActivity(intent);
     }
 
+    // confirmar se o formato da senha é valido
     private boolean senhaValida(String senha) {
         senha = senha.trim();
-        return senha.length() >= 6 && senha.length() <= 14 && textPattern.matcher(senha).matches();
+        return senha.length() >= 6 && senha.length() < 14 && textPattern.matcher(senha).matches();
+    }
+
+    // conferir se o email é invalido
+
+    public static boolean emailInvalido(String email) {
+        boolean isEmailIdValid = false;
+        if (email != null && email.length() > 0) {
+            String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(email);
+            if (matcher.matches()) {
+                isEmailIdValid = true;
+            }
+        }
+        return isEmailIdValid;
     }
 
 }

@@ -4,7 +4,9 @@ import java.util.UUID;
 
 public class Constantes {
 
-        public static String VAGALUME_KEY = UUID.randomUUID()+"";
+    public static final String EMAIL = "EMAIL";
+    public static final String SHARED_PREFERENCES = "LYRIO_PREFERENCES";
+    public static String VAGALUME_KEY = UUID.randomUUID()+"";
 
         public static String TOAST_ARTISTA_FAVORITO_ADICIONAR ="Não aguento mais esse Artista!";
         public static String TOAST_ARTISTA_FAVORITO_EXCLUIR = "Gostei! Vai para a minha lista!";

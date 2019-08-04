@@ -1,7 +1,10 @@
 package com.example.lyrio.login;
 
+import android.content.Context;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.lyrio.R;
 import com.example.lyrio.TabMenu;
+import com.example.lyrio.util.Constantes;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,15 +47,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+
         usernameEditText= findViewById(R.id.emailDigitado);
         passwordEditText = findViewById(R.id.senhaLogin);
-        EditText usernameEditText = findViewById(R.id.emailDigitado);
-        EditText passwordEditText = findViewById(R.id.senhaLogin);
 
-        TextView registro = findViewById(R.id.registreSe);
-        Button buttonFacebook = findViewById(R.id.botaoLoginFacebook);
-        Button registreComGoogle = findViewById(R.id.botaoLoginGoogle);
-        TextView esqueceuSenha = findViewById(R.id.esqueceuSenha);
+        registro = findViewById(R.id.registreSe);
+        buttonFacebook = findViewById(R.id.botaoLoginFacebook);
+        registreComGoogle = findViewById(R.id.botaoLoginGoogle);
+        esqueceuSenha = findViewById(R.id.esqueceuSenha);
 
 
         registro.setOnClickListener(new View.OnClickListener() {
@@ -69,22 +73,30 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+        SharedPreferences preferences = getSharedPreferences(Constantes.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+
+        if (preferences.contains(Constantes.EMAIL)) {
+            usernameEditText.setText(preferences.getString(Constantes.EMAIL, ""));
+
+        }
+
     }
 
-    public void botaoClicado(View view){
+    public void botaoClicado(View view) {
 
         usernameEditText.setError(null);
         passwordEditText.setError(null);
 
-        if (usernameEditText.getEditableText().toString().equals("")){
+        if (usernameEditText.getEditableText().toString().equals("")) {
             usernameEditText.setError("Informe seu email");
-        } else if(!emailInvalido(usernameEditText.getEditableText().toString())){
+        } else if (!emailInvalido(usernameEditText.getEditableText().toString())) {
             usernameEditText.setError("e-mail não foi digitado corretamente");
-        }else if(passwordEditText.getEditableText().toString().equals("")){
+        } else if (passwordEditText.getEditableText().toString().equals("")) {
             passwordEditText.setError("Informe sua senha");
-        }else if (!senhaValida(passwordEditText.getEditableText().toString())){
-            passwordEditText.setError("senha deve ter entre 6 e 14 caracteres");
-        }else{
+        } else if (senhaValida(passwordEditText.getEditableText().toString())) {
+            passwordEditText.setError("senha inválida");
+        } else {
             irParaHome();
         }
     }
@@ -118,6 +130,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //ir para Home  - por enquanto esta indo para registro ate criar a Tela
     private void irParaHome(){
+
         Intent intent = new Intent(this, TabMenu.class);
         startActivity(intent);
     }

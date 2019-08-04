@@ -192,8 +192,15 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         });
 
 
-        userName = view.findViewById(R.id.txtUserName);
+        userName = view.findViewById(R.id.user_name_id);
         userStatus = view.findViewById(R.id.txtUserStatus);
+
+        userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irParaLogin();
+            }
+        });
 
         try{
             gotMail = getActivity().getIntent().getExtras().getString("EMAIL");
@@ -211,6 +218,11 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
 
         return view;
+    }
+
+    private void irParaLogin() {
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
     }
 
     //metodo que direciona para o Fragment que contem a lista de noticias salvas mas não esta direcionando direito
