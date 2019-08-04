@@ -201,6 +201,14 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         userName = view.findViewById(R.id.user_name_id);
         userStatus = view.findViewById(R.id.txtUserStatus);
 
+        userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irParaLogin();
+            }
+        });
+
+
         try {
             gotMail = getActivity().getIntent().getExtras().getString("EMAIL");
         } catch (Exception e) {
@@ -216,17 +224,19 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         }
 
         swipeRefreshLayout = view.findViewById(R.id.home_swipe);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                musicaSalvaAdapter.removerTudo();
-                atualizarTudo();
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            musicaSalvaAdapter.removerTudo();
+            atualizarTudo();
 //                Toast.makeText(getActivity(), "bla", Toast.LENGTH_SHORT).show();
-                swipeRefreshLayout.setRefreshing(false);
-            }
+            swipeRefreshLayout.setRefreshing(false);
         });
 
         return view;
+    }
+
+    private void irParaLogin() {
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
     }
 
     private void atualizarTudo() {
