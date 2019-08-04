@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.ArtistaListener;
-import com.example.lyrio.models.Artista_old;
+import com.example.lyrio.database.models.Artista_old;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.lyrio.models.ArtistaSalvo;
+import com.example.lyrio.database.models.ArtistaSalvo;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.ListaArtistasSalvosListener;
 import com.squareup.picasso.Picasso;

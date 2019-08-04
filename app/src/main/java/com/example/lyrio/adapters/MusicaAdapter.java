@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lyrio.R;
-import com.example.lyrio.models.Musica;
+import com.example.lyrio.database.models.Musica;
 
 import java.util.ArrayList;
 import java.util.List;

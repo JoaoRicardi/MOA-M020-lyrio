@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.lyrio.models.Musica;
+import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.MusicaSalvaListener;
 import com.squareup.picasso.Picasso;

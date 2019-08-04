@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.lyrio.models.NoticiaSalva;
+import com.example.lyrio.database.models.NoticiaSalva;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.ListaNoticiasSalvasListener;
 import com.squareup.picasso.Picasso;

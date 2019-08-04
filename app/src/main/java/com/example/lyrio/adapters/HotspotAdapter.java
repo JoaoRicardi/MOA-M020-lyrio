@@ -13,7 +13,7 @@ import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.lyrio.models.Hotspot;
+import com.example.lyrio.database.models.Hotspot;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.HotspotListener;
 import com.example.lyrio.util.Constantes;

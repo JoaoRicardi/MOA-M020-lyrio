@@ -1,15 +1,15 @@
 package com.example.lyrio.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lyrio.R;
-import com.example.lyrio.models.Album;
+import com.example.lyrio.database.models.Album;
 import com.example.lyrio.interfaces.AlbumListener;
 
 import java.util.List;
