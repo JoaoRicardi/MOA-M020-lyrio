@@ -49,13 +49,11 @@ public class LoginActivity extends AppCompatActivity {
 
         usernameEditText= findViewById(R.id.emailDigitado);
         passwordEditText = findViewById(R.id.senhaLogin);
-        EditText usernameEditText = findViewById(R.id.emailDigitado);
-        EditText passwordEditText = findViewById(R.id.senhaLogin);
 
-        TextView registro = findViewById(R.id.registreSe);
-        Button buttonFacebook = findViewById(R.id.botaoLoginFacebook);
-        Button registreComGoogle = findViewById(R.id.botaoLoginGoogle);
-        TextView esqueceuSenha = findViewById(R.id.esqueceuSenha);
+        registro = findViewById(R.id.registreSe);
+        buttonFacebook = findViewById(R.id.botaoLoginFacebook);
+        registreComGoogle = findViewById(R.id.botaoLoginGoogle);
+        esqueceuSenha = findViewById(R.id.esqueceuSenha);
 
 
         registro.setOnClickListener(new View.OnClickListener() {
@@ -82,20 +80,20 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void botaoClicado(View view){
+    public void botaoClicado(View view) {
 
         usernameEditText.setError(null);
         passwordEditText.setError(null);
 
-        if (usernameEditText.getEditableText().toString().equals("")){
+        if (usernameEditText.getEditableText().toString().equals("")) {
             usernameEditText.setError("Informe seu email");
-        } else if(!emailInvalido(usernameEditText.getEditableText().toString())){
+        } else if (!emailInvalido(usernameEditText.getEditableText().toString())) {
             usernameEditText.setError("e-mail não foi digitado corretamente");
-        }else if(passwordEditText.getEditableText().toString().equals("")){
+        } else if (passwordEditText.getEditableText().toString().equals("")) {
             passwordEditText.setError("Informe sua senha");
-        }else if (!senhaValida(passwordEditText.getEditableText().toString())){
-            passwordEditText.setError("senha deve ter entre 6 e 14 caracteres");
-        }else{
+        } else if (senhaValida(passwordEditText.getEditableText().toString())) {
+            passwordEditText.setError("senha inválida");
+        } else {
             irParaHome();
         }
     }
