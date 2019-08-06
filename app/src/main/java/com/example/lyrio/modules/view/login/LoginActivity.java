@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity{
         LoginViewModel loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
         loginViewModel.getUsuarioLiveData()
                 .observe(this, usuario -> {
-                    loginViewModel
+
                 });
 
         final Button confirmarButton = findViewById(R.id.botaoLogin);
