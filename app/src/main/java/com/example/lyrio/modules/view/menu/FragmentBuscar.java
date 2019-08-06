@@ -272,7 +272,7 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
 
         }else{
 
-//            listaMusicasViewModel.favoritarApiItem(musicaSalva);
+//        listaMusicasViewModel.favoritarApiItem(musicaSalva);
 
             Intent intent = new Intent(getContext(), TelaLetras.class);
             Bundle bundle = new Bundle();
