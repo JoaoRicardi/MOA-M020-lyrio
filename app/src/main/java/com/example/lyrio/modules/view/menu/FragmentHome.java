@@ -219,13 +219,13 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             userStatus.setText("Sem notificações");
         }
 
-        swipeRefreshLayout = view.findViewById(R.id.home_swipe);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            musicaSalvaAdapter.removerTudo();
-            atualizarTudo();
+       // swipeRefreshLayout = view.findViewById(R.id.home_swipe);
+       // swipeRefreshLayout.setOnRefreshListener(() -> {
+       //     musicaSalvaAdapter.removerTudo();
+       //     atualizarTudo();
 //                Toast.makeText(getActivity(), "bla", Toast.LENGTH_SHORT).show();
-            swipeRefreshLayout.setRefreshing(false);
-        });
+       //     swipeRefreshLayout.setRefreshing(false);
+     //   });
 
         return view;
     }

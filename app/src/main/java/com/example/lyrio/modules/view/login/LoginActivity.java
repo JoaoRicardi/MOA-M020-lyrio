@@ -3,6 +3,8 @@ package com.example.lyrio.modules.view.login;
 import android.content.Context;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,13 +14,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.lyrio.R;
+import com.example.lyrio.interfaces.LoginResultadoCallBack;
+import com.example.lyrio.modules.model.Usuario;
 import com.example.lyrio.modules.view.menu.TabMenu;
+import com.example.lyrio.modules.viewModel.LoginViewModel;
 import com.example.lyrio.util.Constantes;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity{
 
     public final Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
     private EditText usernameEditText;
@@ -29,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button registreComGoogle;
     private TextView esqueceuSenha ;
 
+    LoginViewModel loginViewModel;
+
 
 
     @Override
@@ -37,39 +44,35 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
+        LoginViewModel loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        loginViewModel.getUsuarioLiveData()
+                .observe(this, usuario -> {
+                    loginViewModel
+                });
 
         final Button confirmarButton = findViewById(R.id.botaoLogin);
         confirmarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                botaoClicado(view);
+               loginViewModel.botaoClicado(view);
 
             }
         });
 
-        usernameEditText= findViewById(R.id.emailDigitado);
-        passwordEditText = findViewById(R.id.senhaLogin);
-
-        registro = findViewById(R.id.registreSe);
-        buttonFacebook = findViewById(R.id.botaoLoginFacebook);
-        registreComGoogle = findViewById(R.id.botaoLoginGoogle);
-        esqueceuSenha = findViewById(R.id.esqueceuSenha);
-
-
-        registro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                irParaRegistro();
-            }
-        });
+//        registro.setOnClickListener(new View.OnClickListener() {
+  //          @Override
+    //        public void onClick(View v) {
+      //          irParaRegistro();
+        //    }
+      //  });
 
 
-        esqueceuSenha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                esqueceuSenha();
-            }
-        });
+//        esqueceuSenha.setOnClickListener(new View.OnClickListener() {
+ //           @Override
+  //          public void onClick(View v) {
+  //              esqueceuSenha();
+  //          }
+  //      });
 
         SharedPreferences preferences = getSharedPreferences(Constantes.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -78,45 +81,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-    }
-
-    public void botaoClicado(View view) {
-
-        usernameEditText.setError(null);
-        passwordEditText.setError(null);
-
-        if (usernameEditText.getEditableText().toString().equals("")) {
-            usernameEditText.setError("Informe seu email");
-        } else if (!emailInvalido(usernameEditText.getEditableText().toString())) {
-            usernameEditText.setError("e-mail não foi digitado corretamente");
-        } else if (passwordEditText.getEditableText().toString().equals("")) {
-            passwordEditText.setError("Informe sua senha");
-        } else if (senhaValida(passwordEditText.getEditableText().toString())) {
-            passwordEditText.setError("senha inválida");
-        } else {
-            irParaHome();
-        }
-    }
-
-    // confirmar se o formato da senha é valido
-    private boolean senhaValida(String senha) {
-        senha = senha.trim();
-        return senha.length() >= 6 && senha.length() < 14 && textPattern.matcher(senha).matches();
-    }
-
-    // conferir se o email é invalido
-
-    public static boolean emailInvalido(String email) {
-        boolean isEmailIdValid = false;
-        if (email != null && email.length() > 0) {
-            String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(email);
-            if (matcher.matches()) {
-                isEmailIdValid = true;
-            }
-        }
-        return isEmailIdValid;
     }
 
     //intent ir para registro
