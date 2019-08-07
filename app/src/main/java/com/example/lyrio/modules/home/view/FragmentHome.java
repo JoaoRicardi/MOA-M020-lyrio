@@ -2,7 +2,6 @@ package com.example.lyrio.modules.home.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,24 +21,23 @@ import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
 import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.adapters.NoticiaSalvaAdapter;
+import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
-import com.example.lyrio.service.model.VagalumeBusca;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.database.models.NoticiaSalva;
 import com.example.lyrio.interfaces.ArtistaSalvoListener;
 import com.example.lyrio.interfaces.EnviarDeFragmentParaActivity;
 import com.example.lyrio.interfaces.MusicaSalvaListener;
 import com.example.lyrio.interfaces.NoticiaSalvaListener;
-import com.example.lyrio.modules.listaArtista.ListaArtistasSalvosActivity;
+import com.example.lyrio.modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
-import com.example.lyrio.modules.musica.ListaMusicaSalvaActivity;
-import com.example.lyrio.modules.musica.TelaLetras;
-import com.example.lyrio.modules.noticia.view.ListaNoticiaSalvaActivity;
+import com.example.lyrio.modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity;
+import com.example.lyrio.modules.listaNoticiaFavorito.view.ListaNoticiaSalvaActivity;
 import com.example.lyrio.modules.noticia.view.NoticiaActivity;
-import com.example.lyrio.modules.setup.ConfiguracoesActivity;
-import com.example.lyrio.modules.login.LoginActivity;
+import com.example.lyrio.modules.configuracoes.view.ConfiguracoesActivity;
+import com.example.lyrio.modules.login.view.LoginActivity;
 import com.example.lyrio.modules.home.viewModel.ArtistasViewModel;
 import com.example.lyrio.modules.home.viewModel.ListaMusicasViewModel;
 import com.example.lyrio.util.Constantes;
@@ -49,9 +47,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -297,7 +292,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     @Override
     public void onMusicaSalvaClicado(Musica musicaSalva) {
 
-        Intent intent = new Intent(getContext(), TelaLetras.class);
+        Intent intent = new Intent(getContext(), TelaLetrasActivity.class);
         Bundle bundle = new Bundle();
 
         bundle.putSerializable("MUSICA_ID", musicaSalva.getId());

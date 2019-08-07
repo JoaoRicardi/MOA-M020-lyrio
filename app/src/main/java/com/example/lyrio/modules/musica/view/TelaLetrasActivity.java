@@ -1,8 +1,7 @@
-package com.example.lyrio.modules.musica;
+package com.example.lyrio.modules.musica.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,23 +11,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.lyrio.R;
+import com.example.lyrio.modules.musica.viewmodel.LetrasViewModel;
 import com.example.lyrio.service.api.VagalumeBuscaApi;
-import com.example.lyrio.service.model.VagalumeBusca;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.util.Constantes;
-import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class TelaLetras extends AppCompatActivity {
+public class TelaLetrasActivity extends AppCompatActivity {
 
     private TextView nomeDoArtista;
     private TextView nomeDaMusica;
@@ -78,13 +73,13 @@ public class TelaLetras extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             if (favourite_button.isChecked()) {
-                                Toast.makeText(TelaLetras.this, Constantes.TOAST_MUSICA_FAVORITA_ADICIONAR, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(TelaLetrasActivity.this, Constantes.TOAST_MUSICA_FAVORITA_ADICIONAR, Toast.LENGTH_SHORT).show();
                                 Musica musica = new Musica();
                                 musica.setId(musicaSalvaId);
                                 letrasViewModel.favoritarMusica(musica);
 
                             } else {
-                                Toast.makeText(TelaLetras.this, Constantes.TOAST_MUSICA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(TelaLetrasActivity.this, Constantes.TOAST_MUSICA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
 
                                 letrasViewModel.removerMusicaPorId(musicaSalvaId);
                             }

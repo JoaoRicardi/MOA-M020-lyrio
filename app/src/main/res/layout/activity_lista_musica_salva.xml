@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_normal"
-    tools:context=".modules.musica.ListaMusicaSalvaActivity">
+    tools:context=".modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

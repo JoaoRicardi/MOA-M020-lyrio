@@ -1,4 +1,4 @@
-package com.example.lyrio.modules.setup;
+package com.example.lyrio.modules.configuracoes.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lyrio.R;
 import com.example.lyrio.modules.menu.view.MainActivity;
-import com.example.lyrio.modules.login.LoginActivity;
+import com.example.lyrio.modules.login.view.LoginActivity;
 
 public class ConfiguracoesActivity extends AppCompatActivity {
 

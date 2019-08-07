@@ -7,7 +7,7 @@ android:id="@+id/linearLayout"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:gravity="center"
-tools:context=".modules.setup.ConfiguracoesActivity"
+tools:context=".modules.configuracoes.view.ConfiguracoesActivity"
     android:background="@drawable/bg_normal">
 
 <androidx.cardview.widget.CardView

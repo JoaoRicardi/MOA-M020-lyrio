@@ -1,4 +1,4 @@
-package com.example.lyrio.modules.noticia.view;
+package com.example.lyrio.modules.listaNoticiaFavorito.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import com.example.lyrio.R;
 import com.example.lyrio.adapters.ListaNoticiasSalvasAdapter;
 import com.example.lyrio.database.models.NoticiaSalva;
 import com.example.lyrio.interfaces.ListaNoticiasSalvasListener;
+import com.example.lyrio.modules.noticia.view.NoticiaActivity;
 
 import java.util.ArrayList;
 import java.util.List;

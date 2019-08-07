@@ -1,4 +1,4 @@
-package com.example.lyrio.modules.login;
+package com.example.lyrio.modules.login.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.lyrio.R;
+import com.example.lyrio.modules.cadastro.view.UserCadastroActivity;
+import com.example.lyrio.modules.recuperarSenha.view.UserEsqueciMinhaSenha;
 import com.example.lyrio.modules.menu.view.MainActivity;
 import com.example.lyrio.util.Constantes;
 

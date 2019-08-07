@@ -9,7 +9,7 @@ import com.example.lyrio.R;
 import com.example.lyrio.adapters.ViewPagerAdapter;
 import com.example.lyrio.modules.buscar.view.FragmentBuscar;
 import com.example.lyrio.modules.home.view.FragmentHome;
-import com.example.lyrio.modules.noticia.view.FragmentNoticias;
+import com.example.lyrio.modules.noticiasHotspot.view.FragmentNoticias;
 import com.google.android.material.tabs.TabLayout;
 
 

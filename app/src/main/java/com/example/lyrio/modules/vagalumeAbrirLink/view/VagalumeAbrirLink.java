@@ -1,4 +1,4 @@
-package com.example.lyrio.modules.noticia.view;
+package com.example.lyrio.modules.vagalumeAbrirLink.view;
 
 import android.content.Intent;
 import android.os.Bundle;

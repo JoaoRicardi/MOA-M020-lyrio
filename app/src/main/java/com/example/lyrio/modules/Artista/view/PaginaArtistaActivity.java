@@ -2,7 +2,6 @@ package com.example.lyrio.modules.Artista.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,12 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
-import com.example.lyrio.modules.musica.TelaLetras;
+import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.adapters.ListaMusicasSalvasAdapter;
 import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.example.lyrio.service.model.ApiArtista;
-import com.example.lyrio.service.model.ApiItem;
-import com.example.lyrio.service.model.VagalumeBusca;
 import com.example.lyrio.model.Album;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.interfaces.AlbumListener;
@@ -36,9 +33,6 @@ import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class PaginaArtistaActivity extends AppCompatActivity implements ListaMusicasSalvasListener, AlbumListener {
@@ -155,7 +149,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 
 //        Log.i(TAG, " LETRA: "+musicaSalva.getText());
 
-        Intent intent = new Intent(this, TelaLetras.class);
+        Intent intent = new Intent(this, TelaLetrasActivity.class);
         Bundle bundle = new Bundle();
 
         bundle.putSerializable("MUSICA", musicaSalva);

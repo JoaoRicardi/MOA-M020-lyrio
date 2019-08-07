@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_normal"
-    tools:context=".modules.login.UserCadastroActivity">
+    tools:context=".modules.cadastro.view.UserCadastroActivity">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"

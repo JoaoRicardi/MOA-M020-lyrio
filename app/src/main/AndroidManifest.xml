@@ -14,20 +14,20 @@
         android:roundIcon="@mipmap/lyr_new_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".modules.setup.ConfiguracoesActivity"></activity>
+        <activity android:name=".modules.configuracoes.view.ConfiguracoesActivity"></activity>
         <activity android:name=".modules.noticia.view.NoticiaActivity" />
         <activity android:name=".modules.Artista.view.PaginaArtistaActivity" />
-        <activity android:name=".modules.noticia.view.ListaNoticiaSalvaActivity" />
-        <activity android:name=".modules.listaArtista.ListaArtistasSalvosActivity" />
-        <activity android:name=".modules.musica.ListaMusicaSalvaActivity" />
+        <activity android:name=".modules.listaNoticiaFavorito.view.ListaNoticiaSalvaActivity" />
+        <activity android:name=".modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity" />
+        <activity android:name=".modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity" />
         <activity android:name=".modules.Album.view.ListaAlbumActivity" />
-        <activity android:name=".modules.noticia.view.VagalumeAbrirLink" />
-        <activity android:name=".modules.login.LoginActivity" />
+        <activity android:name=".modules.vagalumeAbrirLink.view.VagalumeAbrirLink" />
+        <activity android:name=".modules.login.view.LoginActivity" />
         <activity android:name=".modules.menu.view.MainActivity" />
-        <activity android:name=".modules.musica.TelaLetras" />
-        <activity android:name=".modules.login.UserEsqueciMinhaSenha" />
-        <activity android:name=".modules.login.UserCadastroActivity" />
-        <activity android:name=".modules.login.SplashActivity">
+        <activity android:name=".modules.musica.view.TelaLetrasActivity" />
+        <activity android:name=".modules.recuperarSenha.view.UserEsqueciMinhaSenha" />
+        <activity android:name=".modules.cadastro.view.UserCadastroActivity" />
+        <activity android:name=".modules.splash.view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

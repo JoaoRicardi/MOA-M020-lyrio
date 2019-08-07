@@ -1,4 +1,4 @@
-package com.example.lyrio.modules.listaArtista;
+package com.example.lyrio.modules.listaArtistaFavorito.view;
 
 import android.os.Bundle;
 import android.view.View;

@@ -1,7 +1,9 @@
-package com.example.lyrio.modules.login;
+package com.example.lyrio.modules.cadastro.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.example.lyrio.modules.login.view.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import androidx.appcompat.app.AppCompatActivity;

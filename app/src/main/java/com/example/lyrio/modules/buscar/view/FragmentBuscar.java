@@ -21,7 +21,7 @@ import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.interfaces.ApiBuscaListener;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
 import com.example.lyrio.modules.buscar.viewmodel.BuscarViewModel;
-import com.example.lyrio.modules.musica.TelaLetras;
+import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.util.Constantes;
@@ -166,7 +166,7 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
 
 //        buscarViewModel.favoritarApiItem(musicaSalva);
 
-            Intent intent = new Intent(getContext(), TelaLetras.class);
+            Intent intent = new Intent(getContext(), TelaLetrasActivity.class);
             Bundle bundle = new Bundle();
 
             bundle.putSerializable("MUSICA_ID", apiItem.getId());

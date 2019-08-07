@@ -1,4 +1,4 @@
-package com.example.lyrio.modules.musica;
+package com.example.lyrio.modules.listaMusicaFavorito.view;
 
 import android.os.Bundle;
 import android.view.View;
@@ -70,7 +70,7 @@ public class ListaMusicaSalvaActivity
 
     @Override
     public void onListaMusicasSalvasClicado(Musica musicaSalva) {
-//        Intent intent = new Intent(this, TelaLetras.class);
+//        Intent intent = new Intent(this, TelaLetrasActivity.class);
 //        startActivity(intent);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.lyrio.modules.noticia.view;
+package com.example.lyrio.modules.noticiasHotspot.view;
 
 
 import android.content.Intent;
@@ -15,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.HotspotAdapter;
+import com.example.lyrio.modules.vagalumeAbrirLink.view.VagalumeAbrirLink;
 import com.example.lyrio.service.api.VagalumeHotspotApi;
 import com.example.lyrio.service.model.VagalumeHotspot;
 import com.example.lyrio.model.Hotspot;
