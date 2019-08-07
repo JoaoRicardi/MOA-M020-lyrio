@@ -48,7 +48,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FragmentBuscar extends Fragment implements ApiBuscaListener{
 
     private static final String TAG = "VAGALUME";
-//    private ArrayList<ApiItem> listaTemApi = new ArrayList<>();
+    private ArrayList<ApiItem> listaTemApi = new ArrayList<>();
     private Retrofit retrofit;
     private EditText userInputBusca;
     private TextView campoUserFriendly;

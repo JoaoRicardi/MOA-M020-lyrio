@@ -7,8 +7,10 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.example.lyrio.api.base_vagalume.ApiArtista;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 //@Entity(foreignKeys = @ForeignKey(entity = ListaMusicasFavoritas.class,
 //        parentColumns = "id",
 //        childColumns = "lista_compras_id"))
@@ -21,26 +23,36 @@ public class Musica implements Serializable {
 
     @ColumnInfo(name = "id_da_musica")
     private String id;
+    @SerializedName("mus")
     @Ignore
     private String name;
+    @SerializedName("desc")
     @Ignore
     private String desc;
+    @SerializedName("url")
     @Ignore
     private String url;
+    @SerializedName("albumPic")
     @Ignore
     private String albumPic;
+    @SerializedName("lang")
     @Ignore
     private int lang;
+    @SerializedName("text")
     @Ignore
     private String text;
+    @SerializedName("trans")
     @Ignore
     private String trans;
+    @SerializedName("art")
     @Ignore
     private ApiArtista artista;
     @Ignore
     private String emailUsuario;
     @ColumnInfo(name = "is_favorita")
     private boolean favoritarMusica;
+    @Ignore
+    private List<Musica> musicasList;
 
     public Musica() {
     }
@@ -145,5 +157,13 @@ public class Musica implements Serializable {
 
     public void setFavoritarMusica(boolean favoritarMusica) {
         this.favoritarMusica = favoritarMusica;
+    }
+
+    public List<Musica> getMusicasList() {
+        return musicasList;
+    }
+
+    public void setMusicasList(List<Musica> musicasList) {
+        this.musicasList = musicasList;
     }
 }

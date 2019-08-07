@@ -42,28 +42,6 @@ public class TabMenu extends AppCompatActivity {
         changeView(numeroDoFragment);
 
 
-
-
-        //DESATIVAR MENU DO TOPO
-
-//        final Button apertarButton = findViewById(R.id.artista_button_id);
-//        apertarButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                irParaArtistas();
-//            }
-//        });
-//
-//
-//        final Button apertarButton2 = findViewById(R.id.musica_button_id);
-//        apertarButton2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                irParaMusicas();
-//
-//            }
-//        });
-
     }
 
     public void changeView(Integer pageNum) {
@@ -74,18 +52,6 @@ public class TabMenu extends AppCompatActivity {
         }
     }
 
-    //DESATIVAR MENU DO TOPO
-
-//    //intent ir para registro
-//    private void irParaArtistas () {
-//        Intent intent = new Intent(this, ListaDeArtistasActivity.class);
-//        startActivity(intent);
-//    }
-//
-//    private void irParaMusicas () {
-//        Intent intent = new Intent(this, ListaAlbumActivity.class);
-//        startActivity(intent);
-//    }
 
 }
 

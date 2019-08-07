@@ -1,24 +1,35 @@
 package com.example.lyrio.database.dao;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.api.base_vagalume.ApiArtista;
+
+import java.util.List;
+
+import io.reactivex.Flowable;
 
 @Dao
 public interface ArtistasFavoritosDao {
 
-//        @Query("select * from musica where id_da_musica = :idDaMusica")
-//        Flowable<Musica> getMusicaPorId(String idDaMusica);
-//
-//        @Query("select * from musica")
-//        Flowable<List<Musica>> getMusicasFavoritas();
-//
-//        @Insert
-//        void inserir(Musica musica);
-//
-//        @Delete
-//        void delete(Musica musica);
-//
-//        @Update
-//        void update(Musica musica);
+        @Query("select * from apiartista where id_do_artista = :idDoArtista")
+        Flowable<ApiArtista> getArtistaPorId(String idDoArtista);
+
+        @Query("select * from apiartista")
+        Flowable<List<ApiArtista>> getArtistasFavoritos();
+
+        @Insert
+        void inserir(ApiArtista artista);
+
+        @Delete
+        void delete(ApiArtista artista);
+
+        @Query("delete from apiartista where id_do_artista = :idDoArtista")
+        void deletePorId(String idDoArtista);
+
+        @Update
+        void update(ApiArtista artista);
 }
