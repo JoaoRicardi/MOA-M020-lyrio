@@ -52,9 +52,8 @@ public class LoginViewModel extends AndroidViewModel {
 
     public void botaoClicado(View view) {
 
-        usernameEditText= view.findViewById(R.id.emailDigitado);
+        usernameEditText = view.findViewById(R.id.emailDigitado);
         passwordEditText = view.findViewById(R.id.senhaLogin);
-
         registro = view.findViewById(R.id.registreSe);
         buttonFacebook = view.findViewById(R.id.botaoLoginFacebook);
         registreComGoogle = view.findViewById(R.id.botaoLoginGoogle);
