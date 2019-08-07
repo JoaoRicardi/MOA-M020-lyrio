@@ -112,6 +112,9 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
         artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
         artistasViewModel.atualizarArtista();
+
+
+
         listaMusicasViewModel = ViewModelProviders.of(this).get(ListaMusicasViewModel.class);
         listaMusicasViewModel.atualizarLista();
 
@@ -133,8 +136,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         listaArtistaSalvo = new ArrayList<>();
 
         //Conteudo artista salvo
-        String[] nomesDosArtistas = {"u2", "skank", "imagine-dragons", "emicida", "skrillex", "rita-ora", "rita-lee", "ac-dc"};
-        gerarListaDeArtistas(nomesDosArtistas);
+//        String[] nomesDosArtistas = {"u2", "skank", "imagine-dragons", "emicida", "skrillex", "rita-ora", "rita-lee", "ac-dc"};
+//        gerarListaDeArtistas(nomesDosArtistas);
 
         artistaSalvoAdapter = new ArtistaSalvoAdapter(this);
         GridLayoutManager gridArtistas = new GridLayoutManager(view.getContext(), 4);
