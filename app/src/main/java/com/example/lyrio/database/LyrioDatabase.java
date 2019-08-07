@@ -4,7 +4,7 @@ package com.example.lyrio.database;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-import com.example.lyrio.api.base_vagalume.ApiArtista;
+import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.database.dao.ArtistasFavoritosDao;
 import com.example.lyrio.database.dao.MusicasFavoritasDao;
 import com.example.lyrio.database.models.Musica;

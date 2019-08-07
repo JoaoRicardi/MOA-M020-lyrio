@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context=".modules.view.menu.FragmentHome">
+    tools:context=".modules.home.view.FragmentHome">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

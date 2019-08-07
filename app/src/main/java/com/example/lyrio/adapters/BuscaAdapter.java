@@ -13,7 +13,7 @@ import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.lyrio.api.base_vagalume.ApiItem;
+import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.ApiBuscaListener;
 import com.example.lyrio.database.models.Musica;
@@ -83,7 +83,7 @@ public class BuscaAdapter extends RecyclerView.Adapter<BuscaAdapter.ViewHolder>{
         return listaDeApiItems.size();
     }
 
-    public void adicionarListaDeApiItems(ArrayList<ApiItem> listaApiIt, List<Musica> musicasFavoritas) {
+    public void adicionarListaDeApiItems(List<ApiItem> listaApiIt, List<Musica> musicasFavoritas) {
         if(musicasFavoritas!=null){
             listaDeMusicasFavoritas.addAll(musicasFavoritas);
         }

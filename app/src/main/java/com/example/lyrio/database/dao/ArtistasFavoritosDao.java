@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.lyrio.api.base_vagalume.ApiArtista;
+import com.example.lyrio.service.model.ApiArtista;
 
 import java.util.List;
 

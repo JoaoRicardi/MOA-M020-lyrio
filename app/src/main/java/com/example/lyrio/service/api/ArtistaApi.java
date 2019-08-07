@@ -1,6 +1,6 @@
 package com.example.lyrio.service.api;
 
-import com.example.lyrio.api.base_vagalume.ApiArtista;
+import com.example.lyrio.service.model.ApiArtista;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

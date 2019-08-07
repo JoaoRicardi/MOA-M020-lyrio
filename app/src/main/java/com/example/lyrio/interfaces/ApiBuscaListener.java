@@ -1,5 +1,5 @@
 package com.example.lyrio.interfaces;
-import com.example.lyrio.api.base_vagalume.ApiItem;
+import com.example.lyrio.service.model.ApiItem;
 
 public interface ApiBuscaListener {
 

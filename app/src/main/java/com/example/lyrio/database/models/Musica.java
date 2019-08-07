@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.example.lyrio.api.base_vagalume.ApiArtista;
+import com.example.lyrio.service.model.ApiArtista;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;

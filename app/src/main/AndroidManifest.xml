@@ -14,20 +14,20 @@
         android:roundIcon="@mipmap/lyr_new_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".modules.view.setup.ConfiguracoesActivity"></activity>
-        <activity android:name=".modules.view.noticia.NoticiaActivity" />
-        <activity android:name=".modules.view.Artista.PaginaArtistaActivity" />
-        <activity android:name=".modules.view.noticia.ListaNoticiaSalvaActivity" />
-        <activity android:name=".modules.view.Artista.ListaArtistasSalvosActivity" />
-        <activity android:name=".modules.view.musica.ListaMusicaSalvaActivity" />
-        <activity android:name=".modules.view.Album.ListaAlbumActivity" />
-        <activity android:name=".modules.view.noticia.VagalumeAbrirLink" />
-        <activity android:name=".modules.view.login.LoginActivity" />
-        <activity android:name=".modules.view.menu.TabMenu" />
-        <activity android:name=".modules.view.musica.TelaLetras" />
-        <activity android:name=".modules.view.login.UserEsqueciMinhaSenha" />
-        <activity android:name=".modules.view.login.UserCadastroActivity" />
-        <activity android:name=".modules.view.login.SplashActivity">
+        <activity android:name=".modules.setup.ConfiguracoesActivity"></activity>
+        <activity android:name=".modules.noticia.view.NoticiaActivity" />
+        <activity android:name=".modules.Artista.view.PaginaArtistaActivity" />
+        <activity android:name=".modules.noticia.view.ListaNoticiaSalvaActivity" />
+        <activity android:name=".modules.listaArtista.ListaArtistasSalvosActivity" />
+        <activity android:name=".modules.musica.ListaMusicaSalvaActivity" />
+        <activity android:name=".modules.Album.view.ListaAlbumActivity" />
+        <activity android:name=".modules.noticia.view.VagalumeAbrirLink" />
+        <activity android:name=".modules.login.LoginActivity" />
+        <activity android:name=".modules.menu.view.MainActivity" />
+        <activity android:name=".modules.musica.TelaLetras" />
+        <activity android:name=".modules.login.UserEsqueciMinhaSenha" />
+        <activity android:name=".modules.login.UserCadastroActivity" />
+        <activity android:name=".modules.login.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lyrio.R;
-import com.example.lyrio.database.models.Album;
+import com.example.lyrio.model.Album;
 import com.example.lyrio.interfaces.AlbumListener;
 
 import java.util.List;

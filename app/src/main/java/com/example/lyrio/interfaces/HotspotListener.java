@@ -1,6 +1,6 @@
 package com.example.lyrio.interfaces;
 
-import com.example.lyrio.database.models.Hotspot;
+import com.example.lyrio.model.Hotspot;
 
 public interface HotspotListener {
 

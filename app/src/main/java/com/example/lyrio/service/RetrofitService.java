@@ -3,6 +3,7 @@ package com.example.lyrio.service;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.service.api.ArtistaApi;
 import com.example.lyrio.service.api.MusicaApi;
+import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.util.concurrent.TimeUnit;
@@ -44,5 +45,9 @@ public class RetrofitService {
 
     public MusicaApi getMusicasApi(){
         return getRetrofit().create(MusicaApi.class);
+    }
+
+    public VagalumeBuscaApi getBuscaApi(){
+        return getRetrofit().create(VagalumeBuscaApi.class);
     }
 }
