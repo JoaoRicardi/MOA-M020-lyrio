@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import io.reactivex.Observable;
 
@@ -18,7 +19,7 @@ public class BuscaRepository {
 
     public Observable<List<ApiItem>> buscar(String termos){
         Date curTime = Calendar.getInstance().getTime();
-        String vagaKey =  Constantes.VAGALUME_KEY + curTime.toString().trim().replace(" ","");
+        String vagaKey = "52433bd778677b92342a16ddf927e4bf";
         return retrofitService.getBuscaApi()
                 .getBuscaResponse(vagaKey, termos, 5)
                 .map(vagalumeBusca -> vagalumeBusca.getResponse().getDocs());

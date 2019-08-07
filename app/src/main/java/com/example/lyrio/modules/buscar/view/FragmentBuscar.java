@@ -3,7 +3,6 @@ package com.example.lyrio.modules.buscar.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,34 +17,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.BuscaAdapter;
-import com.example.lyrio.modules.buscar.viewmodel.BuscarViewModel;
-import com.example.lyrio.service.api.VagalumeBuscaApi;
-import com.example.lyrio.service.model.ApiArtista;
-import com.example.lyrio.service.model.ApiItem;
-import com.example.lyrio.service.model.ApiResponse;
-import com.example.lyrio.service.model.VagalumeBusca;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.interfaces.ApiBuscaListener;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
+import com.example.lyrio.modules.buscar.viewmodel.BuscarViewModel;
 import com.example.lyrio.modules.musica.TelaLetras;
+import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.util.Constantes;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentBuscar extends Fragment implements ApiBuscaListener{
+public class FragmentBuscar extends Fragment implements ApiBuscaListener {
 
     private static final String TAG = "VAGALUME";
     private ArrayList<ApiItem> listaTemApi = new ArrayList<>();
@@ -81,24 +69,20 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
         campoUserFriendly = view.findViewById(R.id.buscar_friendly_message);
         campoDiv = view.findViewById(R.id.busca_resultado_div);
 
-        campoLetras.setText("");
-        campoArtista.setText("");
         campoUserFriendly.setText(Constantes.BUSCAR_FRIENDLY_WELCOME);
-        campoDiv.setAlpha(0);
+        campoDiv.setVisibility(View.GONE);
 
         userInputBusca = view.findViewById(R.id.buscar_campo_de_busca);
         botaoBuscar = view.findViewById(R.id.buscar_botao_busca);
+
+        campoLetras.setVisibility(View.GONE);
+        campoArtista.setVisibility(View.GONE);
 
         buscarViewModel = ViewModelProviders.of(this).get(BuscarViewModel.class);
 
         botaoBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                campoLetras.setText("");
-                campoArtista.setText("");
-                campoUserFriendly.setText("");
-                campoDiv.setAlpha(0);
-
                 buscaLetrasAdapter.removerTudo();
                 buscaArtistasAdapter.removerTudo();
                 buscarViewModel.fazerBusca(userInputBusca.getText().toString());
@@ -135,36 +119,37 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
                     buscaLetrasAdapter.adicionarListaDeApiItems(listaMusica, listaMusicasFavoritas);
                 });
 
+        buscarViewModel.getBuscaLayoutLiveData()
+                .observe(this, buscaLayout -> {
+
+                    campoDiv.setVisibility(View.GONE);
+                    campoLetras.setVisibility(View.GONE);
+                    campoUserFriendly.setVisibility(View.GONE);
+                    campoLetras.setText("Letras");
+                    campoArtista.setText("Artistas");
+
+                    if (buscaLayout.isArtistaEncontrado() && buscaLayout.isMusicaEncontrado()) {
+                        campoLetras.setVisibility(View.VISIBLE);
+                        campoArtista.setVisibility(View.VISIBLE);
+                        campoDiv.setVisibility(View.VISIBLE);
+                    } else if (buscaLayout.isArtistaEncontrado()) {
+                        campoArtista.setVisibility(View.VISIBLE);
+                    } else if (buscaLayout.isMusicaEncontrado()) {
+                        campoLetras.setVisibility(View.VISIBLE);
+                    } else {
+                        campoUserFriendly.setVisibility(View.VISIBLE);
+                        campoUserFriendly.setText(Constantes.BUSCAR_NAO_ENCONTRAMOS);
+                    }
+                });
+
         return view;
     }
-
-//   if(listaDeMusicas.size()>0 && listaDeArtistas.size()>0){
-//        campoLetras.setText("Letras");
-//        campoArtista.setText("Artistas");
-//        campoUserFriendly.setText("");
-//        campoDiv.setAlpha(1);
-//    }else if(listaDeMusicas.size()==0 && listaDeArtistas.size()>0){
-//        campoLetras.setText("");
-//        campoArtista.setText("Artistas");
-//        campoUserFriendly.setText("");
-//        campoDiv.setAlpha(0);
-//    }else if(listaDeMusicas.size()>0){
-//        campoLetras.setText("Letras");
-//        campoArtista.setText("");
-//        campoUserFriendly.setText("");
-//        campoDiv.setAlpha(0);
-//    }else{
-//        campoLetras.setText("");
-//        campoArtista.setText("");
-//        campoUserFriendly.setText(Constantes.BUSCAR_NAO_ENCONTRAMOS);
-//        campoDiv.setAlpha(0);
-//    }
 
 
     @Override
     public void onApiBuscarClicado(ApiItem apiItem) {
 
-        if(apiItem.getCampoBottom().equals("Ver músicas")){
+        if (apiItem.getCampoBottom().equals("Ver músicas")) {
 
             ApiArtista apiArtista = new ApiArtista();
             apiArtista.setUrl(apiItem.getUrl());
@@ -178,7 +163,7 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
 
             startActivity(intent);
 
-        }else{
+        } else {
 
 //        buscarViewModel.favoritarApiItem(musicaSalva);
 
@@ -194,7 +179,7 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
 
     @Override
     public void favoritarApiItem(ApiItem apiItem) {
-        if(!apiItem.getCampoBottom().equals("Ver músicas")){
+        if (!apiItem.getCampoBottom().equals("Ver músicas")) {
             Musica musicaSalva = new Musica();
             musicaSalva.setId(apiItem.getId());
 
@@ -204,7 +189,7 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener{
 
     @Override
     public void removerApiItem(ApiItem apiItem) {
-        if(!apiItem.getCampoBottom().equals("Ver músicas")){
+        if (!apiItem.getCampoBottom().equals("Ver músicas")) {
 
             buscarViewModel.getMusicaPorId(apiItem.getId());
             buscarViewModel.getMusicaLiveData()

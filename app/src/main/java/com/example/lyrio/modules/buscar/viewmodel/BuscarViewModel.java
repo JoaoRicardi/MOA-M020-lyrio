@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.model.BuscaLayout;
 import com.example.lyrio.repository.BuscaRepository;
 import com.example.lyrio.repository.ListaMusicasRepository;
 import com.example.lyrio.service.model.ApiItem;
@@ -29,6 +30,7 @@ public class BuscarViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<ApiItem>> listaMusicasBuscadaLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ApiItem>> listaArtistaBuscadaLiveData = new MutableLiveData<>();
+    private MutableLiveData<BuscaLayout> buscaLayoutLiveData = new MutableLiveData<>();
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
@@ -53,6 +55,10 @@ public class BuscarViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<ApiItem>> getListaArtistaBuscadaLiveData() {
         return listaArtistaBuscadaLiveData;
+    }
+
+    public MutableLiveData<BuscaLayout> getBuscaLayoutLiveData() {
+        return buscaLayoutLiveData;
     }
 
     public void getMusicaPorId(String stringId){
@@ -146,7 +152,10 @@ public class BuscarViewModel extends AndroidViewModel {
                             // atualizar pelo LiveData
                             listaArtistaBuscadaLiveData.setValue(listaDeArtistas);
                             listaMusicasBuscadaLiveData.setValue(listaDeMusicas);
-                            
+
+                            BuscaLayout buscaLayout = new BuscaLayout(listaDeArtistas.size() > 0, listaDeMusicas.size() > 0);
+                            buscaLayoutLiveData.setValue(buscaLayout);
+
                         }, throwable -> throwable.printStackTrace())
         );
     }
