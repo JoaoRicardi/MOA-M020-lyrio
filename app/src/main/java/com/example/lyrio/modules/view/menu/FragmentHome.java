@@ -40,6 +40,7 @@ import com.example.lyrio.modules.view.noticia.ListaNoticiaSalvaActivity;
 import com.example.lyrio.modules.view.noticia.NoticiaActivity;
 import com.example.lyrio.modules.view.setup.ConfiguracoesActivity;
 import com.example.lyrio.modules.view.login.LoginActivity;
+import com.example.lyrio.modules.viewModel.ArtistasViewModel;
 import com.example.lyrio.modules.viewModel.ListaMusicasViewModel;
 import com.example.lyrio.util.Constantes;
 
@@ -96,6 +97,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
     //Room ETC
     private ListaMusicasViewModel listaMusicasViewModel;
+    private ArtistasViewModel artistasViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,6 +110,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
+        artistasViewModel.atualizarArtista();
         listaMusicasViewModel = ViewModelProviders.of(this).get(ListaMusicasViewModel.class);
         listaMusicasViewModel.atualizarLista();
 
