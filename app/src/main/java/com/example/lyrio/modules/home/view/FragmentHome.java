@@ -246,20 +246,18 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     }
 
 
-    //metodo que direciona para o Fragment que contem a lista de noticias salvas mas não esta direcionando direito
-    private void irParaMinhasNoticias() {
+        private void irParaMinhasNoticias() {
         Intent intent = new Intent(getContext(), ListaNoticiaSalvaActivity.class);
         startActivity(intent);
     }
 
-    //metodo que direciona para o Fragment que contem a lista de musicas salvas mas não esta direcionando direito
     private void irParaMinhasMusicas() {
         Intent intent = new Intent(getContext(), ListaMusicaSalvaActivity.class);
 
         startActivity(intent);
     }
 
-    //metodo que direciona para o Fragment que contem a lista de artistas salvas mas não esta direcionando direito
+
     private void irParaMeusArtistas() {
 
         Intent intent = new Intent(getContext(), ListaArtistasSalvosActivity.class);
