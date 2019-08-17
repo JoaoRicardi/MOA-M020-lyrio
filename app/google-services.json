@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "69337433706",
+    "firebase_url": "https://lyrio-b9a1d.firebaseio.com",
+    "project_id": "lyrio-b9a1d",
+    "storage_bucket": "lyrio-b9a1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69337433706:android:bc128e89549f2a2d",
+        "android_client_info": {
+          "package_name": "com.example.lyrio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69337433706-vohrnd5qe8nb7s7p8h7qa9j9c07ekgff.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lyrio",
+            "certificate_hash": "0772004297caeee2461e7015796e9471d0505e15"
+          }
+        },
+        {
+          "client_id": "69337433706-aejq45na4hbvm2fvkclp6ug8qa6jjbbs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lyrio",
+            "certificate_hash": "751566c1806282aaef44439174bfe5baefcd52e7"
+          }
+        },
+        {
+          "client_id": "69337433706-sb70un1cje2de2nu5v5pr12ralabceam.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs3PGKBJ5V1GN-FbdulGpQ5IjEiWqI5Mg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69337433706-sb70un1cje2de2nu5v5pr12ralabceam.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

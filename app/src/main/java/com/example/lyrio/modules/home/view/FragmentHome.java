@@ -41,6 +41,9 @@ import com.example.lyrio.modules.login.view.LoginActivity;
 import com.example.lyrio.modules.home.viewModel.ArtistasViewModel;
 import com.example.lyrio.modules.home.viewModel.ListaMusicasViewModel;
 import com.example.lyrio.util.Constantes;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,6 +74,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private TextView verMaisArtistas;
     private TextView verMaisNoticias;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private GoogleApiClient googleApiClient;
 
     //Interfaces
     private EnviarDeFragmentParaActivity enviarDeFragmentParaActivity;
@@ -98,6 +102,21 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
+
+        // Configure Google Sign In
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build();
+
+
+
+//        googleApiClient = new GoogleApiClient.Builder(FragmentHome.this)
+//                .enableAutoManage(this, this)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+//                .build();
+
+
 
         // Iniciar retrofit para buscar infos da API
         retrofit = new Retrofit.Builder()
