@@ -2,6 +2,7 @@ package com.example.lyrio.modules.home.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,8 +22,10 @@ import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
 import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.adapters.NoticiaSalvaAdapter;
+import com.example.lyrio.modules.home.viewModel.HomeViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.service.api.VagalumeBuscaApi;
+import com.example.lyrio.service.api.VagalumeHomeApi;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.database.models.Musica;
@@ -40,6 +43,7 @@ import com.example.lyrio.modules.configuracoes.view.ConfiguracoesActivity;
 import com.example.lyrio.modules.login.view.LoginActivity;
 import com.example.lyrio.modules.home.viewModel.ArtistasViewModel;
 import com.example.lyrio.modules.home.viewModel.ListaMusicasViewModel;
+import com.example.lyrio.service.model.VagalumeBusca;
 import com.example.lyrio.util.Constantes;
 
 import java.util.ArrayList;
@@ -47,6 +51,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -93,32 +100,35 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     //Room ETC
     private ListaMusicasViewModel listaMusicasViewModel;
     private ArtistasViewModel artistasViewModel;
+    private HomeViewModel homeViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
 
-        // Iniciar retrofit para buscar infos da API
-        retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.vagalume.com.br/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel.atualizarListaMusica();
+//        homeViewModel.atualizarArtista();
 
-        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
-        artistasViewModel.atualizarArtista();
-
-
-
-        listaMusicasViewModel = ViewModelProviders.of(this).get(ListaMusicasViewModel.class);
-        listaMusicasViewModel.atualizarLista();
-
-        //Gerar lista de musicas a partir do Banco
-        listaMusicasViewModel.getListaMusicasLiveData()
-                .observe(this, listaMusicas -> {
+        homeViewModel.getListaMusicaLiveData()
+                .observe(this, listaMusicas->{
                     gerarListaDeMusicasPeloBanco(listaMusicas);
-//                    Toast.makeText(this.getContext(), "SIZE: "+listaMusicas.size(), Toast.LENGTH_SHORT).show();
                 });
+
+//        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
+//        artistasViewModel.atualizarArtista();
+//
+//
+//
+//        listaMusicasViewModel = ViewModelProviders.of(this).get(ListaMusicasViewModel.class);
+//        listaMusicasViewModel.atualizarLista();
+//
+//        //Gerar lista de musicas a partir do Banco
+//        listaMusicasViewModel.getListaMusicasLiveData()
+//                .observe(this, listaMusicas -> {
+//                    gerarListaDeMusicasPeloBanco(listaMusicas);
+//                });
 
         musicaSalvaAdapter = new MusicaSalvaAdapter(this);
         GridLayoutManager gridMusicas = new GridLayoutManager(view.getContext(), 4);
@@ -128,11 +138,11 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
 
         //Inicializar lista de artista salvo
-        listaArtistaSalvo = new ArrayList<>();
+//        listaArtistaSalvo = new ArrayList<>();
 
         //Conteudo artista salvo
-        String[] nomesDosArtistas = {"u2", "skank", "imagine-dragons", "emicida", "skrillex", "rita-ora", "rita-lee", "ac-dc"};
-        gerarListaDeArtistas(nomesDosArtistas);
+//        String[] nomesDosArtistas = {"u2", "skank", "imagine-dragons", "emicida", "skrillex", "rita-ora", "rita-lee", "ac-dc"};
+//        gerarListaDeArtistas(nomesDosArtistas);
 
         artistaSalvoAdapter = new ArtistaSalvoAdapter(this);
         GridLayoutManager gridArtistas = new GridLayoutManager(view.getContext(), 4);
@@ -238,10 +248,13 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     }
 
     private void atualizarTudo() {
-        listaMusicasViewModel.getListaMusicasLiveData()
+        homeViewModel.getListaMusicaLiveData()
                 .observe(this, listaMusicas -> {
                     gerarListaDeMusicasPeloBanco(listaMusicas);
-//                    Toast.makeText(this.getContext(), "SIZE: "+listaMusicas.size(), Toast.LENGTH_SHORT).show();
+                });
+        homeViewModel.getListaArtistaLiveData()
+                .observe(this,listaArtista->{
+                    artistaSalvoAdapter.adicionarListaDeArtistas(listaArtista);
                 });
     }
 
@@ -382,70 +395,70 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                 break;
         }
 
-        VagalumeBuscaApi service = retrofit.create(VagalumeBuscaApi.class);
-//        Call<VagalumeBusca> vagalumeBuscaCall = service.getBuscaResponse(buscaFull);
-//        vagalumeBuscaCall.enqueue(new Callback<VagalumeBusca>() {
-//            @Override
-//            public void onResponse(Call<VagalumeBusca> call, Response<VagalumeBusca> response) {
-//                if (response.isSuccessful()) {
-//                    VagalumeBusca vagalumeBusca = response.body();
-//
-//                    if (vagalumeBusca.getArt() != null) {
-//                        ApiArtista apiArtista = vagalumeBusca.getArt();
-//                        ApiItem apiMusica = vagalumeBusca.getMus().get(0);
-//
-//                        ApiArtista artistaRecebido = new ApiArtista();
-//                        artistaRecebido.setId(apiArtista.getId());
-//                        artistaRecebido.setName(apiArtista.getName());
-//                        artistaRecebido.setUrl(apiArtista.getUrl());
-//                        artistaRecebido.setPic_small(apiArtista.getUrl() + "images/profile.jpg");
-//
-//                        // Logcat com tag VAGALUME
-////                        Log.i(TAG, " RETROFIT url imagem: "+artistaRecebido.getPic_small());
-//
-//                        Musica musicaRecebida = new Musica();
-//                        musicaRecebida.setId(apiMusica.getId());
-//                        musicaRecebida.setName(apiMusica.getName());
-//                        musicaRecebida.setUrl(apiMusica.getUrl());
-//                        musicaRecebida.setLang(apiMusica.getLang());
-//                        musicaRecebida.setText(apiMusica.getText());
-//                        musicaRecebida.setAlbumPic(artistaRecebido.getPic_small());
-//                        musicaRecebida.setArtista(apiArtista);
-//
-//                        //Adicionar a lista de Musicas
-////                        listaMusicaSalva.add(musicaRecebida);
-//
-//                        //Adicionar ao Adapter do RecyclerView
-//                        musicaSalvaAdapter.adicionarMusica(musicaRecebida);
-//
-//
-//                    } else {
-//                        ApiArtista apiArtist = vagalumeBusca.getArtist();
-//
-//                        ApiArtista artistaRecebido = new ApiArtista();
-//                        artistaRecebido.setDesc(apiArtist.getDesc());
-//                        artistaRecebido.setPic_small("https://www.vagalume.com.br" + apiArtist.getPic_small());
-//                        artistaRecebido.setPic_medium("https://www.vagalume.com.br" + apiArtist.getPic_medium());
-//                        artistaRecebido.setQtdMusicas(apiArtist.getLyrics().getItem().size());
-//                        artistaRecebido.setToplyrics(apiArtist.getToplyrics());
-//
-//                        //Adicionar a lista de Artistas
-//                        listaArtistaSalvo.add(artistaRecebido);
-//
-//                        //Adicionar ao Adapter do RecyclerView
-//                        artistaSalvoAdapter.adicionarArtista(artistaRecebido);
-//                    }
-//
-//                } else {
-//                    Log.e(TAG, " onResponse: " + response.errorBody());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<VagalumeBusca> call, Throwable t) {
-//                Log.e(TAG, " onFailure: " + t.getMessage());
-//            }
-//        });
+        VagalumeHomeApi service = retrofit.create(VagalumeHomeApi.class);
+        Call<VagalumeBusca> vagalumeBuscaCall = service.getBuscaResponse(buscaFull);
+        vagalumeBuscaCall.enqueue(new Callback<VagalumeBusca>() {
+            @Override
+            public void onResponse(Call<VagalumeBusca> call, Response<VagalumeBusca> response) {
+                if (response.isSuccessful()) {
+                  VagalumeBusca vagalumeBusca = response.body();
+
+                    if (vagalumeBusca.getArt() != null) {
+                        ApiArtista apiArtista = vagalumeBusca.getArt();
+                        ApiItem apiMusica = vagalumeBusca.getMus().get(0);
+
+                        ApiArtista artistaRecebido = new ApiArtista();
+                        artistaRecebido.setId(apiArtista.getId());
+                        artistaRecebido.setName(apiArtista.getName());
+                        artistaRecebido.setUrl(apiArtista.getUrl());
+                        artistaRecebido.setPic_small(apiArtista.getUrl() + "images/profile.jpg");
+
+                        // Logcat com tag VAGALUME
+//                        Log.i(TAG, " RETROFIT url imagem: "+artistaRecebido.getPic_small());
+
+                        Musica musicaRecebida = new Musica();
+                        musicaRecebida.setId(apiMusica.getId());
+                        musicaRecebida.setName(apiMusica.getName());
+                        musicaRecebida.setUrl(apiMusica.getUrl());
+                        musicaRecebida.setLang(apiMusica.getLang());
+                        musicaRecebida.setText(apiMusica.getText());
+                        musicaRecebida.setAlbumPic(artistaRecebido.getPic_small());
+                        musicaRecebida.setArtista(apiArtista);
+
+                        //Adicionar a lista de Musicas
+//                        listaMusicaSalva.add(musicaRecebida);
+
+                        //Adicionar ao Adapter do RecyclerView
+                        musicaSalvaAdapter.adicionarMusica(musicaRecebida);
+
+
+                    } else {
+                        ApiArtista apiArtist = vagalumeBusca.getArtist();
+
+                        ApiArtista artistaRecebido = new ApiArtista();
+                        artistaRecebido.setDesc(apiArtist.getDesc());
+                        artistaRecebido.setPic_small("https://www.vagalume.com.br" + apiArtist.getPic_small());
+                        artistaRecebido.setPic_medium("https://www.vagalume.com.br" + apiArtist.getPic_medium());
+                        artistaRecebido.setQtdMusicas(apiArtist.getLyrics().getItem().size());
+                        artistaRecebido.setToplyrics(apiArtist.getToplyrics());
+
+                        //Adicionar a lista de Artistas
+                        listaArtistaSalvo.add(artistaRecebido);
+
+                        //Adicionar ao Adapter do RecyclerView
+                        artistaSalvoAdapter.adicionarArtista(artistaRecebido);
+                    }
+
+                } else {
+                    Log.e(TAG, " onResponse: " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VagalumeBusca> call, Throwable t) {
+                Log.e(TAG, " onFailure: " + t.getMessage());
+            }
+        });
 
 
 

@@ -1,6 +1,7 @@
 package com.example.lyrio.modules.home.viewModel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,9 +10,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.lyrio.adapters.MusicaAdapter;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.repository.ArtistaRepository;
+import com.example.lyrio.repository.BuscaRepository;
 import com.example.lyrio.repository.ListaMusicasRepository;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
+import com.example.lyrio.service.model.VagalumeBusca;
 
 import java.util.List;
 
@@ -31,6 +34,7 @@ public class HomeViewModel extends AndroidViewModel {
 
     private ListaMusicasRepository listaMusicasRepository = new ListaMusicasRepository();
     private ArtistaRepository listaArtistaRepository = new ArtistaRepository();
+    private BuscaRepository buscaRepository = new BuscaRepository();
 
     public MutableLiveData<ApiArtista> getArtistaLiveData() {
         return artistaLiveData;
@@ -57,9 +61,11 @@ public class HomeViewModel extends AndroidViewModel {
                 listaMusicasRepository.getAllMusicas(getApplication())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(listaMusica->listaMusicaLiveData.setValue(listaMusica) )
+                .subscribe(listaMusica->{listaMusicaLiveData.setValue(listaMusica);
+                },throwable -> throwable.printStackTrace() )
         );
     }
+    private Musica tempMusica;
     public void getMusicaPorId(String stringId){
         disposable.add(
                 listaMusicasRepository.getMusicaPorId(getApplication(), stringId)
@@ -67,6 +73,7 @@ public class HomeViewModel extends AndroidViewModel {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(musica -> {
                             musicaLiveData.setValue(musica);
+                            tempMusica = musica;
                         },throwable -> throwable.printStackTrace())
         );
     }
@@ -87,5 +94,50 @@ public class HomeViewModel extends AndroidViewModel {
                     artistaLiveData.setValue(artista);
                 },throwable -> throwable.printStackTrace())
         );
+    }
+    public void receberBusca(VagalumeBusca vagalumeBusca, String termo){
+        disposable.add(
+                buscaRepository.buscar(termo)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(apiItemList->{
+
+
+                    if (vagalumeBusca.getArt() != null) {
+                        ApiArtista apiArtista = vagalumeBusca.getArt();
+                        ApiItem apiMusica = vagalumeBusca.getMus().get(0);
+
+                        ApiArtista artistaRecebido = new ApiArtista();
+                        artistaRecebido.setId(apiArtista.getId());
+                        artistaRecebido.setName(apiArtista.getName());
+                        artistaRecebido.setUrl(apiArtista.getUrl());
+                        artistaRecebido.setPic_small(apiArtista.getUrl() + "images/profile.jpg");
+
+                        // Logcat com tag VAGALUME
+//                        Log.i(TAG, " RETROFIT url imagem: "+artistaRecebido.getPic_small());
+
+                        Musica musicaRecebida = new Musica();
+                        musicaRecebida.setId(apiMusica.getId());
+                        musicaRecebida.setName(apiMusica.getName());
+                        musicaRecebida.setUrl(apiMusica.getUrl());
+                        musicaRecebida.setLang(apiMusica.getLang());
+                        musicaRecebida.setText(apiMusica.getText());
+                        musicaRecebida.setAlbumPic(artistaRecebido.getPic_small());
+                        musicaRecebida.setArtista(apiArtista);
+
+                    } else {
+                        ApiArtista apiArtist = vagalumeBusca.getArtist();
+
+                        ApiArtista artistaRecebido = new ApiArtista();
+                        artistaRecebido.setDesc(apiArtist.getDesc());
+                        artistaRecebido.setPic_small("https://www.vagalume.com.br" + apiArtist.getPic_small());
+                        artistaRecebido.setPic_medium("https://www.vagalume.com.br" + apiArtist.getPic_medium());
+                        artistaRecebido.setQtdMusicas(apiArtist.getLyrics().getItem().size());
+                        artistaRecebido.setToplyrics(apiArtist.getToplyrics());
+                    }
+
+        },throwable -> throwable.printStackTrace())
+        );
+
     }
 }
