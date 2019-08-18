@@ -16,12 +16,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
 import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.adapters.NoticiaSalvaAdapter;
+import com.example.lyrio.database.LyrioDatabase;
 import com.example.lyrio.modules.home.viewModel.HomeViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.service.api.VagalumeBuscaApi;
@@ -78,6 +80,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private TextView verMaisArtistas;
     private TextView verMaisNoticias;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private LyrioDatabase db;
 
     //Interfaces
     private EnviarDeFragmentParaActivity enviarDeFragmentParaActivity;
@@ -107,14 +110,21 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
 
+        db = Room.databaseBuilder(getContext(), LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         homeViewModel.atualizarListaMusica();
-//        homeViewModel.atualizarArtista();
+        homeViewModel.atualizarArtista();
 
         homeViewModel.getListaMusicaLiveData()
                 .observe(this, listaMusicas->{
                     gerarListaDeMusicasPeloBanco(listaMusicas);
                 });
+
+//        homeViewModel.getListaArtistaLiveData()
+//                .observe(this,listarArtista->{
+//                    gerarListaDeArtistas(listarArtista);
+//                });
 
 //        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
 //        artistasViewModel.atualizarArtista();
