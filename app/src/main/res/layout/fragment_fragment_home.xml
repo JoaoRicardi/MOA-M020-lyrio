@@ -34,11 +34,11 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/txtUserStatus"
+                android:id="@+id/sair_aplicativo_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notificações ativas"
-                android:textSize="12sp"
+                android:text="Sair     "
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="@id/user_name_id"
                 app:layout_constraintTop_toBottomOf="@+id/user_name_id" />
 
@@ -158,6 +158,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/musica_salva_divider" />
 
