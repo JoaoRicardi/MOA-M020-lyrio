@@ -65,18 +65,7 @@ public class HomeViewModel extends AndroidViewModel {
                 },throwable -> throwable.printStackTrace() )
         );
     }
-    private Musica tempMusica;
-    public void getMusicaPorId(String stringId){
-        disposable.add(
-                listaMusicasRepository.getMusicaPorId(getApplication(), stringId)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(musica -> {
-                            musicaLiveData.setValue(musica);
-                            tempMusica = musica;
-                        },throwable -> throwable.printStackTrace())
-        );
-    }
+
     public void atualizarArtista(){
         disposable.add(
                 listaArtistaRepository.getAllArtistas(getApplication())

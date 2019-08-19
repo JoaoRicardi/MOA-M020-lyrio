@@ -168,8 +168,8 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
 
         } else {
 
-//        buscarViewModel.favoritarApiItem(musicaSalva);
 
+            favoritarApiItem(apiItem);
             Intent intent = new Intent(getContext(), TelaLetrasActivity.class);
             Bundle bundle = new Bundle();
 

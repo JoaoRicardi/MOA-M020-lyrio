@@ -8,6 +8,7 @@ import androidx.room.Room;
 import com.example.lyrio.database.LyrioDatabase;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.service.RetrofitService;
+import com.example.lyrio.service.model.ApiArtista;
 
 import java.util.List;
 import java.util.UUID;
@@ -65,9 +66,23 @@ public class ListaMusicasRepository {
                 .deletePorId(musicaId));
     }
 
-    public Observable<List<Musica>> getMusicaList(){
+    public Observable<Musica> getMusicaPorIdApi(String musicaId){
         return retrofitService.getMusicasApi()
-                .getMusicas(API_KEY, FORMAT)
-                .map(musicasList->musicasList.getMusicasList());
+                .getMusicasById(API_KEY, musicaId)
+                .map(vagalumeBusca -> {
+                    Musica musica = new Musica();
+
+                    musica.setName(vagalumeBusca.getMus().get(0).getName());
+
+                    ApiArtista apiArtista = new ApiArtista();
+                    apiArtista.setName(vagalumeBusca.getArt().getName());
+                    apiArtista.setUrl(vagalumeBusca.getArt().getUrl()+"images/profile.jpg");
+                    musica.setArtista(apiArtista);
+
+                    musica.setText(vagalumeBusca.getMus().get(0).getText());
+
+                    return musica;
+                });
     }
+
 }
