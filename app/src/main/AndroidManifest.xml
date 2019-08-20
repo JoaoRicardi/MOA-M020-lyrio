@@ -25,6 +25,7 @@
         <activity android:name=".modules.recuperarSenha.view.UserEsqueciMinhaSenha" />
         <activity android:name=".modules.cadastro.view.UserCadastroActivity" />
         <activity android:name=".modules.splash.view.SplashActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

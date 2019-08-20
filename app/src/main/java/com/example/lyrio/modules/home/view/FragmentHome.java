@@ -145,7 +145,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             Glide.with(this).load(account.getPhotoUrl()).into(ImagemUsuario);
 
         }else {
-            goLogInScreen();
+//            goLogInScreen();
         }
 
     }

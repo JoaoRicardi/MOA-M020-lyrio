@@ -149,17 +149,6 @@
                 android:textSize="16sp"
                 />
 
-            <Button
-                android:layout_marginTop="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="28dp"
-                android:layout_marginEnd="32dp"
-                android:text="login com facebook"
-                android:textColor="@color/branco"
-                android:backgroundTint="@color/azulClaro"
-                android:id="@+id/botaoLoginFacebook"/>
-
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/botaoLoginGoogle"
                 android:layout_width="match_parent"

@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private EditText senhaEditText;
     private Button botaoLogin ;
     private TextView registro ;
-    private Button buttonFacebook;
     private SignInButton loginGoogle;
     private TextView esqueceuSenha ;
     private ProgressBar progressBar;
@@ -62,7 +61,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         registro = findViewById(R.id.registreSe);
         botaoLogin = findViewById(R.id.botaoLogin);
-        buttonFacebook = findViewById(R.id.botaoLoginFacebook);
         loginGoogle = findViewById(R.id.botaoLoginGoogle);
         esqueceuSenha = findViewById(R.id.esqueceuSenha);
         progressBar = findViewById(R.id.progressBar);
@@ -95,6 +93,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
 
 
+        esqueceuSenha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                esqueceuSenha();
+            }
+        });
 
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
 
@@ -121,6 +125,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         String senha = senhaEditText.getEditableText().toString();
 
         loginViewModel.autenticarUsuario(email, senha);
+
+        irParaHome();
 
 
     }
@@ -172,8 +178,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     //ir para Home  - por enquanto esta indo para registro ate criar a Tela
     private void irParaHome(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        Intent intentHome = new Intent(this, MainActivity.class);
+        startActivity(intentHome);
     }
     // ir para esqueci a minha senha
     private void esqueceuSenha (){
