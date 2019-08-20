@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
 
 
-
+        // Login com Google
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
