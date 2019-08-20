@@ -4,23 +4,36 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.lyrio.modules.login.view.LoginActivity;
+import com.example.lyrio.modules.menu.view.MainActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.lyrio.R;
 import com.example.lyrio.database.LyrioDatabase;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserCadastroActivity extends AppCompatActivity {
 
+    private static final String TAG = "CadastroActivity";
+    private FirebaseAuth firebaseAuth;
     public final Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
     private String emailRegex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-
     private TextInputEditText editTextNome;
     private TextInputEditText editTextEmail;
     private TextInputEditText editTextSenha;
@@ -34,11 +47,14 @@ public class UserCadastroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_cadastro);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
         Button confirmarButton = findViewById(R.id.cadastro_button_confirmar);
+
         confirmarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                botaoClicado(view);
+                cadastrarUsuario();
             }
         });
 
@@ -60,6 +76,51 @@ public class UserCadastroActivity extends AppCompatActivity {
   //  }
 
 
+    private void cadastrarUsuario() {
+
+        String email = editTextEmail.getEditableText().toString();
+        String senha = editTextSenha.getEditableText().toString();
+
+        firebaseAuth.createUserWithEmailAndPassword(email, senha)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "Usuário criado com sucesso!");
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            atualizarDadosUsuario(user);
+                            irParaHome();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "Falha na criação do usuário :-(", task.getException());
+                            Toast.makeText(UserCadastroActivity.this, "Falha de autenticação",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+    }
+
+
+    private void atualizarDadosUsuario(FirebaseUser user) {
+        String nome = editTextNome.getEditableText().toString();
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(nome)
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            finish();
+                        }
+                    }
+                });
+
+    }
 
     public void botaoClicado(View view) {
         editTextNome.setError(null);
@@ -111,6 +172,11 @@ public class UserCadastroActivity extends AppCompatActivity {
             }
         }
         return isEmailIdValid;
+    }
+
+    private void irParaHome(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 }

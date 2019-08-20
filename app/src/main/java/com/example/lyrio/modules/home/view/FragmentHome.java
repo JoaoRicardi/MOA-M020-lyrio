@@ -2,7 +2,6 @@ package com.example.lyrio.modules.home.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,16 +15,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
 import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.adapters.NoticiaSalvaAdapter;
-import com.example.lyrio.database.LyrioDatabase;
-import com.example.lyrio.modules.home.viewModel.HomeViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
+import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.database.models.Musica;
@@ -42,12 +39,19 @@ import com.example.lyrio.modules.noticia.view.NoticiaActivity;
 import com.example.lyrio.modules.configuracoes.view.ConfiguracoesActivity;
 import com.example.lyrio.modules.login.view.LoginActivity;
 import com.example.lyrio.modules.home.viewModel.ArtistasViewModel;
+import com.example.lyrio.modules.home.viewModel.ListaMusicasViewModel;
+import com.example.lyrio.util.Constantes;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 
 import java.util.List;
 
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,6 +74,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private TextView verMaisNoticias;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LyrioDatabase db;
+    private GoogleApiClient googleApiClient;
 
     //Interfaces
     private EnviarDeFragmentParaActivity enviarDeFragmentParaActivity;
@@ -90,7 +95,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private static final String TAG = "VAGALUME";
 
     //Room ETC
-
+    private ListaMusicasViewModel listaMusicasViewModel;
     private ArtistasViewModel artistasViewModel;
     private HomeViewModel homeViewModel;
 
@@ -99,6 +104,31 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
         db = Room.databaseBuilder(getContext(), LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+
+        // Configure Google Sign In
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build();
+
+
+
+//        googleApiClient = new GoogleApiClient.Builder(FragmentHome.this)
+//                .enableAutoManage(this, this)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+//                .build();
+
+
+
+        // Iniciar retrofit para buscar infos da API
+        retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.vagalume.com.br/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
+        artistasViewModel.atualizarArtista();
+
 
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         homeViewModel.atualizarListaMusica();
