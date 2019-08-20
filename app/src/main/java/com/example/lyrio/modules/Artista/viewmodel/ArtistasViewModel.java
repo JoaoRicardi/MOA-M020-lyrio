@@ -1,4 +1,4 @@
-package com.example.lyrio.modules.home.viewModel;
+package com.example.lyrio.modules.Artista.viewmodel;
 
 import android.app.Application;
 

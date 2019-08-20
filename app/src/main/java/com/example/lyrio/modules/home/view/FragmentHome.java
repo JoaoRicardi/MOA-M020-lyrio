@@ -15,14 +15,18 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
 import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.adapters.NoticiaSalvaAdapter;
+import com.example.lyrio.database.LyrioDatabase;
+import com.example.lyrio.modules.home.viewModel.HomeViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.service.api.VagalumeBuscaApi;
+import com.example.lyrio.service.api.VagalumeHomeApi;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.database.models.Musica;
@@ -38,12 +42,7 @@ import com.example.lyrio.modules.listaNoticiaFavorito.view.ListaNoticiaSalvaActi
 import com.example.lyrio.modules.noticia.view.NoticiaActivity;
 import com.example.lyrio.modules.configuracoes.view.ConfiguracoesActivity;
 import com.example.lyrio.modules.login.view.LoginActivity;
-import com.example.lyrio.modules.home.viewModel.ArtistasViewModel;
-import com.example.lyrio.modules.home.viewModel.ListaMusicasViewModel;
-import com.example.lyrio.util.Constantes;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
+
 
 import java.util.ArrayList;
 
@@ -74,7 +73,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private TextView verMaisNoticias;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LyrioDatabase db;
-    private GoogleApiClient googleApiClient;
 
     //Interfaces
     private EnviarDeFragmentParaActivity enviarDeFragmentParaActivity;
@@ -95,8 +93,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private static final String TAG = "VAGALUME";
 
     //Room ETC
-    private ListaMusicasViewModel listaMusicasViewModel;
-    private ArtistasViewModel artistasViewModel;
+//    private ArtistasViewModel artistasViewModel;
     private HomeViewModel homeViewModel;
 
     @Override
@@ -126,8 +123,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
-        artistasViewModel.atualizarArtista();
+//        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
+//        artistasViewModel.atualizarArtista();
 
 
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
