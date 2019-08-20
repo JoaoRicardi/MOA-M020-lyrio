@@ -179,7 +179,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
     }
 
-    // Login com Google
+    // Login com Google ///
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
