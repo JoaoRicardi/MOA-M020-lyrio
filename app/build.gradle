@@ -31,7 +31,7 @@ dependencies {
     // para ler infos da API
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.6.0"
     implementation 'com.google.code.gson:gson:2.8.5'
 
     // para buscar imagens
@@ -70,12 +70,12 @@ dependencies {
 
     // FIREBASE
 
-    implementation 'com.google.firebase:firebase-core:17.0.1'
-    implementation 'com.google.firebase:firebase-analytics:17.0.1'
-    implementation 'com.google.firebase:firebase-analytics:17.0.1'
-    implementation 'com.google.firebase:firebase-auth:18.1.0'
-    implementation 'com.google.firebase:firebase-storage:18.1.1'
-    implementation 'com.google.firebase:firebase-messaging:19.0.1'
+    implementation 'com.google.firebase:firebase-core:17.1.0'
+    implementation 'com.google.firebase:firebase-analytics:17.1.0'
+    implementation 'com.google.firebase:firebase-analytics:17.1.0'
+    implementation 'com.google.firebase:firebase-auth:19.0.0'
+    implementation 'com.google.firebase:firebase-storage:19.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
 
     // login com Google
     implementation 'com.google.android.gms:play-services-auth:17.0.0'

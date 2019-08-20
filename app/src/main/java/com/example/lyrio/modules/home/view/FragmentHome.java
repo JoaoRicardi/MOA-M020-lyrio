@@ -1,10 +1,8 @@
 package com.example.lyrio.modules.home.view;
 
-import android.accounts.Account;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,8 +45,6 @@ import com.example.lyrio.modules.listaNoticiaFavorito.view.ListaNoticiaSalvaActi
 import com.example.lyrio.modules.noticia.view.NoticiaActivity;
 import com.example.lyrio.modules.configuracoes.view.ConfiguracoesActivity;
 import com.example.lyrio.modules.login.view.LoginActivity;
-import com.example.lyrio.modules.home.viewModel.ArtistasViewModel;
-import com.example.lyrio.modules.home.viewModel.ListaMusicasViewModel;
 import com.example.lyrio.util.Constantes;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -61,7 +57,6 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,10 +76,9 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         PopupMenu.OnMenuItemClickListener, GoogleApiClient.OnConnectionFailedListener {
 
 
+    private LyrioDatabase db;
 
-    public FragmentHome() {
-        // Required empty public constructor
-    }
+    public FragmentHome() {}
 
     private String gotMail;
     private TextView userName;
@@ -138,8 +132,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             });
 
         }
-
-
 
     }
 
@@ -524,22 +516,22 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
 
 
-    private List<Musica> gerarListaDeMusicas(ApiArtista apiArtista) {
-
-        //Gerar lista de musicas para enviar ao bundle
-        List<Musica> musicasSalvas = new ArrayList<>();
-        for (int i = 0; i < apiArtista.getToplyrics().getItem().size(); i++) {
-
-            ApiItem curApi = apiArtista.getToplyrics().getItem().get(i);
-            String url = "https://www.vagalume.com.br" + curApi.getUrl();
-            Musica musicaTemp = new Musica(curApi.getId(), curApi.getDesc(), url);
-            musicaTemp.setAlbumPic(apiArtista.getPic_small());
-
-            musicasSalvas.add(musicaTemp);
-
-        }
-        return musicasSalvas;
-    }
+//    private List<Musica> gerarListaDeMusicas(ApiArtista apiArtista) {
+//
+//        //Gerar lista de musicas para enviar ao bundle
+//        List<Musica> musicasSalvas = new ArrayList<>();
+//        for (int i = 0; i < apiArtista.getToplyrics().getItem().size(); i++) {
+//
+//            ApiItem curApi = apiArtista.getToplyrics().getItem().get(i);
+//            String url = "https://www.vagalume.com.br" + curApi.getUrl();
+//            Musica musicaTemp = new Musica(curApi.getId(), curApi.getDesc(), url);
+//            musicaTemp.setAlbumPic(apiArtista.getPic_small());
+//
+//            musicasSalvas.add(musicaTemp);
+//
+//        }
+//        return musicasSalvas;
+//    }
 
 
     // Integração com API
