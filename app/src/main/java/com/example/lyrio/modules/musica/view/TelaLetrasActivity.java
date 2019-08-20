@@ -56,7 +56,6 @@ public class TelaLetrasActivity extends AppCompatActivity {
 
         letrasViewModel.getMusicaPorId(musicaSalvaId);
 
-        getApiData(musicaSalvaId);
 
         letrasViewModel.getMusicaLiveData()
                 .observe(this, musica -> {
@@ -85,39 +84,5 @@ public class TelaLetrasActivity extends AppCompatActivity {
         });
 
     }
-
-    private void getApiData(String idDaMusica) {
-
-//        Date curTime = Calendar.getInstance().getTime();
-//
-//        idDaMusica = idDaMusica.trim().replace(" ", "-");
-//        String vagaKey =  Constantes.VAGALUME_KEY + curTime.toString().trim().replace(" ","");
-//        String buscaFull = "https://api.vagalume.com.br/search.php?apikey="+vagaKey+"&musid="+idDaMusica;
-//
-//        VagalumeBuscaApi service = retrofit.create(VagalumeBuscaApi.class);
-//        Call<VagalumeBusca> vagalumeBuscaCall = service.getBuscaResponse(buscaFull);
-//        vagalumeBuscaCall.enqueue(new Callback<VagalumeBusca>() {
-//            @Override
-//            public void onResponse(Call<VagalumeBusca> call, Response<VagalumeBusca> response) {
-//                if(response.isSuccessful()){
-//                    VagalumeBusca vagalumeBusca = response.body();
-////
-////                    ApiArtista apiArtista = vagalumeBusca.getArt();
-////                    ApiItem apiMusica = vagalumeBusca.getMus().get(0);
-//
-//                    //Adicionar aos campos do xml
-//                    nomeDaMusica.setText(vagalumeBusca.getMus().get(0).getName());
-//                    nomeDoArtista.setText(vagalumeBusca.getArt().getName());
-//                    letraDaMusica.setText(vagalumeBusca.getMus().get(0).getText());
-//                    Picasso.get().load(vagalumeBusca.getArt().getUrl()+"images/profile.jpg").into(imagemArtista);
-//
-//                }else {Log.e(TAG, " onResponse: "+response.errorBody());}
-//            }
-//
-//            @Override
-//            public void onFailure(Call<VagalumeBusca> call, Throwable t){Log.e(TAG, " onFailure: "+t.getMessage());}
-//        });
-    }
-
 
 }

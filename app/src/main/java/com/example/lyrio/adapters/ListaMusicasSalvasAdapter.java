@@ -76,7 +76,7 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
         public void setupListaMusicaSalva(Musica musicaSalva){
             buscaCampoBottom.setText(apiArtista.getDesc());
             nomeMusicaSalvaTextView.setText(musicaSalva.getDesc());
-            Picasso.get().load(musicaSalva.getAlbumPic()).into(imagemMusicaSalvaImageView);
+            Picasso.get().load(musicaSalva.getArtista().getUrl()).into(imagemMusicaSalvaImageView);
         }
     }
 }
