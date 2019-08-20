@@ -2,6 +2,7 @@ package com.example.lyrio.modules.home.view;
 
 import android.accounts.Account;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,6 +57,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -115,6 +119,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private ListaMusicasViewModel listaMusicasViewModel;
     private ArtistasViewModel artistasViewModel;
 
+
+    //Implantação do LOGIN com Google
     @Override
     public void onStart() {
         super.onStart();
@@ -137,6 +143,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
     }
 
+    // Login com Google
     private void handleSignInResult(GoogleSignInAccount account) {
         if (account != null){
            userName.setText(account.getDisplayName());
@@ -150,12 +157,14 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
     }
 
+    // Login com Google
     private void goLogInScreen() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
+    // Logout com Google
     private void LogOut (View view){
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
@@ -170,6 +179,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
     }
 
+    // Login com Google
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -188,7 +198,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
 
 
-        // Configure Google Sign In
+        // Login com Google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -199,6 +209,24 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
                 .build();
 
+
+
+        // Receber Informações de perfil de Usuario FIREBASE
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getIdToken() instead.
+            String uid = user.getUid();
+        }
 
 
 
