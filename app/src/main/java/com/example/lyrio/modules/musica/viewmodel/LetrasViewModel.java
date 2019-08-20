@@ -29,9 +29,9 @@ public class LetrasViewModel extends AndroidViewModel {
         return musicaLiveData;
     }
 
-    public void getMusicaPorId(String stringId){
+    public void getMusicaPorId(String musicaId){
         disposable.add(
-                listaMusicasRepository.getMusicaPorId(getApplication(), stringId)
+                listaMusicasRepository.getMusicaPorIdApi(musicaId)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(musica -> {

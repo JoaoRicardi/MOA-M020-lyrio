@@ -11,6 +11,7 @@ import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.model.BuscaLayout;
 import com.example.lyrio.repository.BuscaRepository;
 import com.example.lyrio.repository.ListaMusicasRepository;
+import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ import io.reactivex.schedulers.Schedulers;
 public class BuscarViewModel extends AndroidViewModel {
 
     private static final String TAG = "BuscarViewModel";
+
+    private MutableLiveData<List<ApiArtista>> listaArtistasFavoritosLiveData = new MutableLiveData<>();
+    private MutableLiveData<ApiArtista> artistaLiveData = new MutableLiveData<>();
 
     private MutableLiveData<List<Musica>> listaMusicasFavoritoLiveData = new MutableLiveData<>();
     private MutableLiveData<Musica> musicaLiveData = new MutableLiveData<>();
@@ -52,6 +56,16 @@ public class BuscarViewModel extends AndroidViewModel {
     public MutableLiveData<List<ApiItem>> getListaMusicasBuscadaLiveData() {
         return listaMusicasBuscadaLiveData;
     }
+
+
+    public MutableLiveData<List<ApiArtista>> getListaArtistasFavoritosLiveData() {
+        return listaArtistasFavoritosLiveData;
+    }
+
+    public MutableLiveData<ApiArtista> getArtistaLiveData() {
+        return artistaLiveData;
+    }
+
 
     public MutableLiveData<List<ApiItem>> getListaArtistaBuscadaLiveData() {
         return listaArtistaBuscadaLiveData;

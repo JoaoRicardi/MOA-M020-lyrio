@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
@@ -27,7 +28,8 @@ import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
 import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.adapters.NoticiaSalvaAdapter;
-import com.example.lyrio.modules.menu.view.MainActivity;
+import com.example.lyrio.database.LyrioDatabase;
+import com.example.lyrio.modules.home.viewModel.HomeViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.example.lyrio.service.model.ApiArtista;
@@ -95,8 +97,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private SwipeRefreshLayout swipeRefreshLayout;
     private GoogleApiClient googleApiClient;
 
-
-
     //Interfaces
     private EnviarDeFragmentParaActivity enviarDeFragmentParaActivity;
 
@@ -116,8 +116,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private static final String TAG = "VAGALUME";
 
     //Room ETC
-    private ListaMusicasViewModel listaMusicasViewModel;
-    private ArtistasViewModel artistasViewModel;
+//    private ArtistasViewModel artistasViewModel;
+    private HomeViewModel homeViewModel;
 
 
     //Implantação do LOGIN com Google
@@ -184,6 +184,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
+        db = Room.databaseBuilder(getContext(), LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
 
         // LOGOUT GOOGLE E EMAIL
@@ -239,34 +240,43 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
-        artistasViewModel.atualizarArtista();
+//        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
+//        artistasViewModel.atualizarArtista();
 
 
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel.atualizarListaMusica();
+        homeViewModel.atualizarArtista();
 
-        listaMusicasViewModel = ViewModelProviders.of(this).get(ListaMusicasViewModel.class);
-        listaMusicasViewModel.atualizarLista();
-
-        //Gerar lista de musicas a partir do Banco
-        listaMusicasViewModel.getListaMusicasLiveData()
-                .observe(this, listaMusicas -> {
-                    gerarListaDeMusicasPeloBanco(listaMusicas);
-//                    Toast.makeText(this.getContext(), "SIZE: "+listaMusicas.size(), Toast.LENGTH_SHORT).show();
+        homeViewModel.getListaMusicaLiveData()
+                .observe(this, listaMusicas->{
+                    musicaSalvaAdapter.atualizarListaMusicas(listaMusicas);
                 });
+
+//        homeViewModel.getListaArtistaLiveData()
+//                .observe(this,listarArtista->{
+//                    gerarListaDeArtistas(listarArtista);
+//                });
+
+//        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
+//        artistasViewModel.atualizarArtista();
+//
+//
+//
+//        listaMusicasViewModel = ViewModelProviders.of(this).get(ListaMusicasViewModel.class);
+//        listaMusicasViewModel.atualizarLista();
+//
+//        //Gerar lista de musicas a partir do Banco
+//        listaMusicasViewModel.getListaMusicasLiveData()
+//                .observe(this, listaMusicas -> {
+//                    gerarListaDeMusicasPeloBanco(listaMusicas);
+//                });
 
         musicaSalvaAdapter = new MusicaSalvaAdapter(this);
         GridLayoutManager gridMusicas = new GridLayoutManager(view.getContext(), 4);
         RecyclerView recyclerView = view.findViewById(R.id.musica_salva_recycler_view);
         recyclerView.setAdapter(musicaSalvaAdapter);
         recyclerView.setLayoutManager(gridMusicas);
-
-
-        //Inicializar lista de artista salvo
-        listaArtistaSalvo = new ArrayList<>();
-
-        //Conteudo artista salvo
-        String[] nomesDosArtistas = {"u2", "skank", "imagine-dragons", "emicida", "skrillex", "rita-ora", "rita-lee", "ac-dc"};
-        gerarListaDeArtistas(nomesDosArtistas);
 
         artistaSalvoAdapter = new ArtistaSalvoAdapter(this);
         GridLayoutManager gridArtistas = new GridLayoutManager(view.getContext(), 4);
@@ -357,8 +367,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
         swipeRefreshLayout = view.findViewById(R.id.home_swipe);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            musicaSalvaAdapter.removerTudo();
-            atualizarTudo();
+            homeViewModel.atualizarListaMusica();
+
 //                Toast.makeText(getActivity(), "bla", Toast.LENGTH_SHORT).show();
             swipeRefreshLayout.setRefreshing(false);
         });
@@ -377,29 +387,39 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         startActivity(intent);
     }
 
-    private void atualizarTudo() {
-        listaMusicasViewModel.getListaMusicasLiveData()
-                .observe(this, listaMusicas -> {
-                    gerarListaDeMusicasPeloBanco(listaMusicas);
-//                    Toast.makeText(this.getContext(), "SIZE: "+listaMusicas.size(), Toast.LENGTH_SHORT).show();
-                });
-    }
+//    private void atualizarTudo() {
+//        homeViewModel.getListaMusicaLiveData()
+//                .observe(this, listaMusicas -> {
+//                    gerarListaDeMusicasPeloBanco(listaMusicas);
+//                });
+//        homeViewModel.getListaArtistaLiveData()
+//                .observe(this,listaArtista->{
+//                    artistaSalvoAdapter.adicionarListaDeArtistas(listaArtista);
+//                });
+//    }
+//
+//    private void gerarListaDeMusicasPeloBanco(List<Musica> musicList) {
+//
+//        if(musicList!=null){
+//            for (int i = 0; i < musicList.size(); i++) {
+//                getApiData(musicList.get(i).getId(), "musica");
+//            }
+//        }
+//    }
 
 
-    //metodo que direciona para o Fragment que contem a lista de noticias salvas mas não esta direcionando direito
     private void irParaMinhasNoticias() {
         Intent intent = new Intent(getContext(), ListaNoticiaSalvaActivity.class);
         startActivity(intent);
     }
 
-    //metodo que direciona para o Fragment que contem a lista de musicas salvas mas não esta direcionando direito
     private void irParaMinhasMusicas() {
         Intent intent = new Intent(getContext(), ListaMusicaSalvaActivity.class);
 
         startActivity(intent);
     }
 
-    //metodo que direciona para o Fragment que contem a lista de artistas salvas mas não esta direcionando direito
+
     private void irParaMeusArtistas() {
 
         Intent intent = new Intent(getContext(), ListaArtistasSalvosActivity.class);
@@ -427,6 +447,23 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         intent.putExtras(bundle);
 
         startActivity(intent);
+    }
+
+    private List<Musica> gerarListaDeMusicas(ApiArtista apiArtista) {
+
+        //Gerar lista de musicas para enviar ao bundle
+        List<Musica> musicasSalvas = new ArrayList<>();
+        for (int i = 0; i < apiArtista.getToplyrics().getItem().size(); i++) {
+
+            ApiItem curApi = apiArtista.getToplyrics().getItem().get(i);
+            String url = "https://www.vagalume.com.br" + curApi.getUrl();
+            Musica musicaTemp = new Musica(curApi.getId(), curApi.getDesc(), url);
+            musicaTemp.setAlbumPic(apiArtista.getPic_small());
+
+            musicasSalvas.add(musicaTemp);
+
+        }
+        return musicasSalvas;
     }
 
     @Override
@@ -593,5 +630,4 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
 
     }
-
 }

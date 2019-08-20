@@ -166,7 +166,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         String vagaKey = Constantes.VAGALUME_KEY + curTime.toString().trim().replace(" ","");
         String buscaFull = "https://www.vagalume.com.br/"+oQueBuscar+"/index.js";
 
-        VagalumeBuscaApi service = retrofit.create(VagalumeBuscaApi.class);
+//        VagalumeBuscaApi service = retrofit.create(VagalumeBuscaApi.class);
 //        Call<VagalumeBusca> vagalumeBuscaCall = service.getBuscaResponse(buscaFull);
 //        vagalumeBuscaCall.enqueue(new Callback<VagalumeBusca>() {
 //            @Override

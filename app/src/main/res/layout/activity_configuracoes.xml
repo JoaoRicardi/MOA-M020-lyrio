@@ -77,7 +77,7 @@ tools:context=".modules.configuracoes.view.ConfiguracoesActivity"
 
 
         <TextView
-            android:id="@+id/informacoes_textView"
+            android:id="@+id/informacoes_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -99,7 +99,7 @@ tools:context=".modules.configuracoes.view.ConfiguracoesActivity"
             android:textColor="@color/cinzaEscuro"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/informacoes_textView" />
+            app:layout_constraintTop_toBottomOf="@+id/informacoes_text_view" />
 
         <Switch
             android:id="@+id/notificacoes_switch"

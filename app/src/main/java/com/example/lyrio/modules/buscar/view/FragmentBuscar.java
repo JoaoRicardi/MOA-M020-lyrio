@@ -48,6 +48,7 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
     private BuscaAdapter buscaLetrasAdapter;
     private BuscaAdapter buscaArtistasAdapter;
     private List<Musica> listaMusicasFavoritas;
+    private List<ApiArtista> listaArtistasFavoritos;
 
     //Room ETC
     private BuscarViewModel buscarViewModel;
@@ -63,6 +64,7 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
         View view = inflater.inflate(R.layout.fragment_fragment_buscar, container, false);
 
         listaMusicasFavoritas = new ArrayList<>();
+        listaArtistasFavoritos = new ArrayList<>();
 
         campoLetras = view.findViewById(R.id.buscar_letras_text_view);
         campoArtista = view.findViewById(R.id.buscar_artistas_text_view);
@@ -107,6 +109,8 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
                 .observe(this, listaMusicas -> {
                     listaMusicasFavoritas = listaMusicas;
                 });
+
+
 
         buscarViewModel.getListaArtistaBuscadaLiveData()
                 .observe(this, listaArtista -> {
@@ -164,8 +168,8 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
 
         } else {
 
-//        buscarViewModel.favoritarApiItem(musicaSalva);
 
+            favoritarApiItem(apiItem);
             Intent intent = new Intent(getContext(), TelaLetrasActivity.class);
             Bundle bundle = new Bundle();
 

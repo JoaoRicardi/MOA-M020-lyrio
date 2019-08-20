@@ -76,8 +76,8 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
         }
     }
 
-    public void adicionarListaDeMusicas(List<Musica> listaDeMusicas) {
-        listaMusicaSalva.addAll(listaDeMusicas);
+    public void atualizarListaMusicas(List<Musica> listaDeMusicas) {
+        listaMusicaSalva = listaDeMusicas;
         notifyDataSetChanged();
     }
 
@@ -108,7 +108,7 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
         public void setupMusicaSalva(Musica musicaSalva){
             nomeMusicaSalvaTextView.setText(musicaSalva.getName());
             campoBottomText.setText(musicaSalva.getArtista().getName());
-            Picasso.get().load(musicaSalva.getAlbumPic()).into(imagemMusicaSalvaImageView);
+            Picasso.get().load(musicaSalva.getArtista().getUrl()).into(imagemMusicaSalvaImageView);
         }
     }
 }
