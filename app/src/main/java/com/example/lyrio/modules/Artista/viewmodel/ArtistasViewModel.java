@@ -1,4 +1,4 @@
-package com.example.lyrio.modules.home.viewModel;
+package com.example.lyrio.modules.Artista.viewmodel;
 
 import android.app.Application;
 
@@ -6,11 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.lyrio.repository.BuscaRepository;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.repository.ArtistaRepository;
 
 import java.util.List;
 
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -21,6 +23,7 @@ public class ArtistasViewModel extends AndroidViewModel {
 
     private CompositeDisposable disposable = new CompositeDisposable();
     private ArtistaRepository apiArtistaRepository = new ArtistaRepository();
+    private BuscaRepository buscaRepository = new BuscaRepository();
 
     public ArtistasViewModel(@NonNull Application application) {
         super(application);
@@ -36,17 +39,6 @@ public class ArtistasViewModel extends AndroidViewModel {
 
     private ApiArtista tempArtista;
 
-    private void getArtistaPorId(String stringId){
-        disposable.add(
-                apiArtistaRepository.getArtistaPorId(getApplication(),stringId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(artista -> {
-                    artistaLiveData.setValue(artista);
-                    tempArtista = artista;
-                },throwable -> throwable.printStackTrace())
-        );
-    }
 
     public void atualizarArtista(){
         disposable.add(
@@ -82,4 +74,25 @@ public class ArtistasViewModel extends AndroidViewModel {
                 .subscribe(()->atualizarArtista())
         );
     }
+
+    public void getArtistaPorId(String artistaId) {
+        disposable.add(
+                apiArtistaRepository.getArtistaPorId(getApplication(),artistaId)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.newThread())
+                        .subscribe(artista -> {
+                            artistaLiveData.setValue(artista);
+                            tempArtista = artista;
+                        },throwable -> throwable.printStackTrace())
+        );
+    }
+//    public void getArtistaApiId(String artistaId){
+//        disposable.dispose();
+//            apiArtistaRepository.getArtistaIdApi(artistaId)
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribeOn(Schedulers.newThread())
+//                    .subscribe(artista->{
+//                        artistaLiveData.setValue(artista);
+//                    });
+//    }
 }

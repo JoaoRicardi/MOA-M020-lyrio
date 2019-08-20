@@ -26,7 +26,6 @@ import com.example.lyrio.adapters.NoticiaSalvaAdapter;
 import com.example.lyrio.database.LyrioDatabase;
 import com.example.lyrio.modules.home.viewModel.HomeViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
-import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.example.lyrio.service.api.VagalumeHomeApi;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
@@ -43,7 +42,7 @@ import com.example.lyrio.modules.listaNoticiaFavorito.view.ListaNoticiaSalvaActi
 import com.example.lyrio.modules.noticia.view.NoticiaActivity;
 import com.example.lyrio.modules.configuracoes.view.ConfiguracoesActivity;
 import com.example.lyrio.modules.login.view.LoginActivity;
-import com.example.lyrio.modules.home.viewModel.ArtistasViewModel;
+import com.example.lyrio.modules.Artista.viewmodel.ArtistasViewModel;
 import com.example.lyrio.modules.home.viewModel.ListaMusicasViewModel;
 import com.example.lyrio.service.model.VagalumeBusca;
 import com.example.lyrio.util.Constantes;
@@ -57,7 +56,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**

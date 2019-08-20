@@ -5,9 +5,11 @@ import android.content.Context;
 
 import androidx.room.Room;
 
+import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.database.LyrioDatabase;
 import com.example.lyrio.service.RetrofitService;
+import com.example.lyrio.service.model.VagalumeBusca;
 
 import java.util.List;
 import java.util.UUID;
@@ -62,4 +64,17 @@ public class ArtistaRepository {
                 .getArtistas(API_KEY, FORMAT)
                 .map(artistaList->artistaList.getApiArtistaList());
     }
+//    public Observable<VagalumeBusca> getArtistaIdApi(String artistaId){
+//        return  retrofitService.getBuscaApi()
+//                .getBuscaResponse(API_KEY,artistaId,7)
+//                .map(vagalumeBusca -> {
+//                    ApiArtista apiArtista = new ApiArtista();
+//                    apiArtista.setName(vagalumeBusca.getArt().getName());
+//
+//                    Musica musica = new Musica();
+//                    musica.setName(vagalumeBusca.getMus().get(0).getName());
+//                    musica.setArtista(apiArtista);
+//                    return vagalumeBusca;
+//                });
+//    }
 }

@@ -10,14 +10,15 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
+import com.example.lyrio.modules.Artista.viewmodel.ArtistasViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.adapters.ListaMusicasSalvasAdapter;
-import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.model.Album;
 import com.example.lyrio.database.models.Musica;
@@ -42,11 +43,10 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     private ToggleButton seguirButton;
     private ImageButton backButton;
     private ImageView artistaBg;
-    private Retrofit retrofit;
     private ApiArtista artistaSalvo;
     private ListaMusicasSalvasAdapter listaMusicasSalvasAdapter;
-    private ArtistaSalvoAdapter artistaSalvoAdapter;
     private List<Musica> listaDeMusicasSalvas;
+    private ArtistasViewModel artistasViewModel;
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
     private static final String TAG = "VAGALUME";
@@ -56,9 +56,17 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pagina_artista);
 
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        ApiArtista artistaSalvo = (ApiArtista) bundle.getSerializable("ARTISTA");
+
         // Iniciar retrofit para buscar infos da API
-//        ArtistasViewModel artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
-//        artistasViewModel.atualizarArtista();
+        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
+        artistasViewModel.atualizarArtista();
+        artistasViewModel.getArtistaLiveData()
+                .observe(this, artista -> {
+
+                });
 
         //Definir as variaveis
         artistaBg = findViewById(R.id.artista_imagem_bg);
@@ -67,9 +75,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         seguirButton = findViewById(R.id.letras_favorito_button);
 //            backButton = findViewById(R.id.back_button_pagina_artista_image_button);
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        ApiArtista artistaSalvo = (ApiArtista) bundle.getSerializable("ARTISTA");
 
         if(artistaSalvo.getDesc()==null){
             listaDeMusicasSalvas = new ArrayList<>();
