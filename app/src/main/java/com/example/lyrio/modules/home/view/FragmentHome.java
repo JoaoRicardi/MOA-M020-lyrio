@@ -1,7 +1,10 @@
 package com.example.lyrio.modules.home.view;
 
+import android.accounts.Account;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,17 +13,21 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
 import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.adapters.NoticiaSalvaAdapter;
+import com.example.lyrio.modules.menu.view.MainActivity;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.example.lyrio.service.model.ApiArtista;
@@ -41,6 +48,18 @@ import com.example.lyrio.modules.login.view.LoginActivity;
 import com.example.lyrio.modules.home.viewModel.ArtistasViewModel;
 import com.example.lyrio.modules.home.viewModel.ListaMusicasViewModel;
 import com.example.lyrio.util.Constantes;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,7 +76,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         MusicaSalvaListener,
         NoticiaSalvaListener,
-        PopupMenu.OnMenuItemClickListener {
+        PopupMenu.OnMenuItemClickListener, GoogleApiClient.OnConnectionFailedListener {
+
+
 
     public FragmentHome() {
         // Required empty public constructor
@@ -66,11 +87,15 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private String gotMail;
     private TextView userName;
     private TextView userStatus;
-    private ImageButton opcoesUsuario;
+    private ImageButton ImagemUsuario;
+    private TextView logOut;
     private TextView verMaisMusica;
     private TextView verMaisArtistas;
     private TextView verMaisNoticias;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private GoogleApiClient googleApiClient;
+
+
 
     //Interfaces
     private EnviarDeFragmentParaActivity enviarDeFragmentParaActivity;
@@ -94,10 +119,119 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private ListaMusicasViewModel listaMusicasViewModel;
     private ArtistasViewModel artistasViewModel;
 
+
+    //Implantação do LOGIN com Google
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        OptionalPendingResult<GoogleSignInResult> opr =  Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+        if (opr.isDone()){
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result.getSignInAccount());
+        } else {
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result) {
+                    handleSignInResult(result.getSignInAccount());
+                }
+            });
+
+        }
+
+
+
+    }
+
+    // Login com Google
+    private void handleSignInResult(GoogleSignInAccount account) {
+        if (account != null){
+           userName.setText(account.getDisplayName());
+           logOut.setText("SAIR");
+
+            Glide.with(this).load(account.getPhotoUrl()).into(ImagemUsuario);
+
+        }else {
+//            goLogInScreen();
+        }
+
+    }
+
+    // Login com Google
+    private void goLogInScreen() {
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    // Logout com Google
+    private void LogOut (View view){
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+            if(status.isSuccess()){
+                goLogInScreen();
+            }else{
+                Toast.makeText(getContext(),"logOut não foi possível", Toast.LENGTH_LONG).show();
+            }
+            }
+        });
+
+    }
+
+    // Login com Google
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
+
+
+        // LOGOUT GOOGLE E EMAIL
+        logOut = view.findViewById(R.id.sair_aplicativo_id);
+
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            LogOut(view);
+            }
+        });
+
+
+
+        // Login com Google
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .enableAutoManage(getActivity(),this )
+                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .build();
+
+
+
+        // Receber Informações de perfil de Usuario FIREBASE
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getIdToken() instead.
+            String uid = user.getUid();
+        }
+
+
+
+
+
 
         // Iniciar retrofit para buscar infos da API
         retrofit = new Retrofit.Builder()
@@ -158,11 +292,11 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         recyclerView2.setLayoutManager(gridNoticias);
 
 
-        opcoesUsuario = view.findViewById(R.id.home_user_icon_image_button);
-        opcoesUsuario.setOnClickListener(new View.OnClickListener() {
+        ImagemUsuario = view.findViewById(R.id.home_user_icon_image_button);
+        ImagemUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopupMenu popupMenu = new PopupMenu(getActivity(), opcoesUsuario);
+                PopupMenu popupMenu = new PopupMenu(getActivity(), ImagemUsuario);
                 MenuInflater menuInflater = popupMenu.getMenuInflater();
                 menuInflater.inflate(R.menu.popup_menu, popupMenu.getMenu());
                 popupMenu.show();
@@ -197,7 +331,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
 
         userName = view.findViewById(R.id.user_name_id);
-        userStatus = view.findViewById(R.id.txtUserStatus);
+        userStatus = view.findViewById(R.id.sair_aplicativo_id);
 
         userName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,6 +365,12 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
         return view;
     }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
 
     private void irParaLogin() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
@@ -453,4 +593,5 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
 
     }
+
 }

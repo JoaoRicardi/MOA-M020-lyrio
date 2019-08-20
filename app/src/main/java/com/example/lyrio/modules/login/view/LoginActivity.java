@@ -1,35 +1,53 @@
 package com.example.lyrio.modules.login.view;
 
-import android.content.Context;
 import android.content.Intent;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.SharedPreferences;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lyrio.R;
 import com.example.lyrio.modules.cadastro.view.UserCadastroActivity;
+import com.example.lyrio.modules.login.viewmodel.LoginViewModel;
 import com.example.lyrio.modules.recuperarSenha.view.UserEsqueciMinhaSenha;
 import com.example.lyrio.modules.menu.view.MainActivity;
-import com.example.lyrio.util.Constantes;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity {
+import static com.google.android.gms.auth.api.Auth.GOOGLE_SIGN_IN_API;
 
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+
+
+    private GoogleApiClient googleApiClient;
     public final Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
-    private EditText usernameEditText;
-    private EditText passwordEditText;
+    private EditText emailEditText;
+    private EditText senhaEditText;
     private Button botaoLogin ;
     private TextView registro ;
-    private Button buttonFacebook;
-    private Button registreComGoogle;
+    private SignInButton loginGoogle;
     private TextView esqueceuSenha ;
+    private ProgressBar progressBar;
+    private LoginViewModel loginViewModel;
+    public static final int SIGN_IN_CODE = 777;
+
 
 
 
@@ -38,30 +56,39 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-
-        final Button confirmarButton = findViewById(R.id.botaoLogin);
-        confirmarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                botaoClicado(view);
-
-            }
-        });
-
-        usernameEditText= findViewById(R.id.emailDigitado);
-        passwordEditText = findViewById(R.id.senhaLogin);
+        emailEditText = findViewById(R.id.emailDigitado);
+        senhaEditText = findViewById(R.id.senhaLogin);
 
         registro = findViewById(R.id.registreSe);
-        buttonFacebook = findViewById(R.id.botaoLoginFacebook);
-        registreComGoogle = findViewById(R.id.botaoLoginGoogle);
+        botaoLogin = findViewById(R.id.botaoLogin);
+        loginGoogle = findViewById(R.id.botaoLoginGoogle);
         esqueceuSenha = findViewById(R.id.esqueceuSenha);
+        progressBar = findViewById(R.id.progressBar);
+
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
 
 
-        registro.setOnClickListener(new View.OnClickListener() {
+        // Login com Google
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .build();
+
+        botaoLogin.setOnClickListener( view -> logar());
+
+        registro.setOnClickListener(view -> LoginActivity.this.irParaRegistro());
+
+        loginGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                irParaRegistro();
+                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                startActivityForResult(intent, SIGN_IN_CODE );
+
+
             }
         });
 
@@ -73,28 +100,50 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences preferences = getSharedPreferences(Constantes.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
 
-        if (preferences.contains(Constantes.EMAIL)) {
-            usernameEditText.setText(preferences.getString(Constantes.EMAIL, ""));
-        }
+        loginViewModel.getAutenticadoLiveData()
+                .observe(this, autenticado -> {
+                    if (autenticado) {
+                    irParaHome();
+                    } else {
+                        Toast.makeText(this, "Falha na autenticação", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        loginViewModel.getLoaderLiveData()
+                .observe(this, showLoader -> progressBar.setVisibility(showLoader ? View.VISIBLE : View.GONE));
+
+    }
+
+
+
+
+    private void logar() {
+
+        String email = emailEditText.getEditableText().toString();
+        String senha = senhaEditText.getEditableText().toString();
+
+        loginViewModel.autenticarUsuario(email, senha);
+
+        irParaHome();
 
 
     }
 
     public void botaoClicado(View view) {
 
-        usernameEditText.setError(null);
-        passwordEditText.setError(null);
+        emailEditText.setError(null);
+        senhaEditText.setError(null);
 
-        if (usernameEditText.getEditableText().toString().equals("")) {
-            usernameEditText.setError("Informe seu email");
-        } else if (!emailInvalido(usernameEditText.getEditableText().toString())) {
-            usernameEditText.setError("e-mail não foi digitado corretamente");
-        } else if (passwordEditText.getEditableText().toString().equals("")) {
-            passwordEditText.setError("Informe sua senha");
-        } else if (senhaValida(passwordEditText.getEditableText().toString())) {
-            passwordEditText.setError("senha inválida");
+        if (emailEditText.getEditableText().toString().equals("")) {
+            emailEditText.setError("Informe seu email");
+        } else if (!emailInvalido(emailEditText.getEditableText().toString())) {
+            emailEditText.setError("e-mail não foi digitado corretamente");
+        } else if (senhaEditText.getEditableText().toString().equals("")) {
+            senhaEditText.setError("Informe sua senha");
+        } else if (senhaValida(senhaEditText.getEditableText().toString())) {
+            senhaEditText.setError("senha inválida");
         } else {
             irParaHome();
         }
@@ -129,12 +178,45 @@ public class LoginActivity extends AppCompatActivity {
 
     //ir para Home  - por enquanto esta indo para registro ate criar a Tela
     private void irParaHome(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        Intent intentHome = new Intent(this, MainActivity.class);
+        startActivity(intentHome);
     }
     // ir para esqueci a minha senha
     private void esqueceuSenha (){
         Intent intent = new Intent(this, UserEsqueciMinhaSenha.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SIGN_IN_CODE){
+
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignResult(result);
+        }
+
+    }
+
+    private void handleSignResult(GoogleSignInResult result){
+
+        if(result.isSuccess()){
+            Toast.makeText(this,"Login com Google efetuado com sucesso", Toast.LENGTH_SHORT).show();
+            irParaHome();
+        } else {
+            Toast.makeText(this,"Não foi possivel logar com Google", Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
+
+
 }

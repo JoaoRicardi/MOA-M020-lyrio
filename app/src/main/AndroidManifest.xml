@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
-
-
     package="com.example.lyrio">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,7 +11,7 @@
         android:roundIcon="@mipmap/lyr_new_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".modules.configuracoes.view.ConfiguracoesActivity"></activity>
+        <activity android:name=".modules.configuracoes.view.ConfiguracoesActivity" />
         <activity android:name=".modules.noticia.view.NoticiaActivity" />
         <activity android:name=".modules.Artista.view.PaginaArtistaActivity" />
         <activity android:name=".modules.listaNoticiaFavorito.view.ListaNoticiaSalvaActivity" />
@@ -28,6 +25,7 @@
         <activity android:name=".modules.recuperarSenha.view.UserEsqueciMinhaSenha" />
         <activity android:name=".modules.cadastro.view.UserCadastroActivity" />
         <activity android:name=".modules.splash.view.SplashActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
