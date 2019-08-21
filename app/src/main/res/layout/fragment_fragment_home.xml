@@ -43,7 +43,7 @@
                 app:layout_constraintEnd_toEndOf="@id/user_name_id"
                 app:layout_constraintTop_toBottomOf="@+id/user_name_id" />
 
-            <ImageButton
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/home_user_icon_image_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"

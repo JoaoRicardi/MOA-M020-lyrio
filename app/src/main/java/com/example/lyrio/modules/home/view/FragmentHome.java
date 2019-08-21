@@ -63,6 +63,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -83,7 +84,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private String gotMail;
     private TextView userName;
     private TextView userStatus;
-    private ImageButton ImagemUsuario;
+    private CircleImageView ImagemUsuario;
     private TextView logOut;
     private TextView verMaisMusica;
     private TextView verMaisArtistas;
