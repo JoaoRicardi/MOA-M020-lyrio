@@ -28,20 +28,20 @@
         app:layout_constraintStart_toEndOf="@+id/hotspot_artist_circle_image_view"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ToggleButton
-        android:id="@+id/letras_favorito_button"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/botao_favorito"
-        android:backgroundTint="@color/azulBotoes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:checked="false"
-        android:text=""
-        android:textOn=""
-        android:textOff=""
-        app:layout_constraintBottom_toTopOf="@id/recycler_image"/>
+    <!--<ToggleButton-->
+        <!--android:id="@+id/letras_favorito_button"-->
+        <!--android:layout_width="32dp"-->
+        <!--android:layout_height="32dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:background="@drawable/botao_favorito"-->
+        <!--android:backgroundTint="@color/azulBotoes"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--android:checked="false"-->
+        <!--android:text=""-->
+        <!--android:textOn=""-->
+        <!--android:textOff=""-->
+        <!--app:layout_constraintBottom_toTopOf="@id/recycler_image"/>-->
 
     <ImageView
         android:id="@+id/recycler_image"

@@ -42,8 +42,6 @@ import com.example.lyrio.interfaces.NoticiaSalvaListener;
 import com.example.lyrio.modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
 import com.example.lyrio.modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity;
-import com.example.lyrio.modules.listaNoticiaFavorito.view.ListaNoticiaSalvaActivity;
-import com.example.lyrio.modules.noticia.view.NoticiaActivity;
 import com.example.lyrio.modules.configuracoes.view.ConfiguracoesActivity;
 import com.example.lyrio.modules.login.view.LoginActivity;
 import com.example.lyrio.util.Constantes;
@@ -74,7 +72,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         MusicaSalvaListener,
-        NoticiaSalvaListener,
         PopupMenu.OnMenuItemClickListener, GoogleApiClient.OnConnectionFailedListener {
 
 
@@ -89,7 +86,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private TextView logOut;
     private TextView verMaisMusica;
     private TextView verMaisArtistas;
-    private TextView verMaisNoticias;
+//    private TextView verMaisNoticias;
     private SwipeRefreshLayout swipeRefreshLayout;
     private GoogleApiClient googleApiClient;
 
@@ -282,21 +279,21 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         recyclerView1.setLayoutManager(gridArtistas);
 
 
-        //Conteudo lista noticias
-        List<NoticiaSalva> listaNoticiasSalvas = new ArrayList<>();
-        NoticiaSalva noticiaSalva = new NoticiaSalva();
-        noticiaSalva.setTituloNoticiaSalva("Dia do Rock!");
-        noticiaSalva.setImagemNoticiaSalva("https://caisdamemoria.files.wordpress.com/2018/07/dia-mundial-do-rock.jpg?w=620");
-        listaNoticiasSalvas.add(noticiaSalva);
-        listaNoticiasSalvas.add(noticiaSalva);
-        listaNoticiasSalvas.add(noticiaSalva);
-
-        //Recycler noticias
-        NoticiaSalvaAdapter noticiaSalvaAdapter = new NoticiaSalvaAdapter(listaNoticiasSalvas, this);
-        GridLayoutManager gridNoticias = new GridLayoutManager(view.getContext(), 3);
-        RecyclerView recyclerView2 = view.findViewById(R.id.noticias_salvas_recycler_view);
-        recyclerView2.setAdapter(noticiaSalvaAdapter);
-        recyclerView2.setLayoutManager(gridNoticias);
+//        //Conteudo lista noticias
+//        List<NoticiaSalva> listaNoticiasSalvas = new ArrayList<>();
+//        NoticiaSalva noticiaSalva = new NoticiaSalva();
+//        noticiaSalva.setTituloNoticiaSalva("Dia do Rock!");
+//        noticiaSalva.setImagemNoticiaSalva("https://caisdamemoria.files.wordpress.com/2018/07/dia-mundial-do-rock.jpg?w=620");
+//        listaNoticiasSalvas.add(noticiaSalva);
+//        listaNoticiasSalvas.add(noticiaSalva);
+//        listaNoticiasSalvas.add(noticiaSalva);
+//
+//        //Recycler noticias
+//        NoticiaSalvaAdapter noticiaSalvaAdapter = new NoticiaSalvaAdapter(listaNoticiasSalvas, this);
+//        GridLayoutManager gridNoticias = new GridLayoutManager(view.getContext(), 3);
+//        RecyclerView recyclerView2 = view.findViewById(R.id.noticias_salvas_recycler_view);
+//        recyclerView2.setAdapter(noticiaSalvaAdapter);
+//        recyclerView2.setLayoutManager(gridNoticias);
 
 
         ImagemUsuario = view.findViewById(R.id.home_user_icon_image_button);
@@ -328,13 +325,13 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             }
         });
 
-        verMaisNoticias = view.findViewById(R.id.ver_mais_noticias_salvas_text_view);
-        verMaisNoticias.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                irParaMinhasNoticias();
-            }
-        });
+//        verMaisNoticias = view.findViewById(R.id.ver_mais_noticias_salvas_text_view);
+//        verMaisNoticias.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                irParaMinhasNoticias();
+//            }
+//        });
 
 
         userName = view.findViewById(R.id.user_name_id);
@@ -405,10 +402,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 //    }
 
 
-    private void irParaMinhasNoticias() {
-        Intent intent = new Intent(getContext(), ListaNoticiaSalvaActivity.class);
-        startActivity(intent);
-    }
+//    private void irParaMinhasNoticias() {
+//        Intent intent = new Intent(getContext(), ListaNoticiaSalvaActivity.class);
+//        startActivity(intent);
+//    }
 
     private void irParaMinhasMusicas() {
         Intent intent = new Intent(getContext(), ListaMusicaSalvaActivity.class);
@@ -475,11 +472,11 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         startActivity(intent);
     }
 
-    @Override
-    public void onNoticiaSalvaClicado(NoticiaSalva noticiaSalva) {
-        Intent intent = new Intent(getContext(), NoticiaActivity.class);
-        startActivity(intent);
-    }
+//    @Override
+//    public void onNoticiaSalvaClicado(NoticiaSalva noticiaSalva) {
+//        Intent intent = new Intent(getContext(), NoticiaActivity.class);
+//        startActivity(intent);
+//    }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
