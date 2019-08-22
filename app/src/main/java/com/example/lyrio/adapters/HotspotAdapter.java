@@ -116,23 +116,18 @@ public class HotspotAdapter extends RecyclerView.Adapter<HotspotAdapter.ViewHold
                 Picasso.get().load(hots.getArt_pic_src()).into(hotCircleArtist);
             }
 
-            maisInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    hotspotListener.onHotspotClicado(hots);
-                }
-            });
+            maisInfo.setOnClickListener(v -> hotspotListener.onHotspotClicado(hots));
 
-            favourite_toggle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(favourite_toggle.isChecked()){
-                        Toast.makeText(context, Constantes.TOAST_NOTICIA_FAVORITA_ADICIONAR, Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(context, Constantes.TOAST_NOTICIA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+//            favourite_toggle.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(favourite_toggle.isChecked()){
+//                        Toast.makeText(context, Constantes.TOAST_NOTICIA_FAVORITA_ADICIONAR, Toast.LENGTH_SHORT).show();
+//                    }else{
+//                        Toast.makeText(context, Constantes.TOAST_NOTICIA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            });
         }
     }
 
