@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +19,6 @@ import com.example.lyrio.R;
 import com.example.lyrio.modules.cadastro.view.UserCadastroActivity;
 import com.example.lyrio.modules.login.viewmodel.LoginViewModel;
 import com.example.lyrio.modules.recuperarSenha.view.EmailRecuperarSenha;
-import com.example.lyrio.modules.recuperarSenha.view.UserEsqueciMinhaSenha;
 import com.example.lyrio.modules.menu.view.MainActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -28,14 +26,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.google.android.gms.auth.api.Auth.GOOGLE_SIGN_IN_API;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 

@@ -25,7 +25,6 @@
         <activity android:name=".modules.login.view.LoginActivity" />
         <activity android:name=".modules.menu.view.MainActivity" />
         <activity android:name=".modules.musica.view.TelaLetrasActivity" />
-        <activity android:name=".modules.recuperarSenha.view.UserEsqueciMinhaSenha" />
         <activity android:name=".modules.cadastro.view.UserCadastroActivity" />
         <activity android:name=".modules.splash.view.SplashActivity">
             <intent-filter>
