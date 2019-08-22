@@ -9,7 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,19 +26,17 @@ import com.bumptech.glide.Glide;
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
 import com.example.lyrio.adapters.MusicaSalvaAdapter;
-import com.example.lyrio.adapters.NoticiaSalvaAdapter;
 import com.example.lyrio.database.LyrioDatabase;
 import com.example.lyrio.modules.home.viewModel.HomeViewModel;
+import com.example.lyrio.modules.menu.view.MainActivity;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.database.models.Musica;
-import com.example.lyrio.database.models.NoticiaSalva;
 import com.example.lyrio.interfaces.ArtistaSalvoListener;
 import com.example.lyrio.interfaces.EnviarDeFragmentParaActivity;
 import com.example.lyrio.interfaces.MusicaSalvaListener;
-import com.example.lyrio.interfaces.NoticiaSalvaListener;
 import com.example.lyrio.modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
 import com.example.lyrio.modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity;
@@ -83,12 +81,13 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private TextView userName;
     private TextView userStatus;
     private CircleImageView ImagemUsuario;
-    private TextView logOut;
     private TextView verMaisMusica;
     private TextView verMaisArtistas;
+    private TextView sairBotao;
 //    private TextView verMaisNoticias;
     private SwipeRefreshLayout swipeRefreshLayout;
     private GoogleApiClient googleApiClient;
+
 
     //Interfaces
     private EnviarDeFragmentParaActivity enviarDeFragmentParaActivity;
@@ -138,7 +137,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private void handleSignInResult(GoogleSignInAccount account) {
         if (account != null){
            userName.setText(account.getDisplayName());
-           logOut.setText("SAIR");
+
 
             Glide.with(this).load(account.getPhotoUrl()).into(ImagemUsuario);
 
@@ -156,12 +155,15 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     }
 
     // Logout com Google
-    private void LogOut (View view){
+    private void logOut(View view){
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
             if(status.isSuccess()){
-                goLogInScreen();
+ //              goLogInScreen();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
+
             }else{
                 Toast.makeText(getContext(),"logOut não foi possível", Toast.LENGTH_LONG).show();
             }
@@ -178,15 +180,15 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         db = Room.databaseBuilder(getContext(), LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
 
-        // LOGOUT GOOGLE E EMAIL
-        logOut = view.findViewById(R.id.sair_aplicativo_id);
-
-        logOut.setOnClickListener(new View.OnClickListener() {
+        sairBotao = view.findViewById(R.id.sair_button);
+        sairBotao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            LogOut(view);
+                logOut(view);
             }
         });
+
+
 
 
 
@@ -353,10 +355,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
         if (gotMail != null) {
             userName.setText(gotMail);
-            userStatus.setText("Notificações ativas");
+//            userStatus.setText("Notificações ativas");
         } else {
             userName.setText("Faça seu login");
-            userStatus.setText("Sem notificações");
+//            userStatus.setText("Sem notificações");
         }
 
         swipeRefreshLayout = view.findViewById(R.id.home_swipe);
@@ -472,19 +474,13 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         startActivity(intent);
     }
 
-//    @Override
-//    public void onNoticiaSalvaClicado(NoticiaSalva noticiaSalva) {
-//        Intent intent = new Intent(getContext(), NoticiaActivity.class);
-//        startActivity(intent);
-//    }
-
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch ((menuItem.getItemId())) {
             case R.id.item_sair:
-                Intent intent = new Intent(getContext(), LoginActivity.class);
+                Intent intent = new Intent(getContext(), MainActivity.class);
                 startActivity(intent);
-                return true;
+
             case R.id.item_editar_perfil:
                 Intent intent02 = new Intent(getContext(), ConfiguracoesActivity.class);
                 startActivity(intent02);

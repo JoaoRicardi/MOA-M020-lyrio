@@ -14,7 +14,6 @@ package="com.example.lyrio">
     <activity android:name=".modules.configuracoes.view.ConfiguracoesActivity" />
     <activity android:name=".modules.noticia.view.NoticiaActivity" />
     <activity android:name=".modules.Artista.view.PaginaArtistaActivity" />
-    <activity android:name=".modules.listaNoticiaFavorito.view.ListaNoticiaSalvaActivity" />
     <activity android:name=".modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity" />
     <activity android:name=".modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity" />
     <activity android:name=".modules.Album.view.ListaAlbumActivity" />
