@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.example.lyrio.R;
 import com.example.lyrio.modules.cadastro.view.UserCadastroActivity;
 import com.example.lyrio.modules.login.viewmodel.LoginViewModel;
+import com.example.lyrio.modules.recuperarSenha.view.EmailRecuperarSenha;
 import com.example.lyrio.modules.recuperarSenha.view.UserEsqueciMinhaSenha;
 import com.example.lyrio.modules.menu.view.MainActivity;
 import com.google.android.gms.auth.api.Auth;
@@ -27,6 +29,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -170,6 +174,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         return isEmailIdValid;
     }
 
+
+
     //intent ir para registro
     private void irParaRegistro () {
         Intent intent = new Intent(this, UserCadastroActivity.class);
@@ -183,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
     // ir para esqueci a minha senha
     private void esqueceuSenha (){
-        Intent intent = new Intent(this, UserEsqueciMinhaSenha.class);
+        Intent intent = new Intent(this, EmailRecuperarSenha.class);
         startActivity(intent);
     }
 

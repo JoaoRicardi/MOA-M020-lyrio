@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="com.example.lyrio">
+    package="com.example.lyrio">
 
-<uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-<application
-    android:allowBackup="true"
-    android:icon="@mipmap/lyr_new_icon"
-    android:label="@string/app_name"
-    android:roundIcon="@mipmap/lyr_new_icon_round"
-    android:supportsRtl="true"
-    android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-    <activity android:name=".modules.configuracoes.view.ConfiguracoesActivity" />
-    <activity android:name=".modules.noticia.view.NoticiaActivity" />
-    <activity android:name=".modules.Artista.view.PaginaArtistaActivity" />
-    <activity android:name=".modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity" />
-    <activity android:name=".modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity" />
-    <activity android:name=".modules.Album.view.ListaAlbumActivity" />
-    <activity android:name=".modules.vagalumeAbrirLink.view.VagalumeAbrirLink" />
-    <activity android:name=".modules.login.view.LoginActivity" />
-    <activity android:name=".modules.menu.view.MainActivity" />
-    <activity android:name=".modules.musica.view.TelaLetrasActivity" />
-    <activity android:name=".modules.recuperarSenha.view.UserEsqueciMinhaSenha" />
-    <activity android:name=".modules.cadastro.view.UserCadastroActivity" />
-    <activity android:name=".modules.splash.view.SplashActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/lyr_new_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/lyr_new_icon_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".modules.recuperarSenha.view.EmailRecuperarSenha"></activity>
+        <activity android:name=".modules.configuracoes.view.ConfiguracoesActivity" />
+        <activity android:name=".modules.noticia.view.NoticiaActivity" />
+        <activity android:name=".modules.Artista.view.PaginaArtistaActivity" />
+        <activity android:name=".modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity" />
+        <activity android:name=".modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity" />
+        <activity android:name=".modules.Album.view.ListaAlbumActivity" />
+        <activity android:name=".modules.vagalumeAbrirLink.view.VagalumeAbrirLink" />
+        <activity android:name=".modules.login.view.LoginActivity" />
+        <activity android:name=".modules.menu.view.MainActivity" />
+        <activity android:name=".modules.musica.view.TelaLetrasActivity" />
+        <activity android:name=".modules.recuperarSenha.view.UserEsqueciMinhaSenha" />
+        <activity android:name=".modules.cadastro.view.UserCadastroActivity" />
+        <activity android:name=".modules.splash.view.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-</application>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>

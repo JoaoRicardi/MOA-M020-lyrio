@@ -78,6 +78,7 @@ public class UserCadastroActivity extends AppCompatActivity {
 
     private void cadastrarUsuario() {
 
+
         String email = editTextEmail.getEditableText().toString();
         String senha = editTextSenha.getEditableText().toString();
 
