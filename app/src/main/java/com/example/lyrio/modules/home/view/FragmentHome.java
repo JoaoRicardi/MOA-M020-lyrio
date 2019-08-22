@@ -3,6 +3,7 @@ package com.example.lyrio.modules.home.view;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -197,11 +198,14 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                 .requestEmail()
                 .build();
 
-
-        googleApiClient = new GoogleApiClient.Builder(getContext())
-                .enableAutoManage(getActivity(),this )
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                .build();
+        try {
+            googleApiClient = new GoogleApiClient.Builder(getContext())
+                    .enableAutoManage(getActivity(), this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        } catch(Exception error){
+            Log.e("ExceptionGoogle", error.getMessage());
+        }
 
 
 
