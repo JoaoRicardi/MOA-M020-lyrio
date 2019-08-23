@@ -83,8 +83,9 @@ public class ListaMusicasRepository {
                     apiArtista.setName(vagalumeBusca.getArt().getName());
                     apiArtista.setUrl(vagalumeBusca.getArt().getUrl()+"images/profile.jpg");
                     musica.setArtista(apiArtista);
-
                     musica.setText(vagalumeBusca.getMus().get(0).getText());
+
+                    musica.setTranslate(vagalumeBusca.getMus().get(0).getTranslate());
 
                     return musica;
                 });

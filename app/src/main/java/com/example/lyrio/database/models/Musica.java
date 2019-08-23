@@ -43,7 +43,7 @@ public class Musica implements Serializable {
     private String text;
     @SerializedName("translate")
     @Ignore
-    private Musica translate;
+    private List<Musica> translate;
     @SerializedName("art")
     @Ignore
     private ApiArtista artista;
@@ -127,11 +127,11 @@ public class Musica implements Serializable {
         this.text = text;
     }
 
-    public Musica getTranslate() {
+    public List<Musica> getTranslate() {
         return translate;
     }
 
-    public void setTranslate(Musica translate) {
+    public void setTranslate(List<Musica> translate) {
         this.translate = translate;
     }
 

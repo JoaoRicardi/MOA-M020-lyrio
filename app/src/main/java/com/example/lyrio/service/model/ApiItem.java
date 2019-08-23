@@ -1,5 +1,7 @@
 package com.example.lyrio.service.model;
 
+import com.example.lyrio.database.models.Musica;
+
 import java.util.List;
 
 public class ApiItem {
@@ -16,7 +18,7 @@ public class ApiItem {
     private String imgUrl;
     private int lang;
     private String text;
-    private List<ApiItem> translate;
+    private List<Musica> translate;
     private List<ApiItem> item;
 
     public String getName() {
@@ -43,11 +45,11 @@ public class ApiItem {
         this.text = text;
     }
 
-    public List<ApiItem> getTranslate() {
+    public List<Musica> getTranslate() {
         return translate;
     }
 
-    public void setTranslate(List<ApiItem> translate) {
+    public void setTranslate(List<Musica> translate) {
         this.translate = translate;
     }
 

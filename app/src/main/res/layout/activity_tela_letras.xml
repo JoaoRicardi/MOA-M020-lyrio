@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_normal">
 
-
-
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -76,6 +74,19 @@
                 android:layout_marginEnd="32dp"
                 android:background="@color/cinza"
                 />
+
+            <Button
+                android:id="@+id/button_traduzir_letra"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/letras_div_top"
+                android:layout_marginTop="32dp"
+                android:textAllCaps="false"
+                android:textColor="@color/branco"
+                android:background="@color/azulBotoes"
+                android:text="Ver tradução"/>
 
             <ScrollView
                 android:id="@+id/letras_scroll_view"
