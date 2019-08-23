@@ -15,5 +15,4 @@ public interface VagalumeBuscaApi {
                                                @Query("q") String termo,
                                                @Query("limit") int limit);
 
-
 }

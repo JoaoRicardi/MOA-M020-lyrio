@@ -18,8 +18,9 @@ public class RetrofitService {
     private Retrofit retrofit;
 
     private static  final  String BASE_URL = "https://api.vagalume.com.br/";
+    private static  final  String BASE_URL_ART = "https://www.vagalume.com.br/";
 
-    private Retrofit getRetrofit(){
+    private Retrofit getRetrofit(String base){
         if (retrofit == null) {
             OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
             clientBuilder.connectTimeout(30, TimeUnit.SECONDS);
@@ -29,25 +30,24 @@ public class RetrofitService {
             clientBuilder.addNetworkInterceptor(new StethoInterceptor());
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(base)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(clientBuilder.build())
                     .build();
-
-
         }
         return retrofit;
     }
+
     public ArtistaApi getArtistaApi(){
-        return getRetrofit().create(ArtistaApi.class);
+        return getRetrofit(BASE_URL_ART).create(ArtistaApi.class);
     }
 
     public MusicaApi getMusicasApi(){
-        return getRetrofit().create(MusicaApi.class);
+        return getRetrofit(BASE_URL).create(MusicaApi.class);
     }
 
     public VagalumeBuscaApi getBuscaApi(){
-        return getRetrofit().create(VagalumeBuscaApi.class);
+        return getRetrofit(BASE_URL).create(VagalumeBuscaApi.class);
     }
 }

@@ -110,8 +110,6 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
                     listaMusicasFavoritas = listaMusicas;
                 });
 
-
-
         buscarViewModel.getListaArtistaBuscadaLiveData()
                 .observe(this, listaArtista -> {
                     buscaArtistasAdapter.adicionarListaDeApiItems(listaArtista, listaMusicasFavoritas);

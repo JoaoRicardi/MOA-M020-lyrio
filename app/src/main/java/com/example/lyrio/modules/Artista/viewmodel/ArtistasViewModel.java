@@ -17,7 +17,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ArtistasViewModel extends AndroidViewModel {
     private MutableLiveData<List<ApiArtista>> listaArtistaLiveData = new MutableLiveData<>();
-    private MutableLiveData<ApiArtista>  artistaLiveData = new MutableLiveData<>();
+    private MutableLiveData<ApiArtista> artistaLiveData = new MutableLiveData<>();
 
     private CompositeDisposable disposable = new CompositeDisposable();
     private ArtistaRepository apiArtistaRepository = new ArtistaRepository();
@@ -35,6 +35,19 @@ public class ArtistasViewModel extends AndroidViewModel {
     }
 
     private ApiArtista tempArtista;
+
+
+    public void getArtistaPorUrl(String urlArtista){
+        disposable.add(
+                apiArtistaRepository.getArtistaPorUrl(urlArtista)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(apiArt -> artistaLiveData.setValue(apiArt),
+                                throwable -> throwable.printStackTrace())
+        );
+    }
+
+
 
     private void getArtistaPorId(String stringId){
         disposable.add(

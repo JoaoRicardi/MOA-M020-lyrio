@@ -2,34 +2,31 @@ package com.example.lyrio.modules.Artista.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
+import com.example.lyrio.modules.Artista.viewmodel.ArtistasViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.adapters.ListaMusicasSalvasAdapter;
-import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.model.Album;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.interfaces.AlbumListener;
 import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
 import com.example.lyrio.modules.Album.view.ListaAlbumActivity;
-import com.example.lyrio.util.Constantes;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -40,13 +37,14 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     private CircleImageView imagemArtistaImageView;
     private TextView nomeArtistaTextView;
     private ToggleButton seguirButton;
-    private ImageButton backButton;
     private ImageView artistaBg;
-    private Retrofit retrofit;
-    private ApiArtista artistaSalvo;
     private ListaMusicasSalvasAdapter listaMusicasSalvasAdapter;
-    private ArtistaSalvoAdapter artistaSalvoAdapter;
     private List<Musica> listaDeMusicasSalvas;
+
+    private String imgUrlBase = "https://www.vagalume.com";
+    private ApiArtista artistaBundle;
+    private ApiArtista artistaApi;
+    private ArtistasViewModel artistasViewModel;
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
     private static final String TAG = "VAGALUME";
@@ -54,11 +52,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pagina_artista);
-
-        // Iniciar retrofit para buscar infos da API
-//        ArtistasViewModel artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
-//        artistasViewModel.atualizarArtista();
+        setContentView(R.layout.activity_pagina_artista_sem_album);
 
         //Definir as variaveis
         artistaBg = findViewById(R.id.artista_imagem_bg);
@@ -69,30 +63,59 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        ApiArtista artistaSalvo = (ApiArtista) bundle.getSerializable("ARTISTA");
+        artistaBundle = (ApiArtista) bundle.getSerializable("ARTISTA");
 
-        if(artistaSalvo.getDesc()==null){
-            listaDeMusicasSalvas = new ArrayList<>();
-            String[] artSplit = artistaSalvo.getUrl().split("/");
-            getApiData(artSplit[1]);
-        }else{
-            //Set variaveis
-            nomeArtistaTextView.setText(artistaSalvo.getDesc());
-            Picasso.get().load(artistaSalvo.getPic_small()).into(imagemArtistaImageView);
-            Picasso.get().load(artistaSalvo.getPic_medium()).into(artistaBg);
-            listaDeMusicasSalvas = artistaSalvo.getMusicasSalvas();
-        }
+        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
+        Log.i(TAG, " URL: "+artistaBundle.getUrl().split("/")[1]);
+        artistasViewModel.getArtistaPorUrl(artistaBundle.getUrl().split("/")[1]);
 
-        seguirButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(seguirButton.isChecked()){
-                    Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_EXCLUIR, Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_ADICIONAR, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        artistasViewModel.getArtistaLiveData()
+                .observe(this, apiArtista -> {
+                    artistaApi = apiArtista;
+                    nomeArtistaTextView.setText(artistaApi.getDesc());
+                    Picasso.get().load(imgUrlBase+artistaApi.getPic_small()).into(imagemArtistaImageView);
+                    Log.i(TAG, " URL_IMG_SMALL: "+imgUrlBase+artistaApi.getPic_small());
+                    Picasso.get().load(imgUrlBase+artistaApi.getPic_medium()).into(artistaBg);
+                    listaDeMusicasSalvas = artistaApi.getMusicasSalvas();
+                });
+
+
+
+        //Recycler com a lista de músicas que veio no Bundle
+//        listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(listaDeMusicasSalvas, this, artistaApi);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//        RecyclerView recyclerView = findViewById(R.id.pagina_artista_lista_musicas_recycler_view);
+//        recyclerView.setAdapter(listaMusicasSalvasAdapter);
+//        recyclerView.setLayoutManager(layoutManager);
+
+
+
+//        if(artistaSalvo.getDesc()==null){
+//            listaDeMusicasSalvas = new ArrayList<>();
+//            String[] artSplit = artistaSalvo.getUrl().split("/");
+//            getApiData(artSplit[1]);
+//        }else{
+//            //Set variaveis
+//            nomeArtistaTextView.setText(artistaSalvo.getDesc());
+//            Picasso.get().load(artistaSalvo.getPic_small()).into(imagemArtistaImageView);
+//            Picasso.get().load(artistaSalvo.getPic_medium()).into(artistaBg);
+//            listaDeMusicasSalvas = artistaSalvo.getMusicasSalvas();
+//        }
+//
+//        seguirButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(seguirButton.isChecked()){
+//                    Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_EXCLUIR, Toast.LENGTH_SHORT).show();
+//                }else{
+//                    Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_ADICIONAR, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+
+
+
+        //ja estava baixo
 
 //        backButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -101,34 +124,9 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 //            }
 //        });
 
-        //Recycler com a lista de músicas que veio no Bundle
-        listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(listaDeMusicasSalvas, this, artistaSalvo);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        RecyclerView recyclerView = findViewById(R.id.pagina_artista_lista_musicas_recycler_view);
-        recyclerView.setAdapter(listaMusicasSalvasAdapter);
-        recyclerView.setLayoutManager(layoutManager);
-
-
-//        List<Album> listaAlbum = new ArrayList<>();
-//        Album album1 = new Album(R.drawable.paula_fernandes);
-//        listaAlbum.add(album1);
-//        Album album2 = new Album(R.drawable.u2);
-//        listaAlbum.add(album2);
-//        Album album3 = new Album(R.drawable.paula_fernandes);
-//        listaAlbum.add(album3);
-//        Album album4 = new Album(R.drawable.u2);
-//        listaAlbum.add(album4);
-//
-//        AlbumAdapter albumAdapter = new AlbumAdapter(listaAlbum, this);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false);
-//        RecyclerView recyclerView1 = findViewById(R.id.pagina_artista_lista_albuns_recyler_view);
-//        recyclerView1.setAdapter(albumAdapter);
-//        recyclerView1.setLayoutManager(linearLayoutManager);
-
+        //ja estava cima
 
     }
-
-
 
 //    private void voltarParaUltimaPagina() {
 //        if (getFragmentManager().getBackStackEntryCount() == 0) {
@@ -161,10 +159,10 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 
     private void getApiData(String oQueBuscar) {
 
-        Date curTime = Calendar.getInstance().getTime();
-        oQueBuscar = oQueBuscar.trim().replace(" ", "-");
-        String vagaKey = Constantes.VAGALUME_KEY + curTime.toString().trim().replace(" ","");
-        String buscaFull = "https://www.vagalume.com.br/"+oQueBuscar+"/index.js";
+//        Date curTime = Calendar.getInstance().getTime();
+//        oQueBuscar = oQueBuscar.trim().replace(" ", "-");
+//        String vagaKey = Constantes.VAGALUME_KEY + curTime.toString().trim().replace(" ","");
+//        String buscaFull = "https://www.vagalume.com.br/"+oQueBuscar+"/index.js";
 
 //        VagalumeBuscaApi service = retrofit.create(VagalumeBuscaApi.class);
 //        Call<VagalumeBusca> vagalumeBuscaCall = service.getBuscaResponse(buscaFull);

@@ -14,48 +14,59 @@ import java.util.List;
 public class ApiArtista implements Serializable{
     @PrimaryKey(autoGenerate = true)
     private int pk;
+
     @SerializedName("name")
     @Ignore
     private String name;
+
     @SerializedName("id")
     @ColumnInfo(name = "id_do_artista")
     private String id;
+
     @SerializedName("desc")
     @Ignore
     private String desc;
+
     @SerializedName("url")
     @Ignore
     private String url;
+
     @SerializedName("pic_small")
     @Ignore
     private String pic_small;
+
     @SerializedName("pic_medium")
     @Ignore
     private String pic_medium;
+
     @Ignore
     private int qtdMusicas;
+
     @SerializedName("toplyrics")
     @Ignore
     private ApiItem toplyrics;
+
     @SerializedName("lyrics")
     @Ignore
     private ApiItem lyrics;
+
     @Ignore
     private List<Musica> musicasSalvas;
+
     @ColumnInfo(name = "is_favorito")
     private boolean favoritarArtista;
+
     @Ignore
     private List<ApiArtista> apiArtistaList;
 
-    public List<ApiArtista> getApiArtistaList() {
-        return apiArtistaList;
+
+    public int getPk() {
+        return pk;
     }
 
-    public void setApiArtistaList(List<ApiArtista> apiArtistaList) {
-        this.apiArtistaList = apiArtistaList;
+    public void setPk(int pk) {
+        this.pk = pk;
     }
-
-
 
     public String getName() {
         return name;
@@ -71,38 +82,6 @@ public class ApiArtista implements Serializable{
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public List<Musica> getMusicasSalvas() {
-        return musicasSalvas;
-    }
-
-    public void setMusicasSalvas(List<Musica> musicasSalvas) {
-        this.musicasSalvas = musicasSalvas;
-    }
-
-    public ApiItem getToplyrics() {
-        return toplyrics;
-    }
-
-    public void setToplyrics(ApiItem toplyrics) {
-        this.toplyrics = toplyrics;
-    }
-
-    public int getQtdMusicas() {
-        return qtdMusicas;
-    }
-
-    public void setQtdMusicas(int qtdMusicas) {
-        this.qtdMusicas = qtdMusicas;
-    }
-
-    public ApiItem getLyrics() {
-        return lyrics;
-    }
-
-    public void setLyrics(ApiItem lyrics) {
-        this.lyrics = lyrics;
     }
 
     public String getDesc() {
@@ -137,6 +116,38 @@ public class ApiArtista implements Serializable{
         this.pic_medium = pic_medium;
     }
 
+    public int getQtdMusicas() {
+        return qtdMusicas;
+    }
+
+    public void setQtdMusicas(int qtdMusicas) {
+        this.qtdMusicas = qtdMusicas;
+    }
+
+    public ApiItem getToplyrics() {
+        return toplyrics;
+    }
+
+    public void setToplyrics(ApiItem toplyrics) {
+        this.toplyrics = toplyrics;
+    }
+
+    public ApiItem getLyrics() {
+        return lyrics;
+    }
+
+    public void setLyrics(ApiItem lyrics) {
+        this.lyrics = lyrics;
+    }
+
+    public List<Musica> getMusicasSalvas() {
+        return musicasSalvas;
+    }
+
+    public void setMusicasSalvas(List<Musica> musicasSalvas) {
+        this.musicasSalvas = musicasSalvas;
+    }
+
     public boolean isFavoritarArtista() {
         return favoritarArtista;
     }
@@ -145,11 +156,11 @@ public class ApiArtista implements Serializable{
         this.favoritarArtista = favoritarArtista;
     }
 
-    public int getPk() {
-        return pk;
+    public List<ApiArtista> getApiArtistaList() {
+        return apiArtistaList;
     }
 
-    public void setPk(int pk) {
-        this.pk = pk;
+    public void setApiArtistaList(List<ApiArtista> apiArtistaList) {
+        this.apiArtistaList = apiArtistaList;
     }
 }
