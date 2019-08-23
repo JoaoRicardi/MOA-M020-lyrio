@@ -10,6 +10,8 @@ import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.service.RetrofitService;
 import com.example.lyrio.service.model.ApiArtista;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +25,9 @@ public class ListaMusicasRepository {
 
     private static final String API_KEY = UUID.randomUUID()+"";
     private static final String FORMAT = "json";
+
+    Date curTime = Calendar.getInstance().getTime();
+    String vagaKey = curTime.toString().replace(" ","");
 
     //Escolher observable do reactiveX
     //Entre Flowable e Observable, Flowable entrega mais parâmetros
@@ -68,7 +73,7 @@ public class ListaMusicasRepository {
 
     public Observable<Musica> getMusicaPorIdApi(String musicaId){
         return retrofitService.getMusicasApi()
-                .getMusicasById(API_KEY, musicaId)
+                .getMusicasById(vagaKey, musicaId)
                 .map(vagalumeBusca -> {
                     Musica musica = new Musica();
 

@@ -32,6 +32,7 @@ public class TelaLetrasActivity extends AppCompatActivity {
     private CircleImageView imagemArtista;
     private ToggleButton favourite_button;
     private LetrasViewModel letrasViewModel;
+    private boolean hasTranslation;
 
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT

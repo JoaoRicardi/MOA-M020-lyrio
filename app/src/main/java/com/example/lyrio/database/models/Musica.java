@@ -41,9 +41,9 @@ public class Musica implements Serializable {
     @SerializedName("text")
     @Ignore
     private String text;
-    @SerializedName("trans")
+    @SerializedName("translate")
     @Ignore
-    private String trans;
+    private Musica translate;
     @SerializedName("art")
     @Ignore
     private ApiArtista artista;
@@ -127,12 +127,12 @@ public class Musica implements Serializable {
         this.text = text;
     }
 
-    public String getTrans() {
-        return trans;
+    public Musica getTranslate() {
+        return translate;
     }
 
-    public void setTrans(String trans) {
-        this.trans = trans;
+    public void setTranslate(Musica translate) {
+        this.translate = translate;
     }
 
     public ApiArtista getArtista() {

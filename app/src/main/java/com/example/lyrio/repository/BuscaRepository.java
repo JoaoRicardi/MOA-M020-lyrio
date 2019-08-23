@@ -19,7 +19,8 @@ public class BuscaRepository {
 
     public Observable<List<ApiItem>> buscar(String termos){
         Date curTime = Calendar.getInstance().getTime();
-        String vagaKey = "52433bd778677b92342a16ddf927e4bf";
+        String vagaKey = curTime.toString().replace(" ","");
+//        String vagaKey = "52433bd778677b92342a16ddf927e4bf";
         return retrofitService.getBuscaApi()
                 .getBuscaResponse(vagaKey, termos, 5)
                 .map(vagalumeBusca -> vagalumeBusca.getResponse().getDocs());
