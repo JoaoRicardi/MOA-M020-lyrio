@@ -3,9 +3,11 @@ package com.example.lyrio.modules.Artista.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +27,7 @@ import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.interfaces.AlbumListener;
 import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
 import com.example.lyrio.modules.Album.view.ListaAlbumActivity;
+import com.example.lyrio.util.Constantes;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -47,6 +50,9 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     private ApiArtista artistaBundle;
     private ApiArtista artistaApi;
     private ArtistasViewModel artistasViewModel;
+
+    //Conferir do banco
+    private List<ApiArtista> artistasFavoritados;
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
     private static final String TAG = "VAGALUME";
@@ -104,16 +110,16 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 //            listaDeMusicasSalvas = artistaSalvo.getMusicasSalvas();
 //        }
 //
-//        seguirButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(seguirButton.isChecked()){
-//                    Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_EXCLUIR, Toast.LENGTH_SHORT).show();
-//                }else{
-//                    Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_ADICIONAR, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+        seguirButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(seguirButton.isChecked()){
+                    Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_EXCLUIR, Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_ADICIONAR, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
 
