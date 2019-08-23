@@ -61,7 +61,7 @@ public class EmailRecuperarSenha extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Toast.makeText(EmailRecuperarSenha.this, "Email de recuperação enviado com sucesso", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(EmailRecuperarSenha.this, "Email falhou, tente novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EmailRecuperarSenha.this, "Email incorreto, tente novamente", Toast.LENGTH_SHORT).show();
 
 
                         }

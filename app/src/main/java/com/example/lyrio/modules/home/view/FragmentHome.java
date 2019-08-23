@@ -54,6 +54,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -87,6 +89,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 //    private TextView verMaisNoticias;
     private SwipeRefreshLayout swipeRefreshLayout;
     private GoogleApiClient googleApiClient;
+
+
 
 
     //Interfaces
@@ -132,6 +136,9 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         }
 
     }
+
+
+
 
     // Login com Google
     private void handleSignInResult(GoogleSignInAccount account) {
@@ -180,11 +187,15 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         db = Room.databaseBuilder(getContext(), LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
 
+        userName = view.findViewById(R.id.user_name_id);
+        userStatus = view.findViewById(R.id.sair_aplicativo_id);
+
         sairBotao = view.findViewById(R.id.sair_button);
         sairBotao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logOut(view);
+                FirebaseAuth.getInstance().signOut();
             }
         });
 
@@ -208,22 +219,15 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
 
 
-        // Receber Informações de perfil de Usuario FIREBASE
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // Name, email address, and profile photo Url
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
 
-            // Check if user's email is verified
-            boolean emailVerified = user.isEmailVerified();
 
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getIdToken() instead.
-            String uid = user.getUid();
-        }
+        // receber informações de um Usuario
+        setupUser();
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName("Jane Q. User")
+                .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                .build();
 
 
 
@@ -311,6 +315,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         });
 
 
+
+
         verMaisArtistas = view.findViewById(R.id.ver_mais_artistas_salvos_text_view);
         verMaisArtistas.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -336,8 +342,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 //        });
 
 
-        userName = view.findViewById(R.id.user_name_id);
-        userStatus = view.findViewById(R.id.sair_aplicativo_id);
+
 
         userName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -354,7 +359,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         }
 
         if (gotMail != null) {
-            userName.setText(gotMail);
+
 //            userStatus.setText("Notificações ativas");
         } else {
             userName.setText("Faça seu login");
@@ -370,6 +375,32 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setupUser();
+    }
+
+    private void setupUser() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getIdToken() instead.
+            String uid = user.getUid();
+
+            userName.setText(email);
+        }
     }
 
     @Override
@@ -532,6 +563,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 //    }
 
 
+
     // Integração com API
     private void getApiData(String oQueBuscar, String artistaOuMusica) {
 
@@ -620,4 +652,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
 
     }
+
+
 }
