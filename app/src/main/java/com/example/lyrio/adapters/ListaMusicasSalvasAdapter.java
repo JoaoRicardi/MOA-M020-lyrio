@@ -26,7 +26,6 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
         this.listaMusicaSalva = listaMusicaSalva;
         this.listaMusicasSalvasListener = listaMusicasSalvasListener;
         this.apiArtista = apiArtista;
-
     }
 
     @NonNull
@@ -60,6 +59,19 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
         notifyDataSetChanged();
     }
 
+    public void atualizarLista(List<Musica> listaDeMusicas, ApiArtista apiArt){
+        if(listaMusicaSalva.size()>0){
+            while(listaMusicaSalva.size()>0){
+                listaMusicaSalva.remove(0);
+            }
+        }
+
+        listaMusicaSalva.addAll(listaDeMusicas);
+        apiArtista = apiArt;
+
+        notifyDataSetChanged();
+    }
+
 
     class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView imagemMusicaSalvaImageView;
@@ -74,9 +86,10 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
 
         }
         public void setupListaMusicaSalva(Musica musicaSalva){
+            String imgUrl = "https://www.vagalume.com"+apiArtista.getUrl()+"images/profile.jpg";
             buscaCampoBottom.setText(apiArtista.getDesc());
             nomeMusicaSalvaTextView.setText(musicaSalva.getDesc());
-            Picasso.get().load(musicaSalva.getArtista().getUrl()).into(imagemMusicaSalvaImageView);
+            Picasso.get().load(imgUrl).into(imagemMusicaSalvaImageView);
         }
     }
 }

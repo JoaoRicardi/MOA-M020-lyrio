@@ -449,16 +449,16 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
         //Gerar lista de musicas para enviar ao bundle
         List<Musica> musicasSalvas = new ArrayList<>();
-        for (int i = 0; i < apiArtista.getToplyrics().getItem().size(); i++) {
-
-            ApiItem curApi = apiArtista.getToplyrics().getItem().get(i);
-            String url = "https://www.vagalume.com.br" + curApi.getUrl();
-            Musica musicaTemp = new Musica(curApi.getId(), curApi.getDesc(), url);
-            musicaTemp.setAlbumPic(apiArtista.getPic_small());
-
-            musicasSalvas.add(musicaTemp);
-
-        }
+//        for (int i = 0; i < apiArtista.getToplyrics().getItem().size(); i++) {
+//
+//            ApiItem curApi = apiArtista.getToplyrics().getItem().get(i);
+//            String url = "https://www.vagalume.com.br" + curApi.getUrl();
+//            Musica musicaTemp = new Musica(curApi.getId(), curApi.getDesc(), url);
+//            musicaTemp.setAlbumPic(apiArtista.getPic_small());
+//
+//            musicasSalvas.add(musicaTemp);
+//
+//        }
         return musicasSalvas;
     }
 

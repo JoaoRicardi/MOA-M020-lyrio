@@ -1,37 +1,24 @@
 package com.example.lyrio.modules.home.viewModel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.lyrio.adapters.ListaMusicasSalvasAdapter;
-import com.example.lyrio.adapters.MusicaAdapter;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.repository.ArtistaRepository;
 import com.example.lyrio.repository.BuscaRepository;
 import com.example.lyrio.repository.ListaMusicasRepository;
-import com.example.lyrio.service.api.VagalumeHomeApi;
 import com.example.lyrio.service.model.ApiArtista;
-import com.example.lyrio.service.model.ApiItem;
-import com.example.lyrio.service.model.VagalumeBusca;
-import com.example.lyrio.util.Constantes;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class HomeViewModel extends AndroidViewModel {
 

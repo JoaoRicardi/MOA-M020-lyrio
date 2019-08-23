@@ -44,7 +44,7 @@ public class ApiArtista implements Serializable{
 
     @SerializedName("toplyrics")
     @Ignore
-    private ApiItem toplyrics;
+    private TopLyrics toplyrics;
 
     @SerializedName("lyrics")
     @Ignore
@@ -124,11 +124,11 @@ public class ApiArtista implements Serializable{
         this.qtdMusicas = qtdMusicas;
     }
 
-    public ApiItem getToplyrics() {
+    public TopLyrics getToplyrics() {
         return toplyrics;
     }
 
-    public void setToplyrics(ApiItem toplyrics) {
+    public void setToplyrics(TopLyrics toplyrics) {
         this.toplyrics = toplyrics;
     }
 
