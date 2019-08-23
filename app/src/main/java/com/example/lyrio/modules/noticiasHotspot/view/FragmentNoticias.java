@@ -15,8 +15,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.HotspotAdapter;
+import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
 import com.example.lyrio.modules.vagalumeAbrirLink.view.VagalumeAbrirLink;
 import com.example.lyrio.service.api.VagalumeHotspotApi;
+import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.VagalumeHotspot;
 import com.example.lyrio.model.Hotspot;
 import com.example.lyrio.interfaces.HotspotListener;
@@ -115,6 +117,22 @@ public class FragmentNoticias extends Fragment implements HotspotListener {
 
         // Para poder adicionar ao bundle, a classe tem que implementar "Serializable"
         bundle.putString("HOTSPOT_LINK", hotspot.getLink());
+        intent.putExtras(bundle);
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void onArtistaClicado(String artistaUrl) {
+
+        ApiArtista apiArtista = new ApiArtista();
+        apiArtista.setUrl(artistaUrl);
+        apiArtista.setDesc(null);
+
+        Intent intent = new Intent(getContext(), PaginaArtistaActivity.class);
+        Bundle bundle = new Bundle();
+
+        bundle.putSerializable("ARTISTA", apiArtista);
         intent.putExtras(bundle);
 
         startActivity(intent);

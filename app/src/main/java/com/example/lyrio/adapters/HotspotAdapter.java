@@ -105,7 +105,7 @@ public class HotspotAdapter extends RecyclerView.Adapter<HotspotAdapter.ViewHold
             recyclerArtista.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    hotspotListener.onArtistaClicado("/"+hotspot.getArtUrl()+"/");
                 }
             });
 

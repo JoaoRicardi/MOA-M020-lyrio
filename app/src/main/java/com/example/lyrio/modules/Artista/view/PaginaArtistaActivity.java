@@ -68,7 +68,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         artistaBundle = (ApiArtista) bundle.getSerializable("ARTISTA");
 
         artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
-        Log.i(TAG, " URL: "+artistaBundle.getUrl().split("/")[1]);
         artistasViewModel.getArtistaPorUrl(artistaBundle.getUrl().split("/")[1]);
 
         listaTopLyrics = new ArrayList<>();
@@ -88,7 +87,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                     Picasso.get().load(imgUrlBase+artistaApi.getPic_medium()).into(artistaBg);
 //                    Log.i(TAG, " GOT TOPLYR 01 EM ARTISTA: "+artistaApi.getToplyrics().getItem().get(0).getDesc());
                     listaTopLyrics = artistaApi.getToplyrics().getItem();
-//                    Log.i(TAG, " GOT TOPLYR SIZE: "+listaTopLyrics.size());
                     listaMusicasSalvasAdapter.atualizarLista(listaTopLyrics, artistaApi);
                 });
 
@@ -152,7 +150,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         Intent intent = new Intent(this, TelaLetrasActivity.class);
         Bundle bundle = new Bundle();
 
-        bundle.putSerializable("MUSICA", musicaSalva);
         bundle.putString("MUSICA_ID", musicaSalva.getId());
         intent.putExtras(bundle);
 
