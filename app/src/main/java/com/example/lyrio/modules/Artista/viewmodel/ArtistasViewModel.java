@@ -89,7 +89,7 @@ public class ArtistasViewModel extends AndroidViewModel {
     }
     public void removerArtistaPorId(String artistaId){
         disposable.add(
-                apiArtistaRepository.removerArtistaPorId(artistaId,getApplication())
+                apiArtistaRepository.removerArtistaPorUrl(artistaId,getApplication())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(()->atualizarArtista())

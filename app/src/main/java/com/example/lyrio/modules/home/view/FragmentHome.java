@@ -72,7 +72,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         MusicaSalvaListener,
         PopupMenu.OnMenuItemClickListener, GoogleApiClient.OnConnectionFailedListener {
 
-
     private LyrioDatabase db;
 
     public FragmentHome() {}
@@ -84,13 +83,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private TextView verMaisMusica;
     private TextView verMaisArtistas;
     private TextView sairBotao;
-//    private TextView verMaisNoticias;
     private SwipeRefreshLayout swipeRefreshLayout;
     private GoogleApiClient googleApiClient;
-
-
-    //Interfaces
-    private EnviarDeFragmentParaActivity enviarDeFragmentParaActivity;
 
     //Adapters
     private ArtistaSalvoAdapter artistaSalvoAdapter;
@@ -108,7 +102,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private static final String TAG = "VAGALUME";
 
     //Room ETC
-//    private ArtistasViewModel artistasViewModel;
     private HomeViewModel homeViewModel;
 
 
@@ -137,8 +130,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private void handleSignInResult(GoogleSignInAccount account) {
         if (account != null){
            userName.setText(account.getDisplayName());
-
-
             Glide.with(this).load(account.getPhotoUrl()).into(ImagemUsuario);
 
         }else {
@@ -226,36 +217,21 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         }
 
 
-
-
-
-
-        // Iniciar retrofit para buscar infos da API
-        retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.vagalume.com.br/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-//        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
-//        artistasViewModel.atualizarArtista();
-
-
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         homeViewModel.atualizarListaMusica();
-        homeViewModel.atualizarArtista();
+//        homeViewModel.atualizarArtista();
+        homeViewModel.gerarArtistas();
 
         homeViewModel.getListaMusicaLiveData()
                 .observe(this, listaMusicas->{
                     musicaSalvaAdapter.atualizarListaMusicas(listaMusicas);
                 });
 
-//        homeViewModel.getListaArtistaLiveData()
-//                .observe(this,listarArtista->{
-//                    gerarListaDeArtistas(listarArtista);
-//                });
+        homeViewModel.getListaArtistaLiveData()
+                .observe(this, listaArtistas->{
+                    artistaSalvoAdapter.adicionarListaDeArtistas(listaArtistas);
+                });
 
-//        artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
-//        artistasViewModel.atualizarArtista();
 //
 //
 //
@@ -327,15 +303,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             }
         });
 
-//        verMaisNoticias = view.findViewById(R.id.ver_mais_noticias_salvas_text_view);
-//        verMaisNoticias.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                irParaMinhasNoticias();
-//            }
-//        });
-
-
         userName = view.findViewById(R.id.user_name_id);
         userStatus = view.findViewById(R.id.sair_aplicativo_id);
 
@@ -401,12 +368,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 //                getApiData(musicList.get(i).getId(), "musica");
 //            }
 //        }
-//    }
-
-
-//    private void irParaMinhasNoticias() {
-//        Intent intent = new Intent(getContext(), ListaNoticiaSalvaActivity.class);
-//        startActivity(intent);
 //    }
 
     private void irParaMinhasMusicas() {
@@ -491,18 +452,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     }
 
 
-    private void gerarListaDeArtistas(String[] nomesDosArtistas) {
-
-        // Iterar nomes de cada artista e buscar cada um na Api do Vagalume
-        for (int i = 0; i < nomesDosArtistas.length; i++) {
-
-//            Log.i(TAG, " NOME RECEBIDO: "+nomesDosArtistas[i]);
-            getApiData(nomesDosArtistas[i], "artista");
-
-        }
-    }
-
-
     private void gerarListaDeMusicasPeloBanco(List<Musica> musicList) {
 
         if(musicList!=null){
@@ -511,7 +460,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             }
         }
     }
-
 
 
 //    private List<Musica> gerarListaDeMusicas(ApiArtista apiArtista) {

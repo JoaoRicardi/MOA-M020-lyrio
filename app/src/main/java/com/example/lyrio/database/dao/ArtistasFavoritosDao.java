@@ -15,8 +15,8 @@ import io.reactivex.Flowable;
 @Dao
 public interface ArtistasFavoritosDao {
 
-        @Query("select * from apiartista where id_do_artista = :idDoArtista")
-        Flowable<ApiArtista> getArtistaPorId(String idDoArtista);
+        @Query("select * from apiartista where url_do_artista = :urlDoArtista")
+        Flowable<ApiArtista> getArtistaPorUrl(String urlDoArtista);
 
         @Query("select * from apiartista")
         Flowable<List<ApiArtista>> getArtistasFavoritos();
@@ -27,8 +27,8 @@ public interface ArtistasFavoritosDao {
         @Delete
         void delete(ApiArtista artista);
 
-        @Query("delete from apiartista where id_do_artista = :idDoArtista")
-        void deletePorId(String idDoArtista);
+        @Query("delete from apiartista where url_do_artista = :urlDoArtista")
+        void deletePorUrl(String urlDoArtista);
 
         @Update
         void update(ApiArtista artista);

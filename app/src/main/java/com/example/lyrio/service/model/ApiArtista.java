@@ -28,11 +28,11 @@ public class ApiArtista implements Serializable{
     private String desc;
 
     @SerializedName("url")
-    @Ignore
+    @ColumnInfo(name= "url_do_artista")
     private String url;
 
     @SerializedName("pic_small")
-    @Ignore
+    @ColumnInfo(name= "pic_small")
     private String pic_small;
 
     @SerializedName("pic_medium")
@@ -58,7 +58,6 @@ public class ApiArtista implements Serializable{
 
     @Ignore
     private List<ApiArtista> apiArtistaList;
-
 
     public int getPk() {
         return pk;

@@ -46,6 +46,14 @@ public class ListaMusicasRepository {
     }
 
 
+    public Completable favoritarArtista(ApiArtista apiArt, Context context){
+        LyrioDatabase db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+
+        // transformar de void para completable
+        return Completable.fromAction(() -> db.artistasFavoritosDao()
+                .inserir(apiArt));
+    }
+
     public Completable favoritarMusica(Musica musica, Context context){
         LyrioDatabase db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
