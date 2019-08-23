@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.lyrio.repository.FirebaseRepository;
+import com.google.firebase.auth.FirebaseAuth;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -44,4 +45,6 @@ public class LoginViewModel extends AndroidViewModel {
                                 throwable -> autenticadoLiveData.setValue(false))
         );
     }
+
+
 }

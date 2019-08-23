@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.lyrio.R;
 import com.example.lyrio.modules.cadastro.view.UserCadastroActivity;
+import com.example.lyrio.modules.home.view.FragmentHome;
 import com.example.lyrio.modules.login.viewmodel.LoginViewModel;
 import com.example.lyrio.modules.recuperarSenha.view.EmailRecuperarSenha;
 import com.example.lyrio.modules.menu.view.MainActivity;
@@ -102,7 +103,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         loginViewModel.getAutenticadoLiveData()
                 .observe(this, autenticado -> {
                     if (autenticado) {
-                    irParaHome();
+                        irParaHome();
+
                     } else {
                         Toast.makeText(this, "Falha na autenticação", Toast.LENGTH_SHORT).show();
                     }
@@ -180,7 +182,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Intent intentHome = new Intent(this, MainActivity.class);
         startActivity(intentHome);
     }
-    // ir para esqueci a minha senha
+    // ir para recuperar senha
     private void esqueceuSenha (){
         Intent intent = new Intent(this, EmailRecuperarSenha.class);
         startActivity(intent);
@@ -192,7 +194,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
 
-
+    // Login com Google
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -204,7 +206,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
     }
-
+    //Metodo que verifica se o Login Google foi efetuado com sucesso
     private void handleSignResult(GoogleSignInResult result){
 
         if(result.isSuccess()){

@@ -54,7 +54,9 @@ public class UserCadastroActivity extends AppCompatActivity {
         confirmarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 cadastrarUsuario();
+                irParaHome();
             }
         });
 
@@ -63,18 +65,8 @@ public class UserCadastroActivity extends AppCompatActivity {
         editTextSenha = findViewById(R.id.cadastro_edit_text_senha);
         editTextConfirmarSenha = findViewById(R.id.cadastro_edit_text_confirma_senha);
 
-        //lyrioDatabase = Room.databaseBuilder(this, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
-
 
     }
-    //private void inserir(){
-        //lyrioDatabase.userDao()
-          //      .inserirUser()
-         //       .getClass(this)
-          //      .observeOn(AndroidSchedulers.mainThread())
-           //     .subscribeOn(Schedulers.newThread());
-  //  }
-
 
     private void cadastrarUsuario() {
 
@@ -91,7 +83,7 @@ public class UserCadastroActivity extends AppCompatActivity {
                             Log.d(TAG, "Usuário criado com sucesso!");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             atualizarDadosUsuario(user);
-                            irParaHome();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "Falha na criação do usuário :-(", task.getException());
@@ -123,6 +115,7 @@ public class UserCadastroActivity extends AppCompatActivity {
 
     }
 
+
     public void botaoClicado(View view) {
         editTextNome.setError(null);
         editTextEmail.setError(null);
@@ -149,7 +142,6 @@ public class UserCadastroActivity extends AppCompatActivity {
     }
 
     private void irParaLogin() {
-        String enviarEmail = String.valueOf(editTextEmail);
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
