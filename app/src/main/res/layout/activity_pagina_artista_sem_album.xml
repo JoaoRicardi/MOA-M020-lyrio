@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".modules.Artista.view.PaginaArtistaActivity"
-    android:background="@drawable/bg_normal">
+    android:background="@drawable/bg_light">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
                 android:id="@+id/artista_imagem_bg"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@drawable/placeholder"
                 android:scaleType="centerCrop"
                 android:alpha="0.6"
                 app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +34,7 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="60dp"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@drawable/placeholder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,23 +60,45 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="TextView"
+                android:text="Carregando..."
                 android:textStyle="bold"
                 android:textSize="24sp"
                 app:layout_constraintStart_toEndOf="@id/artista_profile_image_view"
                 app:layout_constraintBottom_toBottomOf="@+id/artista_profile_image_view" />
 
             <TextView
-                android:id="@+id/artista_musca_text_view"
+                android:id="@+id/artista_musicas_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:text="Top Musicas"
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/artista_nome_artista_text_view" />
+
+            <TextView
+                android:id="@+id/artista_todas_muscas_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:text="Todas as Musicas"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/artista_musicas_text_view"
+                app:layout_constraintTop_toTopOf="@id/artista_musicas_text_view" />
+
+            <View
+                android:id="@+id/view_div"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/cinza"
+                app:layout_constraintTop_toBottomOf="@id/artista_musicas_text_view"
+                />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/pagina_artista_lista_musicas_recycler_view"
@@ -87,7 +109,7 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/artista_musca_text_view"
+                app:layout_constraintTop_toBottomOf="@+id/view_div"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

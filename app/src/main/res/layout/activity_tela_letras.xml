@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_normal">
+    android:background="@drawable/bg_light">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@drawable/placeholder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 >
@@ -36,7 +36,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/letras_artist_pic"
                 app:layout_constraintStart_toEndOf="@id/letras_artist_pic"
                 android:layout_marginStart="16dp"
-                android:text="Nome do Artista"
                 android:textSize="14sp"
                 />
 
@@ -45,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="Nome da Música"
+                android:text="Carregando..."
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@id/letras_nome_artista_text_view"
                 app:layout_constraintBottom_toTopOf="@id/letras_nome_artista_text_view"/>
@@ -105,7 +104,7 @@
                     android:id="@+id/letras_letra_musica_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Letra da música"
+                    android:text="Carregando Letra..."
                     android:textSize="16sp"
                     android:textAlignment="center"/>
 

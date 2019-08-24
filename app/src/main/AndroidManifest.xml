@@ -20,7 +20,6 @@
         <activity android:name=".modules.Artista.view.PaginaArtistaActivity" />
         <activity android:name=".modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity" />
         <activity android:name=".modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity" />
-        <activity android:name=".modules.Album.view.ListaAlbumActivity" />
         <activity android:name=".modules.vagalumeAbrirLink.view.VagalumeAbrirLink" />
         <activity android:name=".modules.login.view.LoginActivity" />
         <activity android:name=".modules.menu.view.MainActivity" />

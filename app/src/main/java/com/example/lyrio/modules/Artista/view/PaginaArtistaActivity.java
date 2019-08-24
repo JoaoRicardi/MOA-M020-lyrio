@@ -18,11 +18,8 @@ import com.example.lyrio.modules.Artista.viewmodel.ArtistasViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.adapters.ListaMusicasSalvasAdapter;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
-import com.example.lyrio.model.Album;
 import com.example.lyrio.database.models.Musica;
-import com.example.lyrio.interfaces.AlbumListener;
 import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
-import com.example.lyrio.modules.Album.view.ListaAlbumActivity;
 import com.example.lyrio.util.Constantes;
 import com.squareup.picasso.Picasso;
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity"
-    android:background="@drawable/bg_normal">
+    android:background="@drawable/bg_light">
 
 
     <androidx.cardview.widget.CardView
