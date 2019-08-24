@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,19 +29,15 @@ import com.example.lyrio.database.LyrioDatabase;
 import com.example.lyrio.modules.home.viewModel.HomeViewModel;
 import com.example.lyrio.modules.menu.view.MainActivity;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
-import com.example.lyrio.service.api.VagalumeBuscaApi;
-import com.example.lyrio.service.model.ApiArtista;
-import com.example.lyrio.service.model.ApiItem;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.interfaces.ArtistaSalvoListener;
-import com.example.lyrio.interfaces.EnviarDeFragmentParaActivity;
 import com.example.lyrio.interfaces.MusicaSalvaListener;
 import com.example.lyrio.modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
 import com.example.lyrio.modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity;
 import com.example.lyrio.modules.configuracoes.view.ConfiguracoesActivity;
 import com.example.lyrio.modules.login.view.LoginActivity;
-import com.example.lyrio.util.Constantes;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -55,14 +50,10 @@ import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -194,7 +185,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         homeViewModel.atualizarListaMusica();
-        homeViewModel.gerarArtistas();
+        homeViewModel.atualizarListaArtistas();
 
         homeViewModel.getListaMusicaLiveData()
                 .observe(this, listaMusicas->{
@@ -203,7 +194,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
         homeViewModel.getListaArtistaLiveData()
                 .observe(this, listaArtistas->{
-                    artistaSalvoAdapter.adicionarListaDeArtistas(listaArtistas);
+                    artistaSalvoAdapter.atualizarListaDeArtistas(listaArtistas);
                 });
 
 
@@ -220,7 +211,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         RecyclerView recyclerView1 = view.findViewById(R.id.artistas_salvos_recycler_view);
         recyclerView1.setAdapter(artistaSalvoAdapter);
         recyclerView1.setLayoutManager(gridArtistas);
-
 
 
         verMaisArtistas = view.findViewById(R.id.ver_mais_artistas_salvos_text_view);
@@ -243,6 +233,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         swipeRefreshLayout = view.findViewById(R.id.home_swipe);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             homeViewModel.atualizarListaMusica();
+            homeViewModel.atualizarListaArtistas();
             swipeRefreshLayout.setRefreshing(false);
         });
 
@@ -267,13 +258,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     public void onArtistaClicado(ApiArtista artistaSalvo) {
 
         ApiArtista apiArtista = new ApiArtista();
-        apiArtista.setDesc(artistaSalvo.getDesc());
-        apiArtista.setPic_small(artistaSalvo.getPic_small());
-        apiArtista.setPic_medium(artistaSalvo.getPic_medium());
         apiArtista.setUrl(artistaSalvo.getUrl());
-
-        //Gerar lista para enviar ao bundle
-        apiArtista.setMusicasSalvas(gerarListaDeMusicas(artistaSalvo));
+        apiArtista.setFavoritarArtista(true);
 
         Intent intent = new Intent(getContext(), PaginaArtistaActivity.class);
         Bundle bundle = new Bundle();
@@ -284,23 +270,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         startActivity(intent);
     }
 
-    private List<Musica> gerarListaDeMusicas(ApiArtista apiArtista) {
-
-        //Gerar lista de musicas para enviar ao bundle
-        List<Musica> musicasSalvas = new ArrayList<>();
-//        for (int i = 0; i < apiArtista.getToplyrics().getItem().size(); i++) {
-//
-//            ApiItem curApi = apiArtista.getToplyrics().getItem().get(i);
-//            String url = "https://www.vagalume.com.br" + curApi.getUrl();
-//            Musica musicaTemp = new Musica(curApi.getId(), curApi.getDesc(), url);
-//            musicaTemp.setAlbumPic(apiArtista.getPic_small());
-//
-//            musicasSalvas.add(musicaTemp);
-//
-//        }
-        return musicasSalvas;
-    }
-
     @Override
     public void onMusicaSalvaClicado(Musica musicaSalva) {
 
@@ -308,6 +277,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         Bundle bundle = new Bundle();
 
         bundle.putSerializable("MUSICA_ID", musicaSalva.getId());
+        Log.e("VAGALUME","ID DA MUSICA: "+musicaSalva.getId());
         intent.putExtras(bundle);
 
         startActivity(intent);

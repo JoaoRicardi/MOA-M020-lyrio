@@ -1,7 +1,6 @@
 package com.example.lyrio.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lyrio.R;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.interfaces.ApiBuscaListener;
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.util.Constantes;
 
@@ -139,6 +138,7 @@ public class BuscaArtistaAdapter extends RecyclerView.Adapter<BuscaArtistaAdapte
                     favourite_button.setChecked(true);
                 }
             }
+
             favourite_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

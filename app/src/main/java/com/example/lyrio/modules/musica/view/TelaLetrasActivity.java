@@ -119,7 +119,6 @@ public class TelaLetrasActivity extends AppCompatActivity {
 
                 } else {
                     Toast.makeText(TelaLetrasActivity.this, Constantes.TOAST_MUSICA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
-
                     letrasViewModel.removerMusicaPorId(musicaSalvaId);
                 }
             }

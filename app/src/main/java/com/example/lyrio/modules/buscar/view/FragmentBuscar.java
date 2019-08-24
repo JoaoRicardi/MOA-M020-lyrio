@@ -24,7 +24,7 @@ import com.example.lyrio.interfaces.ApiBuscaListener;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
 import com.example.lyrio.modules.buscar.viewmodel.BuscarViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.util.Constantes;
 
@@ -167,7 +167,14 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
 
             ApiArtista apiArtista = new ApiArtista();
             apiArtista.setUrl(apiItem.getUrl());
-            apiArtista.setDesc(null);
+
+            try{
+                for(int y=0; y<listaArtistasFavoritos.size(); y++){
+                    if(listaArtistasFavoritos.get(y).getUrl().equals(apiItem.getUrl().replace("/",""))) {
+                        apiArtista.setFavoritarArtista(true);
+                    }
+                }
+            }catch(Exception e){}
 
             Intent intent = new Intent(getContext(), PaginaArtistaActivity.class);
             Bundle bundle = new Bundle();
@@ -178,11 +185,22 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
             startActivity(intent);
 
         } else {
+            Musica tempMusic = new Musica();
+            tempMusic.setId(apiItem.getId());
+
+            try{
+                for(int y=0; y<listaMusicasFavoritas.size(); y++){
+                    if(listaMusicasFavoritas.get(y).getUrl().equals(apiItem.getUrl().replace("/",""))) {
+                        tempMusic.setFavoritarMusica(true);
+                    }
+                }
+            }catch(Exception e){}
 
             Intent intent = new Intent(getContext(), TelaLetrasActivity.class);
             Bundle bundle = new Bundle();
 
-            bundle.putSerializable("MUSICA_ID", apiItem.getId());
+            bundle.putSerializable("MUSICA_ID", tempMusic.getId());
+            bundle.putBoolean("MUSICA_FAVORITA", tempMusic.isFavoritarMusica());
             intent.putExtras(bundle);
 
             startActivity(intent);
@@ -194,38 +212,29 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
         if (!apiItem.getCampoBottom().equals("Ver músicas")) {
             Musica musicaSalva = new Musica();
             musicaSalva.setId(apiItem.getId());
+//            Log.i("VAGALUME","ID DA MUSICA: "+musicaSalva.getId());
 
             buscarViewModel.favoritarMusica(musicaSalva);
         }else{
             String urlArt = apiItem.getUrl().replace("/","");
             ApiArtista apiArtSalvo = new ApiArtista();
-            apiArtSalvo.setDesc(apiItem.getBand());
-            apiArtSalvo.setPic_small(apiItem.getPic_small());
-            Log.i(TAG, " FragBuscar Favoritar Artista setUrl: "+ apiArtSalvo.getPic_small());
             apiArtSalvo.setUrl(urlArt);
 
             buscarViewModel.favoritarArtista(apiArtSalvo);
         }
-
     }
 
     @Override
     public void removerApiItem(ApiItem apiItem) {
         if (!apiItem.getCampoBottom().equals("Ver músicas")) {
 
-            buscarViewModel.getMusicaPorId(apiItem.getId());
-            buscarViewModel.getMusicaLiveData()
-                    .observe(this, musicaDoBanco -> {
-                        buscarViewModel.removerMusica(musicaDoBanco);
-                    });
+            Musica delMusic = new Musica();
+            delMusic.setId(apiItem.getId());
+            buscarViewModel.removerMusica(delMusic);
         }else{
             ApiArtista apiArt = new ApiArtista();
             apiArt.setUrl(apiItem.getUrl());
             buscarViewModel.removerArtista(apiArt);
-//            buscarViewModel.getArtistaLiveData()
-//                    .observe(this, artistaDoBanco -> {
-//                        buscarViewModel.removerArtista(artistaDoBanco);
-//                    });
         }
     }
 }

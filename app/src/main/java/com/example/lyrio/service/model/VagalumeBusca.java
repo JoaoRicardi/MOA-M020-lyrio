@@ -1,5 +1,7 @@
 package com.example.lyrio.service.model;
 
+import com.example.lyrio.modules.Artista.model.ApiArtista;
+
 import java.util.List;
 
 public class VagalumeBusca {

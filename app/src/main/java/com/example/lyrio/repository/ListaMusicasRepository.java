@@ -8,7 +8,7 @@ import androidx.room.Room;
 import com.example.lyrio.database.LyrioDatabase;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.service.RetrofitService;
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -86,6 +86,7 @@ public class ListaMusicasRepository {
                     Musica musica = new Musica();
 
                     musica.setName(vagalumeBusca.getMus().get(0).getName());
+                    musica.setId(vagalumeBusca.getMus().get(0).getId());
 
                     ApiArtista apiArtista = new ApiArtista();
                     apiArtista.setName(vagalumeBusca.getArt().getName());

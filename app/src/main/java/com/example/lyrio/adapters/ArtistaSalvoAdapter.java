@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.ArtistaSalvoListener;
 import com.squareup.picasso.Picasso;
@@ -60,15 +60,15 @@ public class ArtistaSalvoAdapter extends RecyclerView.Adapter<ArtistaSalvoAdapte
             num = listaArtistaSalvo.size();
         }
 
-        return listaArtistaSalvo.size();
+        return num;
     }
 
-    public void adicionarArtista(ApiArtista artistaSalvo){
-        listaArtistaSalvo.add(artistaSalvo);
-        notifyDataSetChanged();
-    }
+//    public void adicionarArtista(ApiArtista artistaSalvo){
+//        listaArtistaSalvo.add(artistaSalvo);
+//        notifyDataSetChanged();
+//    }
 
-    public void adicionarListaDeArtistas(List<ApiArtista> listaDeArtistas) {
+    public void atualizarListaDeArtistas(List<ApiArtista> listaDeArtistas) {
         removerTudo();
         listaArtistaSalvo.addAll(listaDeArtistas);
         notifyDataSetChanged();

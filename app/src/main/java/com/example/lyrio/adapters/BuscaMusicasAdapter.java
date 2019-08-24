@@ -4,7 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.lyrio.service.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.ApiBuscaListener;
