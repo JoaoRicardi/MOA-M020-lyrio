@@ -301,7 +301,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             // FirebaseUser.getIdToken() instead.
             String uid = user.getUid();
 
-            userName.setText(email);
+            userName.setText(name);
         }
     }
 

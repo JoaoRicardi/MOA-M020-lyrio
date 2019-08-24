@@ -130,23 +130,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
-    public void botaoClicado(View view) {
-
-        emailEditText.setError(null);
-        senhaEditText.setError(null);
-
-        if (emailEditText.getEditableText().toString().equals("")) {
-            emailEditText.setError("Informe seu email");
-        } else if (!emailInvalido(emailEditText.getEditableText().toString())) {
-            emailEditText.setError("e-mail não foi digitado corretamente");
-        } else if (senhaEditText.getEditableText().toString().equals("")) {
-            senhaEditText.setError("Informe sua senha");
-        } else if (senhaValida(senhaEditText.getEditableText().toString())) {
-            senhaEditText.setError("senha inválida");
-        } else {
-            irParaHome();
-        }
-    }
+//    public void botaoClicado(View view) {
+//
+//        emailEditText.setError(null);
+//        senhaEditText.setError(null);
+//
+//        if (emailEditText.getEditableText().toString().equals("")) {
+//            emailEditText.setError("Informe seu email");
+//        } else if (!emailInvalido(emailEditText.getEditableText().toString())) {
+//            emailEditText.setError("e-mail não foi digitado corretamente");
+//        } else if (senhaEditText.getEditableText().toString().equals("")) {
+//            senhaEditText.setError("Informe sua senha");
+//        } else if (senhaValida(senhaEditText.getEditableText().toString())) {
+//            senhaEditText.setError("senha inválida");
+//        } else {
+//            irParaHome();
+//        }
+//    }
 
     // confirmar se o formato da senha é valido
     private boolean senhaValida(String senha) {

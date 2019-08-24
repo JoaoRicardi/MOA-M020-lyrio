@@ -38,6 +38,7 @@ public class UserCadastroActivity extends AppCompatActivity {
     private TextInputEditText editTextEmail;
     private TextInputEditText editTextSenha;
     private TextInputEditText editTextConfirmarSenha;
+    private Button confirmarButton;
     private LyrioDatabase lyrioDatabase;
 
 
@@ -49,7 +50,11 @@ public class UserCadastroActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        Button confirmarButton = findViewById(R.id.cadastro_button_confirmar);
+        editTextNome = findViewById(R.id.cadastro_edit_text_nome);
+        editTextEmail = findViewById(R.id.cadastro_edit_text_email);
+        editTextSenha = findViewById(R.id.cadastro_edit_text_senha);
+        editTextConfirmarSenha = findViewById(R.id.cadastro_edit_text_confirma_senha);
+        confirmarButton = findViewById(R.id.cadastro_button_confirmar);
 
         confirmarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,22 +63,9 @@ public class UserCadastroActivity extends AppCompatActivity {
             }
         });
 
-        editTextNome = findViewById(R.id.cadastro_edit_text_nome);
-        editTextEmail = findViewById(R.id.cadastro_edit_text_email);
-        editTextSenha = findViewById(R.id.cadastro_edit_text_senha);
-        editTextConfirmarSenha = findViewById(R.id.cadastro_edit_text_confirma_senha);
-
-        //lyrioDatabase = Room.databaseBuilder(this, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
-
 
     }
-    //private void inserir(){
-        //lyrioDatabase.userDao()
-          //      .inserirUser()
-         //       .getClass(this)
-          //      .observeOn(AndroidSchedulers.mainThread())
-           //     .subscribeOn(Schedulers.newThread());
-  //  }
+
 
 
     private void cadastrarUsuario() {
@@ -91,7 +83,7 @@ public class UserCadastroActivity extends AppCompatActivity {
                             Log.d(TAG, "Usuário criado com sucesso!");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             atualizarDadosUsuario(user);
-
+                            irParaHome();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "Falha na criação do usuário :-(", task.getException());
@@ -124,30 +116,30 @@ public class UserCadastroActivity extends AppCompatActivity {
     }
 
 
-    public void botaoClicado(View view) {
-        editTextNome.setError(null);
-        editTextEmail.setError(null);
-        editTextSenha.setError(null);
-        editTextConfirmarSenha.setError(null);
-
-        if (!editTextSenha.getEditableText().toString().equals(editTextConfirmarSenha.getEditableText().toString())) {
-            editTextSenha.setError("As senhas não conferem");
-            editTextConfirmarSenha.setError("As senhas não conferem");
-        } else if (editTextSenha.getEditableText().toString().equals("")) {
-            editTextSenha.setError("Campo obrigatório");
-        } else if (editTextEmail.getEditableText().toString().equals("")) {
-            editTextEmail.setError("Campo obrigatório");
-        } else {
-
-            Snackbar.make(view, "Cadastro realizado com sucesso!", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("OK", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            irParaLogin();
-                        }
-                    }).setActionTextColor(getResources().getColor(R.color.azulClaro)).show();
-        }
-    }
+//    public void botaoClicado(View view) {
+//        editTextNome.setError(null);
+//        editTextEmail.setError(null);
+//        editTextSenha.setError(null);
+//        editTextConfirmarSenha.setError(null);
+//
+//        if (!editTextSenha.getEditableText().toString().equals(editTextConfirmarSenha.getEditableText().toString())) {
+//            editTextSenha.setError("As senhas não conferem");
+//            editTextConfirmarSenha.setError("As senhas não conferem");
+//        } else if (editTextSenha.getEditableText().toString().equals("")) {
+//            editTextSenha.setError("Campo obrigatório");
+//        } else if (editTextEmail.getEditableText().toString().equals("")) {
+//            editTextEmail.setError("Campo obrigatório");
+//        } else {
+//
+//            Snackbar.make(view, "Cadastro realizado com sucesso!", Snackbar.LENGTH_INDEFINITE)
+//                    .setAction("OK", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            irParaLogin();
+//                        }
+//                    }).setActionTextColor(getResources().getColor(R.color.azulClaro)).show();
+//        }
+//    }
 
     private void irParaLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
