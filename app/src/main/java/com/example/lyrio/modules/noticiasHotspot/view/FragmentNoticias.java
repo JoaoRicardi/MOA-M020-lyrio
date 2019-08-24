@@ -18,7 +18,7 @@ import com.example.lyrio.adapters.HotspotAdapter;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
 import com.example.lyrio.modules.vagalumeAbrirLink.view.VagalumeAbrirLink;
 import com.example.lyrio.service.api.VagalumeHotspotApi;
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.service.model.VagalumeHotspot;
 import com.example.lyrio.model.Hotspot;
 import com.example.lyrio.interfaces.HotspotListener;

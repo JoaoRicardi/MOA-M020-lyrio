@@ -16,10 +16,28 @@ public class ApiItem {
     private String campoTop;
     private String campoBottom;
     private String imgUrl;
+    private String pic_small;
     private int lang;
     private String text;
     private List<Musica> translate;
     private List<ApiItem> item;
+    private boolean isFavorite;
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public String getPic_small() {
+        return pic_small;
+    }
+
+    public void setPic_small(String pic_small) {
+        this.pic_small = pic_small;
+    }
 
     public String getName() {
         return name;

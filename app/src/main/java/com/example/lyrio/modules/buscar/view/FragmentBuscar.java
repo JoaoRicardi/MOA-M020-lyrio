@@ -3,6 +3,7 @@ package com.example.lyrio.modules.buscar.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lyrio.R;
-import com.example.lyrio.adapters.BuscaAdapter;
+import com.example.lyrio.adapters.BuscaMusicasAdapter;
+import com.example.lyrio.adapters.BuscaArtistaAdapter;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.interfaces.ApiBuscaListener;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
 import com.example.lyrio.modules.buscar.viewmodel.BuscarViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 import com.example.lyrio.util.Constantes;
 
@@ -45,8 +47,8 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
     private Button botaoBuscar;
     private RecyclerView recyclerLetras;
     private RecyclerView recyclerArtistas;
-    private BuscaAdapter buscaLetrasAdapter;
-    private BuscaAdapter buscaArtistasAdapter;
+    private BuscaMusicasAdapter buscaLetrasAdapter;
+    private BuscaArtistaAdapter buscaArtistasAdapter;
     private List<Musica> listaMusicasFavoritas;
     private List<ApiArtista> listaArtistasFavoritos;
 
@@ -92,27 +94,38 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
         });
 
         recyclerLetras = view.findViewById(R.id.buscar_letras_recycler);
-        buscaLetrasAdapter = new BuscaAdapter(this.getActivity(), this, listaMusicasFavoritas); // "this" adicionado por causa do Glide
+        buscaLetrasAdapter = new BuscaMusicasAdapter(this.getActivity(), this, listaMusicasFavoritas); // "this" adicionado por causa do Glide
         recyclerLetras.setAdapter(buscaLetrasAdapter);
         RecyclerView.LayoutManager layoutLetrasManager = new LinearLayoutManager(this.getActivity());
         recyclerLetras.setLayoutManager(layoutLetrasManager);
 
         recyclerArtistas = view.findViewById(R.id.buscar_artistas_recycler);
-        buscaArtistasAdapter = new BuscaAdapter(this.getActivity(), this, listaMusicasFavoritas); // "this" adicionado por causa do Glide
+        buscaArtistasAdapter = new BuscaArtistaAdapter(this.getActivity(), this, listaArtistasFavoritos); // "this" adicionado por causa do Glide
         recyclerArtistas.setAdapter(buscaArtistasAdapter);
         RecyclerView.LayoutManager layoutArtistasManager = new LinearLayoutManager(this.getActivity());
         recyclerArtistas.setLayoutManager(layoutArtistasManager);
 
-        buscarViewModel.atualizarListaFavoritos();
 
+        //Live data
+        buscarViewModel.atualizarListaFavoritos();
+        buscarViewModel.atualizarListaArtistasFavoritos();
+
+
+        //Get favoritos
         buscarViewModel.getListaMusicasFavoritoLiveData()
                 .observe(this, listaMusicas -> {
                     listaMusicasFavoritas = listaMusicas;
                 });
 
+        buscarViewModel.getListaArtistasFavoritosLiveData()
+                .observe(this, listaArt -> {
+                    listaArtistasFavoritos = listaArt;
+                });
+
+        //Get rsultado da busca
         buscarViewModel.getListaArtistaBuscadaLiveData()
                 .observe(this, listaArtista -> {
-                    buscaArtistasAdapter.adicionarListaDeApiItems(listaArtista, listaMusicasFavoritas);
+                    buscaArtistasAdapter.adicionarListaDeApiItems(listaArtista, listaArtistasFavoritos);
                 });
 
         buscarViewModel.getListaMusicasBuscadaLiveData()
@@ -154,7 +167,14 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
 
             ApiArtista apiArtista = new ApiArtista();
             apiArtista.setUrl(apiItem.getUrl());
-            apiArtista.setDesc(null);
+
+            try{
+                for(int y=0; y<listaArtistasFavoritos.size(); y++){
+                    if(listaArtistasFavoritos.get(y).getUrl().equals(apiItem.getUrl().replace("/",""))) {
+                        apiArtista.setFavoritarArtista(true);
+                    }
+                }
+            }catch(Exception e){}
 
             Intent intent = new Intent(getContext(), PaginaArtistaActivity.class);
             Bundle bundle = new Bundle();
@@ -165,13 +185,22 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
             startActivity(intent);
 
         } else {
+            Musica tempMusic = new Musica();
+            tempMusic.setId(apiItem.getId());
 
+            try{
+                for(int y=0; y<listaMusicasFavoritas.size(); y++){
+                    if(listaMusicasFavoritas.get(y).getUrl().equals(apiItem.getUrl().replace("/",""))) {
+                        tempMusic.setFavoritarMusica(true);
+                    }
+                }
+            }catch(Exception e){}
 
-            favoritarApiItem(apiItem);
             Intent intent = new Intent(getContext(), TelaLetrasActivity.class);
             Bundle bundle = new Bundle();
 
-            bundle.putSerializable("MUSICA_ID", apiItem.getId());
+            bundle.putSerializable("MUSICA_ID", tempMusic.getId());
+            bundle.putBoolean("MUSICA_FAVORITA", tempMusic.isFavoritarMusica());
             intent.putExtras(bundle);
 
             startActivity(intent);
@@ -183,8 +212,15 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
         if (!apiItem.getCampoBottom().equals("Ver músicas")) {
             Musica musicaSalva = new Musica();
             musicaSalva.setId(apiItem.getId());
+//            Log.i("VAGALUME","ID DA MUSICA: "+musicaSalva.getId());
 
             buscarViewModel.favoritarMusica(musicaSalva);
+        }else{
+            String urlArt = apiItem.getUrl().replace("/","");
+            ApiArtista apiArtSalvo = new ApiArtista();
+            apiArtSalvo.setUrl(urlArt);
+
+            buscarViewModel.favoritarArtista(apiArtSalvo);
         }
     }
 
@@ -192,11 +228,13 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
     public void removerApiItem(ApiItem apiItem) {
         if (!apiItem.getCampoBottom().equals("Ver músicas")) {
 
-            buscarViewModel.getMusicaPorId(apiItem.getId());
-            buscarViewModel.getMusicaLiveData()
-                    .observe(this, musicaDoBanco -> {
-                        buscarViewModel.removerMusica(musicaDoBanco);
-                    });
+            Musica delMusic = new Musica();
+            delMusic.setId(apiItem.getId());
+            buscarViewModel.removerMusica(delMusic);
+        }else{
+            ApiArtista apiArt = new ApiArtista();
+            apiArt.setUrl(apiItem.getUrl());
+            buscarViewModel.removerArtista(apiArt);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.example.lyrio.adapters;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +23,14 @@ import com.example.lyrio.util.Constantes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuscaAdapter extends RecyclerView.Adapter<BuscaAdapter.ViewHolder>{
+public class BuscaMusicasAdapter extends RecyclerView.Adapter<BuscaMusicasAdapter.ViewHolder>{
 
     private List<ApiItem> listaDeApiItems;
     private List<Musica> listaDeMusicasFavoritas;
     private ApiBuscaListener apiBuscaListener;
     private Context context;
 
-    public BuscaAdapter(Context context, ApiBuscaListener apiBuscaListener, List<Musica> listaDeFavoritas){
+    public BuscaMusicasAdapter(Context context, ApiBuscaListener apiBuscaListener, List<Musica> listaDeFavoritas){
         //Inicializar lista
         listaDeApiItems = new ArrayList<>();
         listaDeMusicasFavoritas = new ArrayList<>();
@@ -41,19 +42,19 @@ public class BuscaAdapter extends RecyclerView.Adapter<BuscaAdapter.ViewHolder>{
         this.apiBuscaListener = apiBuscaListener;
     }
 
-    public BuscaAdapter(List<ApiItem> listaDeApiItems){
+    public BuscaMusicasAdapter(List<ApiItem> listaDeApiItems){
         this.listaDeApiItems = listaDeApiItems;
     }
 
     @NonNull
     @Override
-    public BuscaAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public BuscaMusicasAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.busca_resultados, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BuscaAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull BuscaMusicasAdapter.ViewHolder viewHolder, int i) {
         final ApiItem apiItem = listaDeApiItems.get(i);
         viewHolder.setupApiItem(apiItem);
 
@@ -83,11 +84,15 @@ public class BuscaAdapter extends RecyclerView.Adapter<BuscaAdapter.ViewHolder>{
         return listaDeApiItems.size();
     }
 
-    public void adicionarListaDeApiItems(List<ApiItem> listaApiIt, List<Musica> musicasFavoritas) {
-        if(musicasFavoritas!=null){
-            listaDeMusicasFavoritas.addAll(musicasFavoritas);
-        }
+    public void atualizarFavoritos(List<Musica> listMus){
+        removerTudo();
+        listaDeMusicasFavoritas = listMus;
+        notifyDataSetChanged();
+    }
 
+    public void adicionarListaDeApiItems(List<ApiItem> listaApiIt, List<Musica> musicasFavoritas) {
+        removerTudo();
+        listaDeMusicasFavoritas.addAll(musicasFavoritas);
         listaDeApiItems.addAll(listaApiIt);
         notifyDataSetChanged();
     }
@@ -126,13 +131,13 @@ public class BuscaAdapter extends RecyclerView.Adapter<BuscaAdapter.ViewHolder>{
             buscaCampoBottom.setText(apiItem.getCampoBottom());
             favourite_button.setChecked(false);
 
-            if(apiItem.getBand()!=null&&listaDeMusicasFavoritas!=null&&listaDeMusicasFavoritas.size()>0){
-                for(int i=0; i<listaDeMusicasFavoritas.size(); i++){
-                    if(listaDeMusicasFavoritas.get(i).getId().equals(apiItem.getId())) {
-                        favourite_button.setChecked(true);
-                    }
+            for(int i=0; i<listaDeMusicasFavoritas.size(); i++){
+                if(listaDeMusicasFavoritas.get(i).getId().equals(apiItem.getId())) {
+                    favourite_button.setChecked(true);
                 }
             }
+
+//            Log.i("VAGALUME", "PAS");
 
             favourite_button.setOnClickListener(new View.OnClickListener() {
                 @Override

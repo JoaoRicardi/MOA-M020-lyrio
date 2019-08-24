@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -21,36 +21,50 @@ public class Musica implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int pk;
 
+    @SerializedName("id")
     @ColumnInfo(name = "id_da_musica")
     private String id;
+
     @SerializedName("mus")
     @Ignore
     private String name;
+
     @SerializedName("desc")
     @Ignore
     private String desc;
+
     @SerializedName("url")
     @Ignore
     private String url;
+
     @SerializedName("albumPic")
     @Ignore
     private String albumPic;
+
     @SerializedName("lang")
     @Ignore
     private int lang;
     @SerializedName("text")
     @Ignore
     private String text;
+
     @SerializedName("translate")
     @Ignore
     private List<Musica> translate;
+
     @SerializedName("art")
     @Ignore
     private ApiArtista artista;
+
+    @SerializedName("emailUsuario")
     @Ignore
     private String emailUsuario;
+
+    @SerializedName("favoritarMusica")
     @ColumnInfo(name = "is_favorita")
-    private boolean favoritarMusica;
+    private boolean favoritarMusica = false;
+
+    @SerializedName("musicasList")
     @Ignore
     private List<Musica> musicasList;
 

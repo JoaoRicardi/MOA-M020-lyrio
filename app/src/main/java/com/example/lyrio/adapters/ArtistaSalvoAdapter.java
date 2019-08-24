@@ -2,12 +2,14 @@ package com.example.lyrio.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.ArtistaSalvoListener;
 import com.squareup.picasso.Picasso;
@@ -18,6 +20,8 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ArtistaSalvoAdapter extends RecyclerView.Adapter<ArtistaSalvoAdapter.ViewHolder> {
+    private static final String TAG = "VAGALUME";
+
     private List<ApiArtista> listaArtistaSalvo;
     private ArtistaSalvoListener artistaSalvoListener;
 
@@ -56,15 +60,16 @@ public class ArtistaSalvoAdapter extends RecyclerView.Adapter<ArtistaSalvoAdapte
             num = listaArtistaSalvo.size();
         }
 
-        return listaArtistaSalvo.size();
+        return num;
     }
 
-    public void adicionarArtista(ApiArtista artistaSalvo){
-        listaArtistaSalvo.add(artistaSalvo);
-        notifyDataSetChanged();
-    }
+//    public void adicionarArtista(ApiArtista artistaSalvo){
+//        listaArtistaSalvo.add(artistaSalvo);
+//        notifyDataSetChanged();
+//    }
 
-    public void adicionarListaDeArtistas(List<ApiArtista> listaDeArtistas) {
+    public void atualizarListaDeArtistas(List<ApiArtista> listaDeArtistas) {
+        removerTudo();
         listaArtistaSalvo.addAll(listaDeArtistas);
         notifyDataSetChanged();
     }
@@ -92,7 +97,8 @@ public class ArtistaSalvoAdapter extends RecyclerView.Adapter<ArtistaSalvoAdapte
         public void setupArtistaSalvo(ApiArtista artistaSalvo){
             nomeArtistaSalvoTextView.setText(artistaSalvo.getDesc());
             bottomText.setText(artistaSalvo.getQtdMusicas()+" músicas");
-            Picasso.get().load(artistaSalvo.getPic_small()).into(imagemArtistaSalvoCircleImageView);
+            Picasso.get().load("https://www.vagalume.com"+artistaSalvo.getPic_small()).into(imagemArtistaSalvoCircleImageView);
+            Log.i(TAG, " ArtistaSalvoAdapter picSmall: "+artistaSalvo.getPic_small());
         }
     }
 }

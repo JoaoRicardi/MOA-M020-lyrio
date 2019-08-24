@@ -11,18 +11,20 @@ import android.widget.TextView;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.MusicaSalvaListener;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.ViewHolder> {
+    private static final String TAG = "VAGALUME";
 
     private List<Musica> listaMusicaSalva;
     private MusicaSalvaListener musicaSalvaListener;
 
     public MusicaSalvaAdapter(MusicaSalvaListener musicaSalvaListener) {
-        this.listaMusicaSalva = new ArrayList<>();
+        listaMusicaSalva = new ArrayList<>();
         this.musicaSalvaListener = musicaSalvaListener;
     }
 
@@ -44,7 +46,6 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
                 musicaSalvaListener.onMusicaSalvaClicado(musicaSalva);
             }
         });
-
     }
 
     @Override
@@ -57,27 +58,17 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
             num = listaMusicaSalva.size();
         }
 
-        return listaMusicaSalva.size();
+        return num;
     }
 
-    public void adicionarMusica(Musica musicaSalva){
-        boolean contains = false;
-
-        if(listaMusicaSalva.size()>0){
-            for(int i=0; i<listaMusicaSalva.size(); i++){
-                if(listaMusicaSalva.get(i).getId().equals(musicaSalva.getId())){
-                    contains = true;
-                }
-            }
-        }
-        if(!contains){
-            listaMusicaSalva.add(musicaSalva);
-            notifyDataSetChanged();
-        }
-    }
+//    public void adicionarMusica(Musica musicaSalva){
+//        listaMusicaSalva.add(musicaSalva);
+//        notifyDataSetChanged();
+//    }
 
     public void atualizarListaMusicas(List<Musica> listaDeMusicas) {
-        listaMusicaSalva = listaDeMusicas;
+        removerTudo();
+        listaMusicaSalva.addAll(listaDeMusicas);
         notifyDataSetChanged();
     }
 
@@ -88,9 +79,6 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
         notifyDataSetChanged();
     }
 
-    public void exibirMusicaFavorita(List<Musica> listaMusica) {
-
-    }
 
     class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView imagemMusicaSalvaImageView;
