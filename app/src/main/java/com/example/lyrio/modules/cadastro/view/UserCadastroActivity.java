@@ -54,9 +54,7 @@ public class UserCadastroActivity extends AppCompatActivity {
         confirmarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 cadastrarUsuario();
-                irParaHome();
             }
         });
 
@@ -65,8 +63,18 @@ public class UserCadastroActivity extends AppCompatActivity {
         editTextSenha = findViewById(R.id.cadastro_edit_text_senha);
         editTextConfirmarSenha = findViewById(R.id.cadastro_edit_text_confirma_senha);
 
+        //lyrioDatabase = Room.databaseBuilder(this, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+
 
     }
+    //private void inserir(){
+        //lyrioDatabase.userDao()
+          //      .inserirUser()
+         //       .getClass(this)
+          //      .observeOn(AndroidSchedulers.mainThread())
+           //     .subscribeOn(Schedulers.newThread());
+  //  }
+
 
     private void cadastrarUsuario() {
 
