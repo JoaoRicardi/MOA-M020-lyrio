@@ -21,49 +21,41 @@
                 android:id="@+id/artista_imagem_bg"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:src="@drawable/placeholder"
                 android:scaleType="centerCrop"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/artista_profile_image_view"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/bg_light_flip"
+                android:src="@drawable/placeholder"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ToggleButton
-                android:id="@+id/letras_favorito_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/botao_favorito"
-                android:backgroundTint="@color/azulBotoes"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/artista_profile_image_view"
-                android:checked="false"
-                android:text=""
-                android:textOn=""
-                android:textOff=""/>
-
-            <TextView
-                android:id="@+id/artista_nome_artista_text_view"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="Carregando..."
-                android:textStyle="bold"
-                android:textSize="24sp"
-                app:layout_constraintStart_toEndOf="@id/artista_profile_image_view"
-                app:layout_constraintBottom_toBottomOf="@+id/artista_profile_image_view" />
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/artista_profile_image_view"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="8dp"
+                    android:src="@drawable/bg_light_flip" />
+
+                <TextView
+                    android:id="@+id/artista_nome_artista_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Carregando..."
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/artista_txt_button_top_lyrics"
@@ -72,23 +64,39 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Top Musicas"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:textColor="@color/azulBotoes"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/artista_nome_artista_text_view" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+            <ToggleButton
+                android:id="@+id/letras_favorito_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/botao_favorito"
+                android:backgroundTint="@color/branco"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/artista_txt_button_all_lyrics"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="27dp"
+                android:layout_marginTop="16dp"
                 android:text="Todas as Musicas"
                 android:textColor="@color/cinzaEscuro"
-                android:textStyle="normal"
                 android:textSize="18sp"
-                app:layout_constraintStart_toEndOf="@id/artista_txt_button_top_lyrics"
-                app:layout_constraintTop_toTopOf="@id/artista_txt_button_top_lyrics" />
+                android:textStyle="normal"
+                app:layout_constraintStart_toEndOf="@+id/artista_txt_button_top_lyrics"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
             <View
                 android:id="@+id/view_div"
