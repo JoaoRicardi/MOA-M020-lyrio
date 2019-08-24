@@ -50,6 +50,8 @@
                 android:layout_marginStart="8dp"
                 android:text="Nome da Música"
                 android:textSize="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/busca_campo_num"
