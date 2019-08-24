@@ -2,21 +2,21 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
+    android:layout_height="56dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/busca_img_artista"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/placeholder"/>
+<!--            <de.hdodenhof.circleimageview.CircleImageView-->
+<!--                android:id="@+id/busca_img_artista"-->
+<!--                android:layout_width="45dp"-->
+<!--                android:layout_height="45dp"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                android:src="@drawable/placeholder"/>-->
 
             <!--<ImageView-->
                 <!--android:id="@+id/imagem_lista_artista_salvos_circle_image_view_id"-->
@@ -31,37 +31,48 @@
                 <!--app:srcCompat="@drawable/ic_launcher_background" />-->
 
             <TextView
-                android:id="@+id/busca_campo_top"
+                android:id="@+id/busca_campo_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Nome da Música"
-                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:text="1."
                 android:textSize="16dp"
-                app:layout_constraintStart_toEndOf="@+id/busca_img_artista"
+                android:textStyle="bold"
+                android:textColor="@color/cinza"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/busca_campo_bottom"
+                android:id="@+id/busca_campo_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Nome do Artista"
-                android:textSize="14dp"
-                app:layout_constraintStart_toEndOf="@+id/busca_img_artista"
-                app:layout_constraintTop_toBottomOf="@id/busca_campo_top" />
+                android:text="Nome da Música"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/busca_campo_num"
+                app:layout_constraintTop_toTopOf="parent" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/busca_campo_bottom"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:text="Nome do Artista"-->
+<!--                android:textSize="14dp"-->
+<!--                app:layout_constraintStart_toStartOf="@id/busca_campo_top"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/busca_campo_top" />-->
             
             <View
                 android:layout_width="0dp"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@id/busca_campo_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="32dp"
-                android:background="@color/cinza"/>
+                android:background="@color/cinzaClaro"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
