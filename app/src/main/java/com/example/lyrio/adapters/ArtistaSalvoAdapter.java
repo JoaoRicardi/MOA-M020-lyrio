@@ -97,7 +97,10 @@ public class ArtistaSalvoAdapter extends RecyclerView.Adapter<ArtistaSalvoAdapte
         public void setupArtistaSalvo(ApiArtista artistaSalvo){
             nomeArtistaSalvoTextView.setText(artistaSalvo.getDesc());
             bottomText.setText(artistaSalvo.getQtdMusicas()+" músicas");
-            Picasso.get().load("https://www.vagalume.com"+artistaSalvo.getPic_small()).into(imagemArtistaSalvoCircleImageView);
+            Picasso.get()
+                    .load("https://www.vagalume.com"+artistaSalvo.getPic_small())
+                    .placeholder(R.drawable.placeholder_logo)
+                    .into(imagemArtistaSalvoCircleImageView);
 //            Log.i(TAG, " ArtistaSalvoAdapter picSmall: "+artistaSalvo.getPic_small());
         }
     }

@@ -16,7 +16,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".modules.recuperarSenha.view.EmailRecuperarSenha"></activity>
         <activity android:name=".modules.configuracoes.view.ConfiguracoesActivity" />
-        <activity android:name=".modules.noticia.view.NoticiaActivity" />
+        <activity android:name=".modules.noticiasHotspot.view.HotspotAbrirNoticiaActivity" />
         <activity android:name=".modules.Artista.view.PaginaArtistaActivity" />
         <activity android:name=".modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity" />
         <activity android:name=".modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity" />

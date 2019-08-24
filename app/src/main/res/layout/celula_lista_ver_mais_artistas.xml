@@ -61,4 +61,15 @@
             android:textOff=""
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/cinzaClaro"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+                />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

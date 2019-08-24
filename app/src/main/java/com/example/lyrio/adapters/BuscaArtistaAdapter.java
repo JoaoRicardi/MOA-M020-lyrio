@@ -67,7 +67,7 @@ public class BuscaArtistaAdapter extends RecyclerView.Adapter<BuscaArtistaAdapte
         // Setup do glide
         Glide.with(context)
                 .load("https://www.vagalume.com.br/"+bandName+"/images/profile.jpg")
-                .placeholder(R.drawable.ic_account_circle_black_24dp)
+                .placeholder(R.drawable.placeholder_logo)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(viewHolder.buscaImgArtista);

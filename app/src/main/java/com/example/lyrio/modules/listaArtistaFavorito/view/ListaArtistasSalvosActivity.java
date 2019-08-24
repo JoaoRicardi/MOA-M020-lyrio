@@ -1,5 +1,8 @@
 package com.example.lyrio.modules.listaArtistaFavorito.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
@@ -17,6 +20,8 @@ import com.example.lyrio.interfaces.ListaArtistasSalvosListener;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.interfaces.ArtistaSalvoListener;
 import com.example.lyrio.interfaces.EnviarDeFragmentParaActivity;
+import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
+import com.example.lyrio.modules.configuracoes.view.ConfiguracoesActivity;
 import com.example.lyrio.modules.listaArtistaFavorito.viewmodel.ListaArtistasFavoritosViewModel;
 
 import java.util.List;
@@ -25,7 +30,7 @@ public class ListaArtistasSalvosActivity
         extends AppCompatActivity
         implements ListaArtistasSalvosListener {
 
-    private ImageButton backButton;
+//    private ImageButton backButton;
     private ListaArtistaSalvoAdapter listaArtistaSalvoAdapter;
     private List<ApiArtista> listaArtistaSalvo;
     private ListaArtistasFavoritosViewModel listArtFavViewModel;
@@ -61,13 +66,49 @@ public class ListaArtistasSalvosActivity
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        listArtFavViewModel.atualizarGeral();
+    }
+
+
+    @Override
     public void abrirPaginaDoArtista(ApiArtista artistaSalvo) {
-        Log.i("VAGALUME", " Método abrir página do artista chamado!");
+//        Log.i("VAGALUME", " Método abrir página do artista chamado!");
+        ApiArtista apiArtista = new ApiArtista();
+        apiArtista.setUrl(artistaSalvo.getUrl());
+        apiArtista.setFavoritarArtista(true);
+
+        Intent intent = new Intent(this, PaginaArtistaActivity.class);
+        Bundle bundle = new Bundle();
+
+        bundle.putSerializable("ARTISTA", apiArtista);
+        intent.putExtras(bundle);
+
+        startActivity(intent);
     }
 
     @Override
     public void desfavoritarArtista(ApiArtista artistaSalvo) {
-        Log.i("VAGALUME", " Método desfavoritar artista chamado!");
+//        Log.i("VAGALUME", " Método desfavoritar artista chamado!");
+        AlertDialog.Builder alert = new AlertDialog.Builder(this)
+                .setTitle("PERAÊ!!")
+                .setMessage("Deseja realmente remover esta música dos seus favoritos?")
+                .setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        listArtFavViewModel.removerArtista(artistaSalvo);
+                        listaArtistaSalvoAdapter.removerArtista(artistaSalvo);
+                    }
+                })
+                .setNegativeButton("NÃO", null);
+        alert.create();
+        alert.show();
     }
 
 

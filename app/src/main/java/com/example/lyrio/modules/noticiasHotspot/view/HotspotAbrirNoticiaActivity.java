@@ -1,4 +1,4 @@
-package com.example.lyrio.modules.noticia.view;
+package com.example.lyrio.modules.noticiasHotspot.view;
 
 import android.os.Bundle;
 import android.webkit.WebSettings;
@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lyrio.R;
 
-public class NoticiaActivity extends AppCompatActivity {
+public class HotspotAbrirNoticiaActivity extends AppCompatActivity {
 
     private WebView webView;
 
