@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.bumptech.glide.Glide;
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.ArtistaSalvoAdapter;
@@ -49,6 +47,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.List;
 
@@ -64,14 +63,15 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         PopupMenu.OnMenuItemClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     public FragmentHome() {}
-
+    private LyrioDatabase db;
     private String gotMail;
     private TextView userName;
     private TextView userStatus;
-    private CircleImageView ImagemUsuario;
+    private CircleImageView imagemUsuario;
     private TextView verMaisMusica;
     private TextView verMaisArtistas;
     private TextView sairBotao;
+    //    private TextView verMaisNoticias;
     private SwipeRefreshLayout swipeRefreshLayout;
     private GoogleApiClient googleApiClient;
 
@@ -93,18 +93,100 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     //Room ETC
     private HomeViewModel homeViewModel;
 
+
+    //Implantação do LOGIN com Google
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        OptionalPendingResult<GoogleSignInResult> opr =  Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+        if (opr.isDone()){
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result.getSignInAccount());
+        } else {
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result) {
+                    handleSignInResult(result.getSignInAccount());
+                }
+            });
+
+        }
+
+    }
+
+
+
+
+    // Login com Google
+    private void handleSignInResult(GoogleSignInAccount account) {
+        if (account != null){
+            userName.setText(account.getDisplayName());
+
+
+            Glide.with(this).load(account.getPhotoUrl()).into(imagemUsuario);
+
+        }else {
+//            goLogInScreen();
+        }
+
+    }
+
+    // Login com Google
+    private void goLogInScreen() {
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    // Logout com Google
+    private void logOut(View view){
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                if(status.isSuccess()){
+                    //              goLogInScreen();
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    startActivity(intent);
+
+                }else{
+                    Toast.makeText(getContext(),"logOut não foi possível", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+    }
+
+    // Login com Google ///
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
+        db = Room.databaseBuilder(getContext(), LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+
+
+        userName = view.findViewById(R.id.user_name_id);
+        userStatus = view.findViewById(R.id.sair_aplicativo_id);
+        imagemUsuario = view.findViewById(R.id.home_user_icon_image_button);
 
         sairBotao = view.findViewById(R.id.sair_button);
         sairBotao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logOut(view);
+                FirebaseAuth.getInstance().signOut();
             }
         });
+
+
+        userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irParaLogin();
+            }
+        });
+
+
 
         // Login com Google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -120,51 +202,15 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             Log.e("ExceptionGoogle", error.getMessage());
         }
 
-        // Receber Informações de perfil de Usuario FIREBASE
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // Name, email address, and profile photo Url
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
 
-            // Check if user's email is verified
-            boolean emailVerified = user.isEmailVerified();
-
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getIdToken() instead.
-            String uid = user.getUid();
-        }
-
-        ImagemUsuario = view.findViewById(R.id.home_user_icon_image_button);
-        ImagemUsuario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu popupMenu = new PopupMenu(getActivity(), ImagemUsuario);
-                MenuInflater menuInflater = popupMenu.getMenuInflater();
-                menuInflater.inflate(R.menu.popup_menu, popupMenu.getMenu());
-                popupMenu.show();
-                popupMenu.setOnMenuItemClickListener(FragmentHome.this);
-            }
-        });
-
-        userName = view.findViewById(R.id.user_name_id);
-        userStatus = view.findViewById(R.id.sair_aplicativo_id);
-
-        userName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                irParaLogin();
-            }
-        });
+        // receber informações de um Usuario
+        setupUser();
 
 
-        try {
-            gotMail = getActivity().getIntent().getExtras().getString("EMAIL");
-        } catch (Exception e) {
-            gotMail = null;
-        }
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName("Jane Q. User")
+                .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                .build();
 
         if (gotMail != null) {
             userName.setText(gotMail);
@@ -232,6 +278,34 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setupUser();
+        homeViewModel.atualizarTodosOsFavoritos();
+    }
+
+    private void setupUser() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getIdToken() instead.
+            String uid = user.getUid();
+
+            userName.setText(email);
+        }
+    }
+
+
     private void irParaMinhasMusicas() {
         Intent intent = new Intent(getContext(), ListaMusicaSalvaActivity.class);
         startActivity(intent);
@@ -244,6 +318,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         startActivity(intent);
     }
 
+    private void irParaLogin() {
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onArtistaClicado(ApiArtista artistaSalvo) {
@@ -280,11 +358,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         super.onPause();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        homeViewModel.atualizarTodosOsFavoritos();
-    }
+
 
 
     //Menu de opções do usuário
@@ -304,66 +378,69 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         }
     }
 
-
-    //A PARTIR DAQUI TUDO RELACIONADO A LOGIN
-
-    private void irParaLogin() {
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        OptionalPendingResult<GoogleSignInResult> opr =  Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-        if (opr.isDone()){
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result.getSignInAccount());
-        } else {
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(@NonNull GoogleSignInResult result) {
-                    handleSignInResult(result.getSignInAccount());
-                }
-            });
-        }
-    }
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
 
-    private void handleSignInResult(GoogleSignInAccount account) {
-        if (account != null){
-            userName.setText(account.getDisplayName());
-            Glide.with(this).load(account.getPhotoUrl()).into(ImagemUsuario);
-        }else {
-//            goLogInScreen();
-        }
-    }
+//    //A PARTIR DAQUI TUDO RELACIONADO A LOGIN
+//
 
-    // Login com Google
-    private void goLogInScreen() {
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-
-    // Logout com Google
-    private void logOut(View view){
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                if(status.isSuccess()){
-                    //              goLogInScreen();
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(getContext(),"logOut não foi possível", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }
+//
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//
+//        OptionalPendingResult<GoogleSignInResult> opr =  Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+//        if (opr.isDone()){
+//            GoogleSignInResult result = opr.get();
+//            handleSignInResult(result.getSignInAccount());
+//        } else {
+//            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+//                @Override
+//                public void onResult(@NonNull GoogleSignInResult result) {
+//                    handleSignInResult(result.getSignInAccount());
+//                }
+//            });
+//        }
+//    }
+//
+//    @Override
+//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+//    }
+//
+//
+//    private void handleSignInResult(GoogleSignInAccount account) {
+//        if (account != null){
+//            userName.setText(account.getDisplayName());
+//            Glide.with(this).load(account.getPhotoUrl()).into(ImagemUsuario);
+//        }else {
+////            goLogInScreen();
+//        }
+//    }
+//
+//    // Login com Google
+//    private void goLogInScreen() {
+//        Intent intent = new Intent(getContext(), LoginActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
+//    }
+//
+//    // Logout com Google
+//    private void logOut(View view){
+//        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+//            @Override
+//            public void onResult(@NonNull Status status) {
+//                if(status.isSuccess()){
+//                    //              goLogInScreen();
+//                    Intent intent = new Intent(getContext(), MainActivity.class);
+//                    startActivity(intent);
+//                }else{
+//                    Toast.makeText(getContext(),"logOut não foi possível", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//    }
 }
+

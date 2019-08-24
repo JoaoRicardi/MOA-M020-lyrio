@@ -67,6 +67,17 @@
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/ir_para_login_recSenha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="Ir para Login"
+                android:backgroundTint="@color/verde"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="20dp"
+                />
+
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
