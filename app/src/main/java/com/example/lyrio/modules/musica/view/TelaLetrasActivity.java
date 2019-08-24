@@ -103,7 +103,10 @@ public class TelaLetrasActivity extends AppCompatActivity {
                     favourite_button.setSelected(musica != null);
                     nomeDaMusica.setText(musica.getName());
                     nomeDoArtista.setText(musica.getArtista().getName());
-                    Picasso.get().load(musica.getArtista().getUrl()).into(imagemArtista);
+                    Picasso.get()
+                            .load(musica.getArtista().getUrl())
+                            .placeholder(R.drawable.placeholder_logo)
+                            .into(imagemArtista);
 
                 });
 

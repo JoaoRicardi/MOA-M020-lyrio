@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,7 +24,9 @@ import com.example.lyrio.service.model.VagalumeHotspot;
 import com.example.lyrio.model.Hotspot;
 import com.example.lyrio.interfaces.HotspotListener;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 import retrofit2.Call;
@@ -42,6 +45,7 @@ public class FragmentNoticias extends Fragment implements HotspotListener {
     private RecyclerView recyclerView;
     private HotspotAdapter hotspotAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView txtUltimaAtualização;
 
     public FragmentNoticias() {
         // Required empty public constructor
@@ -66,6 +70,10 @@ public class FragmentNoticias extends Fragment implements HotspotListener {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+        txtUltimaAtualização = view.findViewById(R.id.hotspot_ultima_atualizacao);
+        String atualizadoText = "Atualizado em:\n";
+        txtUltimaAtualização.setText(atualizadoText +android.text.format.DateFormat.format("kk:mm:ss", new java.util.Date()));
+
         // Executar retrofit para buscar dados da API
         getRetrofitData();
 
@@ -74,13 +82,12 @@ public class FragmentNoticias extends Fragment implements HotspotListener {
             @Override
             public void onRefresh() {
                 getRetrofitData();
+                txtUltimaAtualização.setText(atualizadoText +android.text.format.DateFormat.format("kk:mm:ss", new java.util.Date()));
             }
         });
 
         return view;
     }
-
-
 
     private void  getRetrofitData(){
         VagalumeHotspotApi service = retrofit.create(VagalumeHotspotApi.class);

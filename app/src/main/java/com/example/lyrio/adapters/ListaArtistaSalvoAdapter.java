@@ -95,7 +95,10 @@ public class ListaArtistaSalvoAdapter extends RecyclerView.Adapter<ListaArtistaS
         public void setupArtistaSalvo(ApiArtista artistaSalvo){
             toggleButton.setChecked(true);
             nomeArtista.setText(artistaSalvo.getDesc());
-            Picasso.get().load("https://www.vagalume.com"+artistaSalvo.getPic_small()).into(profilePic);
+            Picasso.get()
+                    .load("https://www.vagalume.com"+artistaSalvo.getPic_small())
+                    .placeholder(R.drawable.placeholder_logo)
+                    .into(profilePic);
 //            Log.i(TAG, " ArtistaSalvoAdapter picSmall: "+artistaSalvo.getPic_small());
 
             toggleButton.setOnClickListener(new View.OnClickListener() {
