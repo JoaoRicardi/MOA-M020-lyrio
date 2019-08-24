@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".modules.menu.view.MainActivity"
-    android:background="@drawable/bg_normal">
+    android:background="@drawable/bg_light">
 
     <!--DESATIVAR MENU DO TOPO-->
 

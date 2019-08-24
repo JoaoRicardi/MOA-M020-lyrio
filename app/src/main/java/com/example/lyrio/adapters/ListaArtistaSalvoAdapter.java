@@ -1,17 +1,17 @@
 package com.example.lyrio.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
-import com.example.lyrio.modules.Artista.model.ApiArtista;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.lyrio.R;
-import com.example.lyrio.interfaces.ArtistaSalvoListener;
+import com.example.lyrio.interfaces.ListaArtistasSalvosListener;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -19,13 +19,13 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ArtistaSalvoAdapter extends RecyclerView.Adapter<ArtistaSalvoAdapter.ViewHolder> {
+public class ListaArtistaSalvoAdapter extends RecyclerView.Adapter<ListaArtistaSalvoAdapter.ViewHolder> {
     private static final String TAG = "VAGALUME";
 
     private List<ApiArtista> listaArtistaSalvo;
-    private ArtistaSalvoListener artistaSalvoListener;
+    private ListaArtistasSalvosListener artistaSalvoListener;
 
-    public ArtistaSalvoAdapter(ArtistaSalvoListener artistaSalvoListener) {
+    public ListaArtistaSalvoAdapter(ListaArtistasSalvosListener artistaSalvoListener) {
         listaArtistaSalvo = new ArrayList<>();
         this.artistaSalvoListener = artistaSalvoListener;
     }
@@ -33,7 +33,7 @@ public class ArtistaSalvoAdapter extends RecyclerView.Adapter<ArtistaSalvoAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.celula_circle_image_vertical,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.celula_lista_ver_mais_artistas,viewGroup,false);
         return new ViewHolder(view);
     }
 
@@ -45,22 +45,14 @@ public class ArtistaSalvoAdapter extends RecyclerView.Adapter<ArtistaSalvoAdapte
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                artistaSalvoListener.onArtistaClicado(artistaSalvo);
+                artistaSalvoListener.abrirPaginaDoArtista(artistaSalvo);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        int num = 0;
-
-        if(listaArtistaSalvo.size()>8){
-            num = 8;
-        }else{
-            num = listaArtistaSalvo.size();
-        }
-
-        return num;
+        return listaArtistaSalvo.size();
     }
 
 //    public void adicionarArtista(ApiArtista artistaSalvo){
@@ -81,23 +73,33 @@ public class ArtistaSalvoAdapter extends RecyclerView.Adapter<ArtistaSalvoAdapte
         notifyDataSetChanged();
     }
 
+    public void removerArtista(ApiArtista apiArt){
+        listaArtistaSalvo.remove(apiArt);
+        notifyDataSetChanged();
+    }
 
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        private CircleImageView imagemArtistaSalvoCircleImageView;
-        private TextView nomeArtistaSalvoTextView;
-        private TextView bottomText;
+        private CircleImageView profilePic;
+        private TextView nomeArtista;
+        private ToggleButton toggleButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            imagemArtistaSalvoCircleImageView = itemView.findViewById(R.id.celula_circle_image_view);
-            nomeArtistaSalvoTextView = itemView.findViewById(R.id.celula_circle_campo_topo);
-            bottomText = itemView.findViewById(R.id.celula_circle_campo_bottom);
+            profilePic = itemView.findViewById(R.id.lista_ver_mais_artistas_img_artista);
+            nomeArtista = itemView.findViewById(R.id.lista_ver_mais_artistas_nome_artista);
+            toggleButton = itemView.findViewById(R.id.lista_ver_mais_artistas_favorito_button);
         }
         public void setupArtistaSalvo(ApiArtista artistaSalvo){
-            nomeArtistaSalvoTextView.setText(artistaSalvo.getDesc());
-            bottomText.setText(artistaSalvo.getQtdMusicas()+" músicas");
-            Picasso.get().load("https://www.vagalume.com"+artistaSalvo.getPic_small()).into(imagemArtistaSalvoCircleImageView);
+            toggleButton.setChecked(true);
+            toggleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    artistaSalvoListener.desfavoritarArtista(artistaSalvo);
+                }
+            });
+            nomeArtista.setText(artistaSalvo.getDesc());
+            Picasso.get().load("https://www.vagalume.com"+artistaSalvo.getPic_small()).into(profilePic);
 //            Log.i(TAG, " ArtistaSalvoAdapter picSmall: "+artistaSalvo.getPic_small());
         }
     }

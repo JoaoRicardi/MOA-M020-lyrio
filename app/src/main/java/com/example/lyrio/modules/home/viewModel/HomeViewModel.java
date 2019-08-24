@@ -24,37 +24,26 @@ public class HomeViewModel extends AndroidViewModel {
 
     private static final String TAG = "VAGALUME";
 
-
     private MutableLiveData<List<ApiArtista>> listaArtistaLiveData = new MutableLiveData<>();
     private MutableLiveData<ApiArtista> artistaLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Musica>> listaMusicaLiveData = new MutableLiveData<>();
     private MutableLiveData<Musica> musicaLiveData = new MutableLiveData<>();
 
-    private CompositeDisposable disposable = new CompositeDisposable();
-
+    //Favoritos do Banco
     private ListaMusicasRepository listaMusicasRepository = new ListaMusicasRepository();
     private ArtistaRepository listaArtistaRepository = new ArtistaRepository();
-    private BuscaRepository buscaRepository = new BuscaRepository();
-    private ListaMusicasSalvasAdapter musicaSalvaAdapter;
 
-    public MutableLiveData<ApiArtista> getArtistaLiveData() {
-        return artistaLiveData;
-    }
+    private CompositeDisposable disposable = new CompositeDisposable();
 
-    public MutableLiveData<Musica> getMusicaLiveData() {
-        return musicaLiveData;
-    }
 
-    public MutableLiveData<List<ApiArtista>> getListaArtistaLiveData() {
-        return listaArtistaLiveData;
-    }
-
-    public MutableLiveData<List<Musica>> getListaMusicaLiveData() {
-        return listaMusicaLiveData;
-    }
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    public void atualizarTodosOsFavoritos(){
+        atualizarListaMusica();
+        atualizarListaArtistas();
     }
 
     public void atualizarListaMusica(){
@@ -76,7 +65,6 @@ public class HomeViewModel extends AndroidViewModel {
         );
     }
 
-
     public void atualizarListaArtistas() {
         disposable.add(
                 listaArtistaRepository.getAllArtistas(getApplication())
@@ -97,63 +85,21 @@ public class HomeViewModel extends AndroidViewModel {
         );
     }
 
-//    public void atualizarListaArtistas() {
-//        List<ApiArtista> listaGerada = new ArrayList<>();
-//
-//        String listaString = "skank,matisyahu";
-//        String[] listaHard = listaString.split(",");
-//
-//        // Iterar nomes de cada artista e buscar cada um na Api do Vagalume
-//        for (int i = 0; i < listaHard.length; i++) {
-//            disposable.add(
-//                    listaArtistaRepository.getArtistaPorUrl(listaHard[i])
-//                            .subscribeOn(Schedulers.newThread())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe(apiArt -> {
-//                                artistaLiveData.setValue(apiArt);
-//                                        listaGerada.add(apiArt);
-//                                        Log.i(TAG, " GERANDO ARTISTA: "+apiArt.getDesc());
-//                                        listaArtistaLiveData.setValue(listaGerada);
-//
-//
-//                                    },
-//                            throwable -> throwable.printStackTrace())
-//            );
-//        }
-//
-//        listaArtistaLiveData.setValue(listaGerada);
-//        Log.i(TAG, " LISTA ARTISTA SIZE: "+listaGerada.size());
-//    }
 
-
-
-
-//    public void removerMusica(String musicaId){
-//        disposable.delete(
-//                listaMusicasRepository.removerMusica(musicaId,getApplication())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.newThread())
-//                .subscribe(listaMusica->{
-//                    listaMusicaLiveData.setValue(listaMusica);
-//                })
-//        )
-//    }
-
-    public void atualizarArtista(){
-        disposable.add(
-                listaArtistaRepository.getAllArtistas(getApplication())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(listaArtista-> listaArtistaLiveData.setValue(listaArtista))
-        );
+    //Getter e Setters
+    public MutableLiveData<ApiArtista> getArtistaLiveData() {
+        return artistaLiveData;
     }
-    public void getArtistaPorUrl(String stringUrl){
-        disposable.add(
-                listaArtistaRepository.getArtistaPorUrl(stringUrl)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(apiArt -> artistaLiveData.setValue(apiArt),
-                                throwable -> throwable.printStackTrace())
-        );
+
+    public MutableLiveData<Musica> getMusicaLiveData() {
+        return musicaLiveData;
+    }
+
+    public MutableLiveData<List<ApiArtista>> getListaArtistaLiveData() {
+        return listaArtistaLiveData;
+    }
+
+    public MutableLiveData<List<Musica>> getListaMusicaLiveData() {
+        return listaMusicaLiveData;
     }
 }

@@ -25,8 +25,8 @@ import java.util.List;
 
 public class BuscaMusicasAdapter extends RecyclerView.Adapter<BuscaMusicasAdapter.ViewHolder>{
 
-    private List<ApiItem> listaDeApiItems;
-    private List<Musica> listaDeMusicasFavoritas;
+    private List<ApiItem> listaDeApiItems = null;
+    private List<Musica> listaDeMusicasFavoritas = null;
     private ApiBuscaListener apiBuscaListener;
     private Context context;
 
@@ -93,7 +93,9 @@ public class BuscaMusicasAdapter extends RecyclerView.Adapter<BuscaMusicasAdapte
     public void adicionarListaDeApiItems(List<ApiItem> listaApiIt, List<Musica> musicasFavoritas) {
         removerTudo();
         listaDeMusicasFavoritas.addAll(musicasFavoritas);
-        listaDeApiItems.addAll(listaApiIt);
+        if(listaApiIt!=null){
+            listaDeApiItems.addAll(listaApiIt);
+        }
         notifyDataSetChanged();
     }
 
@@ -104,8 +106,10 @@ public class BuscaMusicasAdapter extends RecyclerView.Adapter<BuscaMusicasAdapte
             }
         }
 
-        while(listaDeApiItems.size()>0){
-            listaDeApiItems.remove(0);
+        if(listaDeApiItems!=null){
+            while(listaDeApiItems.size()>0){
+                listaDeApiItems.remove(0);
+            }
         }
         notifyDataSetChanged();
     }
@@ -136,8 +140,6 @@ public class BuscaMusicasAdapter extends RecyclerView.Adapter<BuscaMusicasAdapte
                     favourite_button.setChecked(true);
                 }
             }
-
-//            Log.i("VAGALUME", "PAS");
 
             favourite_button.setOnClickListener(new View.OnClickListener() {
                 @Override

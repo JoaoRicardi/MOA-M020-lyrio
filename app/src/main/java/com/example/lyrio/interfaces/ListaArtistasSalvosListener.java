@@ -1,7 +1,8 @@
 package com.example.lyrio.interfaces;
 
-import com.example.lyrio.model.ArtistaSalvo;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 
 public interface ListaArtistasSalvosListener {
-    void onListaArtistasSalvosClicado(ArtistaSalvo artistaSalvo);
+    void abrirPaginaDoArtista(ApiArtista artistaSalvo);
+    void desfavoritarArtista(ApiArtista artistaSalvo);
 }

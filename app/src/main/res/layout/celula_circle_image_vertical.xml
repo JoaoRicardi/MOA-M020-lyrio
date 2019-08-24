@@ -13,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_launcher_background"/>
+        android:src="@drawable/placeholder"/>
 
     <TextView
         android:id="@+id/celula_circle_campo_topo"

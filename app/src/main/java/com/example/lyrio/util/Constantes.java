@@ -11,8 +11,8 @@ public class Constantes {
     public static String PASSWORD = "PASSWORD";
     public static String VAGALUME_KEY = UUID.randomUUID()+"";
 
-        public static String TOAST_ARTISTA_FAVORITO_ADICIONAR ="Não aguento mais esse Artista!";
-        public static String TOAST_ARTISTA_FAVORITO_EXCLUIR = "Gostei! Vai para a minha lista!";
+        public static String TOAST_ARTISTA_FAVORITO_EXCLUIR ="Não aguento mais esse Artista!";
+        public static String TOAST_ARTISTA_FAVORITO_ADICIONAR = "Gostei! Vai para a minha lista!";
         public static String TOAST_MUSICA_FAVORITA_ADICIONAR = "Adoro essa música!";
         public static String TOAST_MUSICA_FAVORITA_EXCLUIR = "Enjoei desta música! :(";
         public static String TOAST_NOTICIA_FAVORITA_ADICIONAR = "Guardei para ler depois!";

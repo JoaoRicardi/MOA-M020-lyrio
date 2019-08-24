@@ -38,7 +38,7 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final Musica musicaSalva = listaMusicaSalva.get(i);
-        viewHolder.setupListaMusicaSalva(musicaSalva);
+        viewHolder.setupListaMusicaSalva(musicaSalva, i);
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,22 +74,26 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
 
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        private ImageView imagemMusicaSalvaImageView;
+//        private ImageView imagemMusicaSalvaImageView;
         private TextView nomeMusicaSalvaTextView;
+        private TextView numeroMusicaSalvaTextView;
         private TextView buscaCampoBottom;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            imagemMusicaSalvaImageView = itemView.findViewById(R.id.busca_img_artista);
+//            imagemMusicaSalvaImageView = itemView.findViewById(R.id.busca_img_artista);
             nomeMusicaSalvaTextView=itemView.findViewById(R.id.busca_campo_top);
-            buscaCampoBottom=itemView.findViewById(R.id.busca_campo_bottom);
+            numeroMusicaSalvaTextView=itemView.findViewById(R.id.busca_campo_num);
+//            buscaCampoBottom=itemView.findViewById(R.id.busca_campo_bottom);
 
         }
-        public void setupListaMusicaSalva(Musica musicaSalva){
-            String imgUrl = "https://www.vagalume.com"+apiArtista.getUrl()+"images/profile.jpg";
-            buscaCampoBottom.setText(apiArtista.getDesc());
+        public void setupListaMusicaSalva(Musica musicaSalva, int num){
+//            imagemMusicaSalvaImageView.setVisibility(View.GONE);
+//            String imgUrl = "https://www.vagalume.com"+apiArtista.getUrl()+"images/profile.jpg";
+//            buscaCampoBottom.setText(apiArtista.getDesc());
+            numeroMusicaSalvaTextView.setText(num+".");
             nomeMusicaSalvaTextView.setText(musicaSalva.getDesc());
-            Picasso.get().load(imgUrl).into(imagemMusicaSalvaImageView);
+//            Picasso.get().load(imgUrl).into(imagemMusicaSalvaImageView);
         }
     }
 }

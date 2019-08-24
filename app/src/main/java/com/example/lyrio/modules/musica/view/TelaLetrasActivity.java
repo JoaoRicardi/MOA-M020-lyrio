@@ -41,7 +41,6 @@ public class TelaLetrasActivity extends AppCompatActivity {
     private String letraOriginal;
     private String letraTraduzida;
 
-
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
     private static final String TAG = "VAGALUME";
 
@@ -87,17 +86,17 @@ public class TelaLetrasActivity extends AppCompatActivity {
 
                     letraOriginal = musica.getText();
 
-                    Log.i(TAG, " CHECAR TRADUCAO:");
+//                    Log.i(TAG, " CHECAR TRADUCAO:");
                     try{
                         hasTranslation = musica.getTranslate().get(0).getText()!=null;
                         if(hasTranslation){
                             traduzirButton.setVisibility(View.VISIBLE);
                             letraTraduzida = "\n\n"+musica.getTranslate().get(0).getText();
                             letraOriginal = "\n\n"+letraOriginal;
+//                            Log.i(TAG, " MÚSICA COM TRADUÇÃO");
                         }
-                        Log.i(TAG, " TRADUCAO: "+hasTranslation);
                     }catch(Exception e){
-                        Log.i(TAG, " ERRO NA RESPOSTA");
+//                        Log.i(TAG, " MÚSICA SEM TRADUÇÃO");
                     }
 
                     letraDaMusica.setText(letraOriginal);

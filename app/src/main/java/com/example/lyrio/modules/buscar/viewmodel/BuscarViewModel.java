@@ -78,7 +78,7 @@ public class BuscarViewModel extends AndroidViewModel {
                                     curApiItem.setUrl(pgUrl);
                                     curApiItem.setId(theId);
                                     listaDeMusicas.add(curApiItem);
-                                    Log.i(TAG, " BuscarVM Musica API: " +curApiItem.getCampoTop());
+//                                    Log.i(TAG, " BuscarVM Musica API: " +curApiItem.getCampoTop());
 
 
                                 } else if(songTitle == null){
@@ -93,7 +93,7 @@ public class BuscarViewModel extends AndroidViewModel {
                                     curApiItem.setUrl(pgUrl);
                                     String thePic = "https://www.vagalume.com"+pgUrl+"images/profile.jpg";
                                     curApiItem.setPic_small(thePic);
-                                    Log.i(TAG, " BuscarVM GOT BUSCA ARTISTA URL: " +curApiItem.getPic_small());
+//                                    Log.i(TAG, " BuscarVM GOT BUSCA ARTISTA URL: " +curApiItem.getPic_small());
 
                                     listaDeArtistas.add(curApiItem);
                                 }
@@ -110,6 +110,10 @@ public class BuscarViewModel extends AndroidViewModel {
         );
     }
 
+    public void atualizarTodosOsFavoritos(){
+        atualizarListaArtistasFavoritos();
+        atualizarListaMusicasFavoritas();
+    }
 
     //Métodos Ler Banco de dados
     public void atualizarListaArtistasFavoritos(){
@@ -123,7 +127,7 @@ public class BuscarViewModel extends AndroidViewModel {
         );
     }
 
-    public void atualizarListaFavoritos(){
+    public void atualizarListaMusicasFavoritas(){
         disposable.add(
                 listaMusicasRepository.getAllMusicas(getApplication())
                         .subscribeOn(Schedulers.newThread())
@@ -170,7 +174,7 @@ public class BuscarViewModel extends AndroidViewModel {
                 listaMusicasRepository.favoritarMusica(musica, getApplication())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(() -> atualizarListaFavoritos())
+                        .subscribe(() -> atualizarListaMusicasFavoritas())
         );
     }
 
@@ -179,10 +183,9 @@ public class BuscarViewModel extends AndroidViewModel {
                 listaMusicasRepository.removerMusicaPorId(musica.getId(), getApplication())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(() -> atualizarListaFavoritos())
+                        .subscribe(() -> atualizarListaMusicasFavoritas())
         );
     }
-
 
     //Getter e setters
     public BuscarViewModel(@NonNull Application application) {
