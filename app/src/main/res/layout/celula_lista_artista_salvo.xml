@@ -14,7 +14,7 @@ android:layout_height="wrap_content">
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"/>
+        android:src="@drawable/placeholder"/>
 
     <TextView
         android:id="@+id/nome_lista_artistas_salvos_text_view"

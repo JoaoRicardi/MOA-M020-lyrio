@@ -8,7 +8,7 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:gravity="center"
 tools:context=".modules.configuracoes.view.ConfiguracoesActivity"
-    android:background="@drawable/bg_normal">
+    android:background="@drawable/bg_light">
 
 <androidx.cardview.widget.CardView
     android:id="@+id/cardView"

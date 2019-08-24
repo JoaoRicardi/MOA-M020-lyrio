@@ -26,9 +26,9 @@ import java.util.List;
 
 public class BuscaArtistaAdapter extends RecyclerView.Adapter<BuscaArtistaAdapter.ViewHolder>{
 
-    private List<ApiItem> listaDeApiItems;
-    private List<Musica> listaDeMusicasFavoritas;
-    private List<ApiArtista> listaDeArtistasFavoritos;
+    private List<ApiItem> listaDeApiItems = null;
+    private List<Musica> listaDeMusicasFavoritas = null;
+    private List<ApiArtista> listaDeArtistasFavoritos = null;
     private ApiBuscaListener apiBuscaListener;
     private Context context;
 
@@ -95,7 +95,9 @@ public class BuscaArtistaAdapter extends RecyclerView.Adapter<BuscaArtistaAdapte
     public void adicionarListaDeApiItems(List<ApiItem> listaApiIt, List<ApiArtista> artistasFavoritos) {
         removerTudo();
         listaDeArtistasFavoritos.addAll(artistasFavoritos);
-        listaDeApiItems.addAll(listaApiIt);
+        if(listaApiIt!=null){
+            listaDeApiItems.addAll(listaApiIt);
+        }
         notifyDataSetChanged();
     }
 
@@ -106,8 +108,10 @@ public class BuscaArtistaAdapter extends RecyclerView.Adapter<BuscaArtistaAdapte
             }
         }
 
-        while(listaDeApiItems.size()>0){
-            listaDeApiItems.remove(0);
+        if(listaDeApiItems!=null){
+            while(listaDeApiItems.size()>0){
+                listaDeApiItems.remove(0);
+            }
         }
         notifyDataSetChanged();
     }

@@ -34,8 +34,27 @@ public class ArtistasViewModel extends AndroidViewModel {
         return artistaLiveData;
     }
 
-    private ApiArtista tempArtista;
+//    public void atualizarArtista(){
+//        disposable.add(
+//                apiArtistaRepository.getArtistasList()
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribeOn(Schedulers.newThread())
+//                        .subscribe(artistasList -> listaArtistaLiveData.setValue(artistasList),
+//                                throwable -> throwable.printStackTrace()
+//                        )
+//        );
+//    }
 
+    public void atualizarListadeArtistas(){
+        disposable.add(
+                apiArtistaRepository.getAllArtistas(getApplication())
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(listaArtistas -> {
+                            listaArtistaLiveData.setValue(listaArtistas);
+                        }, throwable -> throwable.printStackTrace())
+        );
+    }
 
     public void getArtistaPorUrl(String urlArtista){
         disposable.add(
@@ -47,52 +66,21 @@ public class ArtistasViewModel extends AndroidViewModel {
         );
     }
 
-
-
-    private void getArtistaPorId(String stringId){
-        disposable.add(
-                apiArtistaRepository.getArtistaPorId(getApplication(),stringId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(artista -> {
-                    artistaLiveData.setValue(artista);
-                    tempArtista = artista;
-                },throwable -> throwable.printStackTrace())
-        );
-    }
-
-    public void atualizarArtista(){
-        disposable.add(
-                apiArtistaRepository.getArtistasList()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.newThread())
-                        .subscribe(artistasList -> listaArtistaLiveData.setValue(artistasList),
-                                throwable -> throwable.printStackTrace()
-                        )
-        );
-    }
     public void favoritarArtista(ApiArtista artista){
         disposable.add(
                 apiArtistaRepository.favoritarArtista(artista, getApplication())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(()->atualizarArtista())
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> atualizarListadeArtistas())
         );
     }
     public void removerArtista(ApiArtista artista){
         disposable.add(
-                apiArtistaRepository.removerArtista(artista, getApplication())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(()->atualizarArtista())
+                apiArtistaRepository.removerArtistaPorUrl(artista.getUrl().replace("/",""), getApplication())
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(() -> atualizarListadeArtistas())
         );
     }
-    public void removerArtistaPorId(String artistaId){
-        disposable.add(
-                apiArtistaRepository.removerArtistaPorUrl(artistaId,getApplication())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(()->atualizarArtista())
-        );
-    }
+
 }

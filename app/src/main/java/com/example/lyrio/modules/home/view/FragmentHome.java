@@ -63,8 +63,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         MusicaSalvaListener,
         PopupMenu.OnMenuItemClickListener, GoogleApiClient.OnConnectionFailedListener {
 
-    private LyrioDatabase db;
-
     public FragmentHome() {}
 
     private String gotMail;
@@ -95,14 +93,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     //Room ETC
     private HomeViewModel homeViewModel;
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
-        db = Room.databaseBuilder(getContext(), LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
-
 
         sairBotao = view.findViewById(R.id.sair_button);
         sairBotao.setOnClickListener(new View.OnClickListener() {
@@ -125,8 +119,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         } catch(Exception error){
             Log.e("ExceptionGoogle", error.getMessage());
         }
-
-
 
         // Receber Informações de perfil de Usuario FIREBASE
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -240,7 +232,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         return view;
     }
 
-
     private void irParaMinhasMusicas() {
         Intent intent = new Intent(getContext(), ListaMusicaSalvaActivity.class);
         startActivity(intent);
@@ -277,10 +268,22 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         Bundle bundle = new Bundle();
 
         bundle.putSerializable("MUSICA_ID", musicaSalva.getId());
-        Log.e("VAGALUME","ID DA MUSICA: "+musicaSalva.getId());
+//        Log.i("VAGALUME","ID DA MUSICA: "+musicaSalva.getId());
         intent.putExtras(bundle);
 
         startActivity(intent);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        homeViewModel.atualizarTodosOsFavoritos();
     }
 
 

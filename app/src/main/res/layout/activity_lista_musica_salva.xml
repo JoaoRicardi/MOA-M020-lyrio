@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_normal"
+    android:background="@drawable/bg_light"
     tools:context=".modules.listaMusicaFavorito.view.ListaMusicaSalvaActivity">
 
     <androidx.cardview.widget.CardView

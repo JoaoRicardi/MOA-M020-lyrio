@@ -9,6 +9,7 @@ import androidx.room.Room;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.database.LyrioDatabase;
 import com.example.lyrio.service.RetrofitService;
+import com.example.lyrio.service.model.VagalumeBusca;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,15 +28,13 @@ public class ArtistaRepository {
     private static final String API_KEY = UUID.randomUUID()+"";
     private static final String FORMAT = "json";
 
-    private CompositeDisposable disposable = new CompositeDisposable();
-
-    public Flowable<ApiArtista> getArtistaPorId(Context context, String idDoArtista){
-        db = Room.databaseBuilder(context,LyrioDatabase.class,LyrioDatabase.DATABASE_NAME).build();
-
-
-        return db.artistasFavoritosDao()
-                .getArtistaPorUrl(idDoArtista);
-    }
+//    public Flowable<ApiArtista> getArtistaPorId(Context context, String idDoArtista){
+//        db = Room.databaseBuilder(context,LyrioDatabase.class,LyrioDatabase.DATABASE_NAME).build();
+//
+//
+//        return db.artistasFavoritosDao()
+//                .getArtistaPorUrl(idDoArtista);
+//    }
 
     public Flowable<List<ApiArtista>> getAllArtistas(Context context){
         db = Room.databaseBuilder(context,LyrioDatabase.class,LyrioDatabase.DATABASE_NAME).build();
@@ -50,11 +49,11 @@ public class ArtistaRepository {
                 .inserir(artista));
     }
 
-    public Completable removerArtista(ApiArtista artista, Context context){
-        db = Room.databaseBuilder(context,LyrioDatabase.class,LyrioDatabase.DATABASE_NAME).build();
-        return Completable.fromAction(()->db.artistasFavoritosDao()
-        .delete(artista));
-    }
+//    public Completable removerArtista(ApiArtista artista, Context context){
+//        db = Room.databaseBuilder(context,LyrioDatabase.class,LyrioDatabase.DATABASE_NAME).build();
+//        return Completable.fromAction(()->db.artistasFavoritosDao()
+//        .delete(artista));
+//    }
 
     public Completable removerArtistaPorUrl(String artistaUrl, Application context){
         db = Room.databaseBuilder(context,LyrioDatabase.class,LyrioDatabase.DATABASE_NAME).build();
@@ -71,17 +70,9 @@ public class ArtistaRepository {
 
     public Observable<ApiArtista> getArtistaPorUrl(String urlArtista){
         String buscaCorreta = urlArtista+"/index.js";
-        Log.i(TAG, " ArtistaRepository BUSCA CORRETA: "+buscaCorreta);
+//        Log.i(TAG, " ArtistaRepository BUSCA CORRETA: "+buscaCorreta);
         return retrofitService.getArtistaApi()
                 .getArtistaApi(buscaCorreta)
-                .map(artistaApi -> {
-                    Log.i(TAG, " ArtistaRepository GOT ARTIST: "+artistaApi.getArtist().getDesc());
-                    Log.i(TAG, " ArtistaRepository GOT ARTIST PIC SMALL: "+artistaApi.getArtist().getPic_small());
-
-//                    ApiArtista apiArtista = new ApiArtista();
-//                    apiArtista.setDesc(artistaApi.getArtist().getDesc());
-
-                    return artistaApi.getArtist();
-                });
+                .map(vagalumeBusca -> vagalumeBusca.getArtist());
     }
 }

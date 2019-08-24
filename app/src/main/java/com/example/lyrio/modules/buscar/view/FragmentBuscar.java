@@ -3,7 +3,6 @@ package com.example.lyrio.modules.buscar.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +50,9 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
     private BuscaArtistaAdapter buscaArtistasAdapter;
     private List<Musica> listaMusicasFavoritas;
     private List<ApiArtista> listaArtistasFavoritos;
+
+    private List<ApiItem> listaMusicasBuscadas;
+    private List<ApiItem> listaArtistasBuscados;
 
     //Room ETC
     private BuscarViewModel buscarViewModel;
@@ -107,7 +109,7 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
 
 
         //Live data
-        buscarViewModel.atualizarListaFavoritos();
+        buscarViewModel.atualizarListaMusicasFavoritas();
         buscarViewModel.atualizarListaArtistasFavoritos();
 
 
@@ -115,21 +117,25 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
         buscarViewModel.getListaMusicasFavoritoLiveData()
                 .observe(this, listaMusicas -> {
                     listaMusicasFavoritas = listaMusicas;
+                    buscaLetrasAdapter.adicionarListaDeApiItems(listaMusicasBuscadas, listaMusicasFavoritas);
                 });
 
         buscarViewModel.getListaArtistasFavoritosLiveData()
                 .observe(this, listaArt -> {
                     listaArtistasFavoritos = listaArt;
+                    buscaArtistasAdapter.adicionarListaDeApiItems(listaArtistasBuscados, listaArtistasFavoritos);
                 });
 
         //Get rsultado da busca
         buscarViewModel.getListaArtistaBuscadaLiveData()
                 .observe(this, listaArtista -> {
+                    listaArtistasBuscados = listaArtista;
                     buscaArtistasAdapter.adicionarListaDeApiItems(listaArtista, listaArtistasFavoritos);
                 });
 
         buscarViewModel.getListaMusicasBuscadaLiveData()
                 .observe(this, listaMusica -> {
+                    listaMusicasBuscadas = listaMusica;
                     buscaLetrasAdapter.adicionarListaDeApiItems(listaMusica, listaMusicasFavoritas);
                 });
 
@@ -159,6 +165,16 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
         return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        buscarViewModel.atualizarTodosOsFavoritos();
+    }
 
     @Override
     public void onApiBuscarClicado(ApiItem apiItem) {
