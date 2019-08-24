@@ -96,7 +96,10 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
         public void setupMusicaSalva(Musica musicaSalva){
             nomeMusicaSalvaTextView.setText(musicaSalva.getName());
             campoBottomText.setText(musicaSalva.getArtista().getName());
-            Picasso.get().load(musicaSalva.getArtista().getUrl()).into(imagemMusicaSalvaImageView);
+            Picasso.get()
+                    .load(musicaSalva.getArtista().getUrl())
+                    .placeholder(R.drawable.placeholder_logo)
+                    .into(imagemMusicaSalvaImageView);
         }
     }
 }

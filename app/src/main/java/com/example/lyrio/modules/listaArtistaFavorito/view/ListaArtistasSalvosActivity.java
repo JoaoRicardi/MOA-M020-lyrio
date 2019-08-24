@@ -68,6 +68,8 @@ public class ListaArtistasSalvosActivity
     @Override
     public void desfavoritarArtista(ApiArtista artistaSalvo) {
         Log.i("VAGALUME", " Método desfavoritar artista chamado!");
+
+        listaArtistaSalvoAdapter.removerArtista(artistaSalvo);
     }
 
 

@@ -97,7 +97,10 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                 .observe(this, apiArtista -> {
                     artistaApi = apiArtista;
                     nomeArtistaTextView.setText(artistaApi.getDesc());
-                    Picasso.get().load(imgUrlBase+artistaApi.getPic_small()).into(imagemArtistaImageView);
+                    Picasso.get()
+                            .load(imgUrlBase+artistaApi.getPic_small())
+                            .placeholder(R.drawable.placeholder_logo)
+                            .into(imagemArtistaImageView);
 //                    Picasso.get().load(imgUrlBase+artistaApi.getPic_medium()).into(artistaBg);
 //                    Log.i(TAG, " GOT TOPLYR 01 EM ARTISTA: "+artistaApi.getToplyrics().getItem().get(0).getDesc());
                     listaTopLyrics = artistaApi.getToplyrics().getItem();
