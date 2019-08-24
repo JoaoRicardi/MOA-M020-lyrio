@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.repository.ArtistaRepository;
 
 import java.util.List;

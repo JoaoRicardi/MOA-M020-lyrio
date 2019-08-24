@@ -1,6 +1,6 @@
 package com.example.lyrio.model;
 
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 
 import java.io.Serializable;
 import java.util.ArrayList;

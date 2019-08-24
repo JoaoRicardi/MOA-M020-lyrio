@@ -12,7 +12,7 @@ import com.example.lyrio.model.BuscaLayout;
 import com.example.lyrio.repository.ArtistaRepository;
 import com.example.lyrio.repository.BuscaRepository;
 import com.example.lyrio.repository.ListaMusicasRepository;
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;
 
 import java.util.ArrayList;
@@ -176,7 +176,7 @@ public class BuscarViewModel extends AndroidViewModel {
 
     public void removerMusica(Musica musica){
         disposable.add(
-                listaMusicasRepository.removerMusica(musica, getApplication())
+                listaMusicasRepository.removerMusicaPorId(musica.getId(), getApplication())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(() -> atualizarListaFavoritos())

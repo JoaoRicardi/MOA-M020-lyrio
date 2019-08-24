@@ -21,6 +21,15 @@ public class ApiItem {
     private String text;
     private List<Musica> translate;
     private List<ApiItem> item;
+    private boolean isFavorite;
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 
     public String getPic_small() {
         return pic_small;

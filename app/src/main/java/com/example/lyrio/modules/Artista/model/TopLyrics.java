@@ -1,4 +1,4 @@
-package com.example.lyrio.service.model;
+package com.example.lyrio.modules.Artista.model;
 
 import com.example.lyrio.database.models.Musica;
 

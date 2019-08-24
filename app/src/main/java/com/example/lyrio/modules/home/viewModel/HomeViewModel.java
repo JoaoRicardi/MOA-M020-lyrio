@@ -1,8 +1,6 @@
 package com.example.lyrio.modules.home.viewModel;
 
 import android.app.Application;
-import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -13,7 +11,7 @@ import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.repository.ArtistaRepository;
 import com.example.lyrio.repository.BuscaRepository;
 import com.example.lyrio.repository.ListaMusicasRepository;
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +77,7 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
 
-    public void gerarArtistas() {
+    public void atualizarListaArtistas() {
         disposable.add(
                 listaArtistaRepository.getAllArtistas(getApplication())
                         .map(listaArtista -> {
@@ -87,6 +85,7 @@ public class HomeViewModel extends AndroidViewModel {
                             for (ApiArtista apiArt : listaArtista){
                                 ApiArtista artApi = listaArtistaRepository.getArtistaPorUrl(apiArt.getUrl())
                                         .blockingFirst();
+                                artApi.setQtdMusicas(artApi.getLyrics().getItem().size());
                                 listaArtistaGerado.add(artApi);
                             }
                             return listaArtistaGerado;
@@ -98,7 +97,7 @@ public class HomeViewModel extends AndroidViewModel {
         );
     }
 
-//    public void gerarArtistas() {
+//    public void atualizarListaArtistas() {
 //        List<ApiArtista> listaGerada = new ArrayList<>();
 //
 //        String listaString = "skank,matisyahu";

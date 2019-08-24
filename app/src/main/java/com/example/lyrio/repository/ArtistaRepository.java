@@ -6,7 +6,7 @@ import android.util.Log;
 
 import androidx.room.Room;
 
-import com.example.lyrio.service.model.ApiArtista;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.database.LyrioDatabase;
 import com.example.lyrio.service.RetrofitService;
 

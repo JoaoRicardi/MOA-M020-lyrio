@@ -1,4 +1,4 @@
-package com.example.lyrio.service.model;
+package com.example.lyrio.modules.Artista.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -48,13 +48,13 @@ public class ApiArtista implements Serializable{
 
     @SerializedName("lyrics")
     @Ignore
-    private ApiItem lyrics;
+    private AllLyrics lyrics;
 
     @Ignore
     private List<Musica> musicasSalvas;
 
     @ColumnInfo(name = "is_favorito")
-    private boolean favoritarArtista;
+    private boolean favoritarArtista = false;
 
     @Ignore
     private List<ApiArtista> apiArtistaList;
@@ -131,11 +131,11 @@ public class ApiArtista implements Serializable{
         this.toplyrics = toplyrics;
     }
 
-    public ApiItem getLyrics() {
+    public AllLyrics getLyrics() {
         return lyrics;
     }
 
-    public void setLyrics(ApiItem lyrics) {
+    public void setLyrics(AllLyrics lyrics) {
         this.lyrics = lyrics;
     }
 
