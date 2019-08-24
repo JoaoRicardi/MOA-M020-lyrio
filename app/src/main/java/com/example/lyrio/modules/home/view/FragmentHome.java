@@ -165,7 +165,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         db = Room.databaseBuilder(getContext(), LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
 
-        userName = view.findViewById(R.id.user_name_id);
+        userName = view.findViewById(R.id.usuario_name_id);
         userStatus = view.findViewById(R.id.sair_aplicativo_id);
         imagemUsuario = view.findViewById(R.id.home_user_icon_image_button);
 
@@ -187,6 +187,28 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         });
 
 
+        try {
+            gotMail = getActivity().getIntent().getExtras().getString("EMAIL");
+        } catch (Exception e) {
+            gotMail = null;
+        }
+
+        if (gotMail != null) {
+
+//            userStatus.setText("Notificações ativas");
+        } else {
+            userName.setText("Faça seu login");
+//            userStatus.setText("Sem notificações");
+        }
+
+
+
+        imagemUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                irParaConfiguracoes();
+            }
+        });
 
         // Login com Google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -212,13 +234,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                 .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
                 .build();
 
-        if (gotMail != null) {
-            userName.setText(gotMail);
-//            userStatus.setText("Notificações ativas");
-        } else {
-            userName.setText("Faça seu login");
-//            userStatus.setText("Sem notificações");
-        }
+
+
 
 
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
@@ -308,6 +325,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
     private void irParaMinhasMusicas() {
         Intent intent = new Intent(getContext(), ListaMusicaSalvaActivity.class);
+        startActivity(intent);
+    }
+    private void irParaConfiguracoes() {
+        Intent intent = new Intent(getContext(), ConfiguracoesActivity.class);
         startActivity(intent);
     }
 
