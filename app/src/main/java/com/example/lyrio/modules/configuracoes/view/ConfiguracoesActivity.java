@@ -84,8 +84,6 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                         .setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
-
                             }
                         })
                         .setNegativeButton("NÂO", null);

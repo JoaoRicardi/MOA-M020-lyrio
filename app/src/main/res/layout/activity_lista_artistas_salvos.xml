@@ -19,17 +19,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageButton
-                android:id="@+id/back_button_meus_artistas_image_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:background="@color/branco"
-                android:tint="@color/azulClaro"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/lista_artistas_salvos_divider_id"
-                app:srcCompat="?attr/actionModeCloseDrawable" />
+<!--            <ImageButton-->
+<!--                android:id="@+id/back_button_meus_artistas_image_button"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:background="@color/branco"-->
+<!--                android:tint="@color/azulClaro"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintBottom_toTopOf="@id/lista_artistas_salvos_divider_id"-->
+<!--                app:srcCompat="?attr/actionModeCloseDrawable" />-->
 
             <View
                 android:id="@+id/lista_artistas_salvos_divider_id"

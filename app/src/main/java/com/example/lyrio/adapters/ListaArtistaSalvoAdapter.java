@@ -1,5 +1,7 @@
 package com.example.lyrio.adapters;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,15 +94,17 @@ public class ListaArtistaSalvoAdapter extends RecyclerView.Adapter<ListaArtistaS
         }
         public void setupArtistaSalvo(ApiArtista artistaSalvo){
             toggleButton.setChecked(true);
-            toggleButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    artistaSalvoListener.desfavoritarArtista(artistaSalvo);
-                }
-            });
             nomeArtista.setText(artistaSalvo.getDesc());
             Picasso.get().load("https://www.vagalume.com"+artistaSalvo.getPic_small()).into(profilePic);
 //            Log.i(TAG, " ArtistaSalvoAdapter picSmall: "+artistaSalvo.getPic_small());
+
+            toggleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleButton.setChecked(true);
+                    artistaSalvoListener.desfavoritarArtista(artistaSalvo);
+                }
+            });
         }
     }
 }
