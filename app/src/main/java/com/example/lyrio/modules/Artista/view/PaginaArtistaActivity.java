@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -17,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lyrio.R;
 import com.example.lyrio.modules.Artista.viewmodel.ArtistasViewModel;
+import com.example.lyrio.modules.home.viewModel.HomeViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.adapters.ListaMusicasSalvasAdapter;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
@@ -32,11 +31,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PaginaArtistaActivity extends AppCompatActivity implements ListaMusicasSalvasListener{
 
+    //    private ImageView artistaBg;
+    private ListaMusicasSalvasAdapter listaMusicasSalvasAdapter;
     private CircleImageView imagemArtistaImageView;
     private TextView nomeArtistaTextView;
     private ToggleButton seguirButton;
-//    private ImageView artistaBg;
-    private ListaMusicasSalvasAdapter listaMusicasSalvasAdapter;
     private List<Musica> listaDeMusicasSalvas;
 
     private RecyclerView recyclerView;
@@ -50,7 +49,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     private ApiArtista artistaBundle;
     private ApiArtista artistaApi;
     private ArtistasViewModel artistasViewModel;
-
     private boolean isTopLyrSelected = true;
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
@@ -134,9 +132,23 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
             @Override
             public void onClick(View view) {
                 if(seguirButton.isChecked()){
-                    Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_EXCLUIR, Toast.LENGTH_SHORT).show();
-                }else{
                     Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_ADICIONAR, Toast.LENGTH_SHORT).show();
+
+                    String urlArt = artistaBundle.getUrl().replace("/","");
+                    ApiArtista apiArtSalvo = new ApiArtista();
+                    apiArtSalvo.setUrl(urlArt);
+
+                    artistasViewModel.favoritarArtista(apiArtSalvo);
+                    artistasViewModel.atualizarListadeArtistas();
+                }else{
+                    Toast.makeText(PaginaArtistaActivity.this, Constantes.TOAST_ARTISTA_FAVORITO_EXCLUIR, Toast.LENGTH_SHORT).show();
+
+                    String urlArt = artistaBundle.getUrl().replace("/","");
+                    ApiArtista apiArtSalvo = new ApiArtista();
+                    apiArtSalvo.setUrl(urlArt);
+
+                    artistasViewModel.removerArtista(apiArtSalvo);
+                    artistasViewModel.atualizarListadeArtistas();
                 }
             }
         });
@@ -175,7 +187,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
             textView.setTextColor(getResources().getColor(R.color.azulBotoes));
         }
     }
-
 
     @Override
     public void onListaMusicasSalvasClicado(Musica musicaSalva) {
