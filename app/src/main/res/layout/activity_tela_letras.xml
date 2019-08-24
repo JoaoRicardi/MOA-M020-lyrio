@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        android:text="Carregando... dfdsgdgfdsfgsdfgsgfsdf   dgdsfgsds"
+                        android:text="Carregando..."
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        android:text="Nome do Artista"
+                        android:text=""
                         android:textSize="14sp" />
 
                 </LinearLayout>
