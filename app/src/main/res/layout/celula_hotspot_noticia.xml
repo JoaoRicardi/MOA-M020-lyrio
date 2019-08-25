@@ -74,7 +74,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="12dp"
         android:gravity="center|end"
-        android:text="Ver no site"
+        android:text="Ver mais"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

@@ -61,6 +61,13 @@ public class HotspotAdapter extends RecyclerView.Adapter<HotspotAdapter.ViewHold
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(viewHolder.recyclerImage);
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hotspotListener.onHotspotClicado(hotspot);
+            }
+        });
     }
 
     @Override
@@ -114,7 +121,14 @@ public class HotspotAdapter extends RecyclerView.Adapter<HotspotAdapter.ViewHold
                 Picasso.get().load(hots.getArt_pic_src()).into(hotCircleArtist);
             }
 
-            maisInfo.setOnClickListener(v -> hotspotListener.onHotspotClicado(hots));
+            hotCircleArtist.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hotspotListener.onArtistaClicado("/"+hotspot.getArtUrl()+"/");
+                }
+            });
+
+//            maisInfo.setOnClickListener(v -> hotspotListener.onHotspotClicado(hots));
 
 //            favourite_toggle.setOnClickListener(new View.OnClickListener() {
 //                @Override
