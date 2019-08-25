@@ -145,10 +145,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             @Override
             public void onResult(@NonNull Status status) {
                 if(status.isSuccess()){
-                    //              goLogInScreen();
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    startActivity(intent);
+                                goLogInScreen();
+                                irParaHome();
 
+                    Toast.makeText(getContext(),"logOut efetuado", Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(getContext(),"logOut não foi possível", Toast.LENGTH_LONG).show();
                 }
@@ -318,7 +318,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             // FirebaseUser.getIdToken() instead.
             String uid = user.getUid();
 
-            userName.setText(name);
+            userName.setText("Bem vindo! " + name);
         }
     }
 
@@ -342,6 +342,11 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     private void irParaLogin() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         startActivity(intent);
+    }
+
+    private void irParaHome(){
+        Intent intentHome = new Intent(getContext(), MainActivity.class);
+        startActivity(intentHome);
     }
 
     @Override
