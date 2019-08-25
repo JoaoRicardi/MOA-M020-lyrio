@@ -75,7 +75,7 @@ public class BuscarViewModel extends AndroidViewModel {
                                     curApiItem.setCampoTop(songTitle);
                                     curApiItem.setCampoBottom(bandName);
                                     curApiItem.setUrl(pgUrl);
-                                    curApiItem.setId(theId);
+                                    curApiItem.setId(theId.substring(1));
                                     listaDeMusicas.add(curApiItem);
 //                                    Log.i(TAG, " BuscarVM Musica API: " +curApiItem.getCampoTop());
 

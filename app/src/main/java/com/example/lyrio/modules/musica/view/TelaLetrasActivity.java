@@ -139,7 +139,7 @@ public class TelaLetrasActivity extends AppCompatActivity {
                     Toast.makeText(TelaLetrasActivity.this, Constantes.TOAST_MUSICA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
 
                     Musica delMusic = new Musica();
-                    delMusic.setId("l"+musicaApi.getId());
+                    delMusic.setId(musicaApi.getId());
 
                     letrasViewModel.removerMusica(delMusic);
                     letrasViewModel.atualizarListadeMusicas();
