@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.example.lyrio.R;
@@ -28,7 +26,7 @@ import com.example.lyrio.modules.home.viewModel.HomeViewModel;
 import com.example.lyrio.modules.menu.view.MainActivity;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.interfaces.ArtistaSalvoListener;
 import com.example.lyrio.interfaces.MusicaSalvaListener;
 import com.example.lyrio.modules.listaArtistaFavorito.view.ListaArtistasSalvosActivity;
@@ -115,9 +113,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
     }
 
-
-
-
     // Login com Google
     private void handleSignInResult(GoogleSignInAccount account) {
         if (account != null){
@@ -162,8 +157,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
-        db = Room.databaseBuilder(getContext(), LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
-
 
         userName = view.findViewById(R.id.usuario_name_id);
         userStatus = view.findViewById(R.id.sair_aplicativo_id);
@@ -235,16 +228,17 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                 .build();
 
 
-
-
-
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        homeViewModel.atualizarListaMusica();
-        homeViewModel.atualizarListaArtistas();
+        homeViewModel.atualizarTodosOsFavoritos();
 
         homeViewModel.getListaMusicaLiveData()
                 .observe(this, listaMusicas->{
-                    musicaSalvaAdapter.atualizarListaMusicas(listaMusicas);
+                    musicaSalvaAdapter.atualizarListaDeMusicas(listaMusicas);
+                });
+
+        homeViewModel.getListaMusicasFavoritas()
+                .observe(this, listaMusicas->{
+                    homeViewModel.atualizarListaMusica();
                 });
 
         homeViewModel.getListaArtistaLiveData()
@@ -256,16 +250,16 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         //Recycler de Musicas
         musicaSalvaAdapter = new MusicaSalvaAdapter(this);
         GridLayoutManager gridMusicas = new GridLayoutManager(view.getContext(), 4);
-        RecyclerView recyclerView = view.findViewById(R.id.musica_salva_recycler_view);
-        recyclerView.setAdapter(musicaSalvaAdapter);
-        recyclerView.setLayoutManager(gridMusicas);
+        RecyclerView musicaRecycler = view.findViewById(R.id.musica_salva_recycler_view);
+        musicaRecycler.setAdapter(musicaSalvaAdapter);
+        musicaRecycler.setLayoutManager(gridMusicas);
 
         //Recycler de Artistas
         artistaSalvoAdapter = new ArtistaSalvoAdapter(this);
         GridLayoutManager gridArtistas = new GridLayoutManager(view.getContext(), 4);
-        RecyclerView recyclerView1 = view.findViewById(R.id.artistas_salvos_recycler_view);
-        recyclerView1.setAdapter(artistaSalvoAdapter);
-        recyclerView1.setLayoutManager(gridArtistas);
+        RecyclerView artistaRecycler = view.findViewById(R.id.artistas_salvos_recycler_view);
+        artistaRecycler.setAdapter(artistaSalvoAdapter);
+        artistaRecycler.setLayoutManager(gridArtistas);
 
 
         verMaisArtistas = view.findViewById(R.id.ver_mais_artistas_salvos_text_view);
@@ -284,11 +278,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             }
         });
 
-        //Função de swipe para atualizar os dados (precisa arrumar)
+        //Função de swipe para atualizar os dados
         swipeRefreshLayout = view.findViewById(R.id.home_swipe);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            homeViewModel.atualizarListaMusica();
-            homeViewModel.atualizarListaArtistas();
+            homeViewModel.atualizarTodosOsFavoritos();
             swipeRefreshLayout.setRefreshing(false);
         });
 
@@ -299,6 +292,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     public void onResume() {
         super.onResume();
         setupUser();
+//        Log.i(TAG, " ONRESUME - FragmentHome Chamando atualização de listas");
         homeViewModel.atualizarTodosOsFavoritos();
     }
 
@@ -363,11 +357,14 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     @Override
     public void onMusicaSalvaClicado(Musica musicaSalva) {
 
+        Musica tempMusic = new Musica();
+        tempMusic.setId(musicaSalva.getId());
+        tempMusic.setFavoritarMusica(true);
+
         Intent intent = new Intent(getContext(), TelaLetrasActivity.class);
         Bundle bundle = new Bundle();
 
-        bundle.putSerializable("MUSICA_ID", musicaSalva.getId());
-//        Log.i("VAGALUME","ID DA MUSICA: "+musicaSalva.getId());
+        bundle.putSerializable("MUSICA", tempMusic);
         intent.putExtras(bundle);
 
         startActivity(intent);

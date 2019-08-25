@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 
 import java.util.List;
 

@@ -63,11 +63,6 @@ public class ArtistaSalvoAdapter extends RecyclerView.Adapter<ArtistaSalvoAdapte
         return num;
     }
 
-//    public void adicionarArtista(ApiArtista artistaSalvo){
-//        listaArtistaSalvo.add(artistaSalvo);
-//        notifyDataSetChanged();
-//    }
-
     public void atualizarListaDeArtistas(List<ApiArtista> listaDeArtistas) {
         removerTudo();
         listaArtistaSalvo.addAll(listaDeArtistas);

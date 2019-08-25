@@ -6,8 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.repository.ListaMusicasRepository;
+
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -16,6 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 public class LetrasViewModel extends AndroidViewModel {
 
     private MutableLiveData<Musica> musicaLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Musica>> listaDeMusicasFavoritas = new MutableLiveData<>();
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
@@ -25,8 +28,15 @@ public class LetrasViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public  MutableLiveData<Musica> getMusicaLiveData(){
-        return musicaLiveData;
+    public void atualizarListadeMusicas(){
+        disposable.add(
+                listaMusicasRepository.getAllMusicas(getApplication())
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(listaDeMusicasFavoritasRecebidasDoBanco -> {
+                            listaDeMusicasFavoritas.setValue(listaDeMusicasFavoritasRecebidasDoBanco);
+                        }, throwable -> throwable.printStackTrace())
+        );
     }
 
     public void getMusicaPorId(String musicaId){
@@ -34,9 +44,8 @@ public class LetrasViewModel extends AndroidViewModel {
                 listaMusicasRepository.getMusicaPorIdApi(musicaId)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(musica -> {
-                            musicaLiveData.setValue(musica);
-                        }, throwable -> throwable.printStackTrace())
+                        .subscribe(musica -> musicaLiveData.setValue(musica),
+                                throwable -> throwable.printStackTrace())
         );
     }
 
@@ -45,16 +54,20 @@ public class LetrasViewModel extends AndroidViewModel {
                 listaMusicasRepository.favoritarMusica(musica, getApplication())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
+                        .subscribe(()->atualizarListadeMusicas())
         );
     }
 
-    public void removerMusicaPorId(String musicaId){
+    public void removerMusica(Musica musica){
         disposable.add(
-                listaMusicasRepository.removerMusicaPorId(musicaId, getApplication())
+                listaMusicasRepository.removerMusicaPorId(musica.getId(), getApplication())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
+                        .subscribe(() -> atualizarListadeMusicas())
         );
+    }
+
+    public  MutableLiveData<Musica> getMusicaLiveData(){
+        return musicaLiveData;
     }
 }

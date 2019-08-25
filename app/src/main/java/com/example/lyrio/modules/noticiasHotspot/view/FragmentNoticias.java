@@ -21,12 +21,10 @@ import com.example.lyrio.modules.vagalumeAbrirLink.view.VagalumeAbrirLink;
 import com.example.lyrio.service.api.VagalumeHotspotApi;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.service.model.VagalumeHotspot;
-import com.example.lyrio.model.Hotspot;
+import com.example.lyrio.modules.noticiasHotspot.model.Hotspot;
 import com.example.lyrio.interfaces.HotspotListener;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 import retrofit2.Call;

@@ -1,6 +1,5 @@
 package com.example.lyrio.service;
 
-import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.service.api.ArtistaApi;
 import com.example.lyrio.service.api.MusicaApi;
 import com.example.lyrio.service.api.VagalumeBuscaApi;

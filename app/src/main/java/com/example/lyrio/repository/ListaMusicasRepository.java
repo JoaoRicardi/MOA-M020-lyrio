@@ -2,11 +2,12 @@ package com.example.lyrio.repository;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.room.Room;
 
 import com.example.lyrio.database.LyrioDatabase;
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.service.RetrofitService;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
 
@@ -21,6 +22,9 @@ import io.reactivex.Observable;
 
 public class ListaMusicasRepository {
 
+    private LyrioDatabase db;
+
+    private static final String TAG = "VAGALUME";
     private RetrofitService retrofitService = new RetrofitService();
 
     private static final String API_KEY = UUID.randomUUID()+"";
@@ -32,30 +36,22 @@ public class ListaMusicasRepository {
     //Escolher observable do reactiveX
     //Entre Flowable e Observable, Flowable entrega mais parâmetros
     public Flowable<Musica> getMusicaPorId (Context context, String idDaMusica){
-        LyrioDatabase db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+        db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
         return db.musicasFavoritasDao()
                 .getMusicaPorId(idDaMusica);
     }
 
     public Flowable<List<Musica>> getAllMusicas (Context context){
-        LyrioDatabase db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
-
+        db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+        Log.i(TAG, " Tentativa de atualizar lista de músicas no repository");
         return db.musicasFavoritasDao()
                 .getMusicasFavoritas();
     }
 
-
-    public Completable favoritarArtista(ApiArtista apiArt, Context context){
-        LyrioDatabase db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
-
-        // transformar de void para completable
-        return Completable.fromAction(() -> db.artistasFavoritosDao()
-                .inserir(apiArt));
-    }
-
     public Completable favoritarMusica(Musica musica, Context context){
-        LyrioDatabase db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+        db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+        Log.i(TAG, " Música "+musica.getId()+" - tentativa de favoritar no repository");
 
         // transformar de void para completable
         return Completable.fromAction(() -> db.musicasFavoritasDao()
@@ -63,7 +59,7 @@ public class ListaMusicasRepository {
     }
 
     public Completable removerMusica(Musica musica, Context context){
-        LyrioDatabase db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+        db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
 
         // transformar de void para completable
         return Completable.fromAction(() -> db.musicasFavoritasDao()
@@ -72,7 +68,8 @@ public class ListaMusicasRepository {
 
 
     public Completable removerMusicaPorId(String musicaId, Application context) {
-        LyrioDatabase db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+        db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+        Log.i(TAG, " Música "+musicaId+" - tentativa de remoção no repository");
 
         // transformar de void para completable
         return Completable.fromAction(() -> db.musicasFavoritasDao()
@@ -80,6 +77,7 @@ public class ListaMusicasRepository {
     }
 
     public Observable<Musica> getMusicaPorIdApi(String musicaId){
+        Log.i(TAG, " Buscando no Vagalume a música com id: "+musicaId);
         return retrofitService.getMusicasApi()
                 .getMusicasById(vagaKey, musicaId)
                 .map(vagalumeBusca -> {
@@ -93,7 +91,27 @@ public class ListaMusicasRepository {
                     apiArtista.setUrl(vagalumeBusca.getArt().getUrl()+"images/profile.jpg");
                     musica.setArtista(apiArtista);
                     musica.setText(vagalumeBusca.getMus().get(0).getText());
+                    musica.setTranslate(vagalumeBusca.getMus().get(0).getTranslate());
 
+                    return musica;
+                });
+    }
+
+    public Observable<Musica> getMusicaPorIdApiV2(String musicaId, String increaseNum){
+        Log.i(TAG, " Buscando no Vagalume a música com id: "+musicaId);
+        return retrofitService.getMusicasApi()
+                .getMusicasById(increaseNum+curTime.toString().replace(" ",""), musicaId)
+                .map(vagalumeBusca -> {
+                    Musica musica = new Musica();
+
+                    musica.setName(vagalumeBusca.getMus().get(0).getName());
+                    musica.setId(vagalumeBusca.getMus().get(0).getId());
+
+                    ApiArtista apiArtista = new ApiArtista();
+                    apiArtista.setName(vagalumeBusca.getArt().getName());
+                    apiArtista.setUrl(vagalumeBusca.getArt().getUrl()+"images/profile.jpg");
+                    musica.setArtista(apiArtista);
+                    musica.setText(vagalumeBusca.getMus().get(0).getText());
                     musica.setTranslate(vagalumeBusca.getMus().get(0).getTranslate());
 
                     return musica;

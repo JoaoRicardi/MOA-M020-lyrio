@@ -8,15 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.lyrio.model.Hotspot;
+import com.example.lyrio.modules.noticiasHotspot.model.Hotspot;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.HotspotListener;
-import com.example.lyrio.util.Constantes;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

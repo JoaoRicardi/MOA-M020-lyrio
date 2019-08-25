@@ -5,13 +5,14 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
 @Entity
 public class ApiArtista implements Serializable{
+
     @PrimaryKey(autoGenerate = true)
     private int pk;
 
@@ -39,6 +40,7 @@ public class ApiArtista implements Serializable{
     @Ignore
     private String pic_medium;
 
+    @SerializedName("qtdMusicas")
     @Ignore
     private int qtdMusicas;
 
@@ -50,12 +52,15 @@ public class ApiArtista implements Serializable{
     @Ignore
     private AllLyrics lyrics;
 
+    @SerializedName("musicasSalvas")
     @Ignore
     private List<Musica> musicasSalvas;
 
-    @ColumnInfo(name = "is_favorito")
+    @SerializedName("favoritarArtista")
+    @Ignore
     private boolean favoritarArtista = false;
 
+    @SerializedName("apiArtistaList")
     @Ignore
     private List<ApiArtista> apiArtistaList;
 

@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.lyrio.R;
-import com.example.lyrio.adapters.ViewPagerAdapter;
+import com.example.lyrio.adapters.MainActivityViewPagerAdapter;
 import com.example.lyrio.modules.buscar.view.FragmentBuscar;
 import com.example.lyrio.modules.home.view.FragmentHome;
 import com.example.lyrio.modules.noticiasHotspot.view.FragmentNoticias;
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tablayout_id);
         viewPager = findViewById(R.id.viewpager_id);
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        MainActivityViewPagerAdapter adapter = new MainActivityViewPagerAdapter(getSupportFragmentManager());
         adapter.AddFragment(new FragmentHome(), "Home");
         adapter.AddFragment(new FragmentNoticias(), "Notícias");
         adapter.AddFragment(new FragmentBuscar(), "Buscar");
@@ -40,10 +40,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             numeroDoFragment = null;
         }
-
         changeView(numeroDoFragment);
-
-
     }
 
     public void changeView(Integer pageNum) {

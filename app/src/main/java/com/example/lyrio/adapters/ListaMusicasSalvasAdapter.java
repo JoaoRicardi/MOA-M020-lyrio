@@ -5,14 +5,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lyrio.modules.Artista.model.ApiArtista;
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 

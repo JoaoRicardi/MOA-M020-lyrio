@@ -22,10 +22,24 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/titulo_sua_biblioteca_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Minha Biblioteca"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/noticias_top_div"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                />
+
+            <TextView
                 android:id="@+id/usuario_name_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginEnd="8dp"
                 android:text="Nome do Usuário"
                 android:textSize="14dp"
@@ -34,7 +48,16 @@
                 app:layout_constraintEnd_toStartOf="@+id/home_user_icon_image_button"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
+            <TextView
+                android:id="@+id/sair_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/usuario_name_id"
+                app:layout_constraintEnd_toEndOf="@id/usuario_name_id"
+                />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/home_user_icon_image_button"
@@ -44,7 +67,7 @@
                 android:layout_marginEnd="8dp"
                 android:background="@color/branco"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_account_circle_black_24dp"
+                android:src="@drawable/placeholder_logo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,20 +81,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/home_user_icon_image_button" />
 
-            <TextView
-                android:id="@+id/titulo_sua_biblioteca_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="Minha Biblioteca"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/noticias_top_div"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-
-                />
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/home_swipe"
                 android:layout_width="match_parent"
@@ -84,17 +93,14 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:background="#E3F2FD"
-                android:scrollbars="none"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/noticias_top_div">
+                android:scrollbars="none">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/musica_salva_home_card_view"
@@ -226,85 +232,12 @@
 
                     </androidx.cardview.widget.CardView>
 
-                    <!--<androidx.cardview.widget.CardView-->
-                        <!--android:id="@+id/noticia_salva_home_card_view"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginStart="8dp"-->
-                        <!--android:layout_marginTop="8dp"-->
-                        <!--android:layout_marginEnd="8dp"-->
-                        <!--android:layout_marginBottom="16dp"-->
-                        <!--app:cardCornerRadius="6dp"-->
-                        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                        <!--app:layout_constraintEnd_toEndOf="parent"-->
-                        <!--app:layout_constraintStart_toStartOf="parent"-->
-                        <!--app:layout_constraintTop_toBottomOf="@+id/artistas_salvos_home_card_view">-->
-
-                        <!--<androidx.constraintlayout.widget.ConstraintLayout-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content">-->
-
-                            <!--<TextView-->
-                                <!--android:id="@+id/suas_noticias_salva_text_view"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:layout_marginStart="16dp"-->
-                                <!--android:layout_marginTop="8dp"-->
-                                <!--android:text="Minhas Noticias"-->
-                                <!--android:textSize="14sp"-->
-                                <!--android:textStyle="bold"-->
-                                <!--app:layout_constraintStart_toStartOf="parent"-->
-                                <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-                            <!--<TextView-->
-                                <!--android:id="@+id/ver_mais_noticias_salvas_text_view"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:layout_marginTop="8dp"-->
-                                <!--android:layout_marginEnd="16dp"-->
-                                <!--android:text="Ver mais"-->
-                                <!--android:textStyle="bold"-->
-                                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                                <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-                            <!--<View-->
-                                <!--android:id="@+id/noticia_salva_divider"-->
-                                <!--android:layout_width="0dp"-->
-                                <!--android:layout_height="0.5dp"-->
-                                <!--android:layout_marginStart="16dp"-->
-                                <!--android:layout_marginTop="8dp"-->
-                                <!--android:layout_marginEnd="16dp"-->
-                                <!--android:background="@color/cinza"-->
-                                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                                <!--app:layout_constraintStart_toStartOf="parent"-->
-                                <!--app:layout_constraintTop_toBottomOf="@+id/suas_noticias_salva_text_view" />-->
-
-                            <!--<androidx.recyclerview.widget.RecyclerView-->
-                                <!--android:id="@+id/noticias_salvas_recycler_view"-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                                <!--app:layout_constraintStart_toStartOf="parent"-->
-                                <!--app:layout_constraintTop_toTopOf="@+id/noticia_salva_divider" />-->
-                        <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
-
-                    <!--</androidx.cardview.widget.CardView>-->
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
             </ScrollView>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <TextView
-                android:id="@+id/sair_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:text="Logout"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/home_swipe"
-                app:layout_constraintEnd_toStartOf="@id/home_user_icon_image_button"
-                />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

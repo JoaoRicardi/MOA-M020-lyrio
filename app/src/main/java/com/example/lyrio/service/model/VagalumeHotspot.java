@@ -1,6 +1,6 @@
 package com.example.lyrio.service.model;
 
-import com.example.lyrio.model.Hotspot;
+import com.example.lyrio.modules.noticiasHotspot.model.Hotspot;
 
 import java.util.ArrayList;
 

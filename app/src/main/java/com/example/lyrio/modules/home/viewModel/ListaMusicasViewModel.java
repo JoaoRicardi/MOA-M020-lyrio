@@ -6,7 +6,7 @@
 //import androidx.lifecycle.AndroidViewModel;
 //import androidx.lifecycle.MutableLiveData;
 //
-//import com.example.lyrio.database.models.Musica;
+//import com.example.lyrio.modules.musica.model.Musica;
 //import com.example.lyrio.repository.ListaMusicasRepository;
 //
 //import java.util.List;
@@ -79,9 +79,9 @@
 //                        .subscribe(() -> atualizarLista())
 //        );
 //    }
-//    public void removerMusicaPorId(String musicaId){
+//    public void removerMusica(String musicaId){
 //        disposable.add(
-//                listaMusicasRepository.removerMusicaPorId(musicaId, getApplication())
+//                listaMusicasRepository.removerMusica(musicaId, getApplication())
 //                        .subscribeOn(Schedulers.newThread())
 //                        .observeOn(AndroidSchedulers.mainThread())
 //                        .subscribe(() -> atualizarLista())

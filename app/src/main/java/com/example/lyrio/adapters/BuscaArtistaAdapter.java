@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lyrio.R;
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.interfaces.ApiBuscaListener;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.service.model.ApiItem;

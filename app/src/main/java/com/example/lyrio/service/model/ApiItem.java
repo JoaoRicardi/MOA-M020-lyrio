@@ -1,6 +1,6 @@
 package com.example.lyrio.service.model;
 
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 
 import java.util.List;
 

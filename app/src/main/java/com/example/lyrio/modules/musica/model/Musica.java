@@ -1,4 +1,4 @@
-package com.example.lyrio.database.models;
+package com.example.lyrio.modules.musica.model;
 
 
 import androidx.room.ColumnInfo;
@@ -61,21 +61,12 @@ public class Musica implements Serializable {
     private String emailUsuario;
 
     @SerializedName("favoritarMusica")
-    @ColumnInfo(name = "is_favorita")
+    @Ignore
     private boolean favoritarMusica = false;
 
     @SerializedName("musicasList")
     @Ignore
     private List<Musica> musicasList;
-
-    public Musica() {
-    }
-
-    public Musica(String id, String desc, String url) {
-        this.id = id;
-        this.desc = desc;
-        this.url = url;
-    }
 
     public int getPk() {
         return pk;

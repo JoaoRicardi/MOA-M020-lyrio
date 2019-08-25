@@ -1,14 +1,13 @@
 package com.example.lyrio.modules.buscar.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.lyrio.database.models.Musica;
-import com.example.lyrio.model.BuscaLayout;
+import com.example.lyrio.modules.musica.model.Musica;
+import com.example.lyrio.modules.buscar.model.BuscaLayout;
 import com.example.lyrio.repository.ArtistaRepository;
 import com.example.lyrio.repository.BuscaRepository;
 import com.example.lyrio.repository.ListaMusicasRepository;

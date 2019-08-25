@@ -1,9 +1,7 @@
 package com.example.lyrio.service.api;
 
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.service.model.VagalumeBusca;
-
-import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

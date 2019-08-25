@@ -21,19 +21,16 @@
                 android:id="@+id/linear_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
                 android:orientation="horizontal"
-                android:padding="8dp"
+                android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/letras_artist_pic"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_gravity="center"
                     android:src="@drawable/placeholder">
 
@@ -41,10 +38,11 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|left"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="4dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:id="@+id/letras_nome_musica_text_view"
@@ -101,7 +99,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:background="@color/cinza"
                 app:layout_constraintEnd_toEndOf="parent"

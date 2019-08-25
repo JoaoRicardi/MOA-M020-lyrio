@@ -3,6 +3,7 @@ package com.example.lyrio.modules.buscar.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.BuscaMusicasAdapter;
 import com.example.lyrio.adapters.BuscaArtistaAdapter;
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.interfaces.ApiBuscaListener;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
 import com.example.lyrio.modules.buscar.viewmodel.BuscarViewModel;
@@ -173,6 +174,7 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
     @Override
     public void onResume() {
         super.onResume();
+//        Log.i(TAG, " ONRESUME - FragmentBuscar Chamando atualização de listas");
         buscarViewModel.atualizarTodosOsFavoritos();
     }
 
@@ -190,7 +192,9 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
                         apiArtista.setFavoritarArtista(true);
                     }
                 }
-            }catch(Exception e){}
+            }catch(Exception e){
+                Log.e(TAG, " Não foi possível enviar bundle para a Pagina de Artistas com a opção FAVORITO");
+            }
 
             Intent intent = new Intent(getContext(), PaginaArtistaActivity.class);
             Bundle bundle = new Bundle();
@@ -206,17 +210,19 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
 
             try{
                 for(int y=0; y<listaMusicasFavoritas.size(); y++){
-                    if(listaMusicasFavoritas.get(y).getUrl().equals(apiItem.getUrl().replace("/",""))) {
+                    if(listaMusicasFavoritas.get(y).getId().equals(apiItem.getId())) {
                         tempMusic.setFavoritarMusica(true);
                     }
                 }
-            }catch(Exception e){}
+            }catch(Exception e){
+                Log.e(TAG, " Não foi possível enviar bundle para a Pagina de Letras com a opção FAVORITO");
+//                Log.e(TAG, " Tamanho da lista de favoritos: "+listaMusicasFavoritas.size());
+            }
 
             Intent intent = new Intent(getContext(), TelaLetrasActivity.class);
             Bundle bundle = new Bundle();
 
-            bundle.putSerializable("MUSICA_ID", tempMusic.getId());
-            bundle.putBoolean("MUSICA_FAVORITA", tempMusic.isFavoritarMusica());
+            bundle.putSerializable("MUSICA", tempMusic);
             intent.putExtras(bundle);
 
             startActivity(intent);

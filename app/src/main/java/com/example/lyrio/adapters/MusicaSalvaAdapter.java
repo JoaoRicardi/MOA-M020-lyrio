@@ -2,16 +2,17 @@ package com.example.lyrio.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.MusicaSalvaListener;
-import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -61,14 +62,12 @@ public class MusicaSalvaAdapter extends RecyclerView.Adapter<MusicaSalvaAdapter.
         return num;
     }
 
-//    public void adicionarMusica(Musica musicaSalva){
-//        listaMusicaSalva.add(musicaSalva);
-//        notifyDataSetChanged();
-//    }
-
-    public void atualizarListaMusicas(List<Musica> listaDeMusicas) {
+    public void atualizarListaDeMusicas(List<Musica> listaDeMusicas) {
+//        Log.i("VAGALUME", " - Lista de musicas da home ANTES com "+listaMusicaSalva.size()+" itens");
         removerTudo();
         listaMusicaSalva.addAll(listaDeMusicas);
+//        Log.i("VAGALUME", " - Atualizando lista de músicas do recycler na home");
+//        Log.i("VAGALUME", " - Lista de musicas da home DEPOIS com "+listaMusicaSalva.size()+" itens");
         notifyDataSetChanged();
     }
 

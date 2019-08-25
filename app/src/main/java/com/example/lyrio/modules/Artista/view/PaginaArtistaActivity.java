@@ -15,11 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lyrio.R;
 import com.example.lyrio.modules.Artista.viewmodel.ArtistasViewModel;
-import com.example.lyrio.modules.home.viewModel.HomeViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.adapters.ListaMusicasSalvasAdapter;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
 import com.example.lyrio.util.Constantes;
 import com.squareup.picasso.Picasso;

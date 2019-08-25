@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.database.LyrioDatabase;
-import com.example.lyrio.database.models.Musica;
+import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
 
 import java.util.List;
