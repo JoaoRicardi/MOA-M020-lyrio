@@ -29,10 +29,6 @@ public class VerMaisMusicasAdapter extends RecyclerView.Adapter<VerMaisMusicasAd
         this.musicaListener = musicaListener;
     }
 
-    public void atualizarLista(List<Musica> listaMusica){
-        this.listaMusica = listaMusica;
-        notifyDataSetChanged();
-    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,11 +41,33 @@ public class VerMaisMusicasAdapter extends RecyclerView.Adapter<VerMaisMusicasAd
         Musica musicaSalva = listaMusica.get(position);
         holder.setupListaMusica(musicaSalva);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                musicaListener.abrirLetrasMusica(musicaSalva);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return listaMusica.size();
+    }
+
+    public void atualizarLista(List<Musica> listaMusica){
+        removerTudo();
+        this.listaMusica.addAll(listaMusica);
+        notifyDataSetChanged();
+    }
+    public void removerTudo(){
+        while(listaMusica.size()>0){
+            listaMusica.remove(0);
+        }
+        notifyDataSetChanged();
+    }
+    public void removerMusica(Musica musicaSalva){
+        listaMusica.remove(musicaSalva);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -76,15 +76,26 @@ public class ListaMusicaSalvaActivity
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        listaMusicaViewModel.atualizarListaMusicaGeral();
+    }
+
+    @Override
     public void abrirLetrasMusica(Musica musicaSalva) {
         Musica musica = new Musica();
-        musica.setUrl(musicaSalva.getUrl());
+        musica.setId(musicaSalva.getId());
         musica.setFavoritarMusica(true);
 
         Intent intent = new Intent(this, TelaLetrasActivity.class);
         Bundle bundle = new Bundle();
 
-        bundle.putSerializable("ARTISTA", musica);
+        bundle.putSerializable("MUSICA", musica);
         intent.putExtras(bundle);
 
         startActivity(intent);
@@ -99,6 +110,7 @@ public class ListaMusicaSalvaActivity
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         listaMusicaViewModel.removerMusica(musicaSalva);
+                        musicaSalvaAdapter.removerMusica(musicaSalva);
                     }
                 })
                 .setNegativeButton("NÃO", null);

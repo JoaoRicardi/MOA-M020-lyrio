@@ -38,6 +38,10 @@ public class ListaMusicaFavoritaViewModel extends AndroidViewModel {
         super(application);
     }
 
+    public void atualizarListaMusicaGeral(){
+        gerarListaMusicasFavoritas();
+    }
+
     public void atualizarListaDeMusicaFavoritos() {
         disposable.add(
                 musicasRepository.getAllMusicas(getApplication())
@@ -75,16 +79,16 @@ public class ListaMusicaFavoritaViewModel extends AndroidViewModel {
                 musicasRepository.favoritarMusica(musica, getApplication())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(() -> gerarListaMusicasFavoritas())
+                        .subscribe(() -> atualizarListaDeMusicaFavoritos())
         );
     }
 
     public void removerMusica(Musica musica) {
         disposable.add(
-                musicasRepository.removerMusica(musica, getApplication())
+                musicasRepository.removerMusicaPorId(musica.getId(), getApplication())
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(() -> gerarListaMusicasFavoritas())
+                        .subscribe(() -> atualizarListaDeMusicaFavoritos())
         );
     }
 }
