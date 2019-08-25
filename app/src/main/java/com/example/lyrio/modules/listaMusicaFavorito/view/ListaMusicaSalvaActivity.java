@@ -48,7 +48,7 @@ public class ListaMusicaSalvaActivity
         listaMusicaViewModel.getListaMusicaApi()
                 .observe(this, listamusica->{
                     listaMusicaSalva = listamusica;
-                    musicaSalvaAdapter.atualizarVerMaisMusicas(listaMusicaSalva);
+                    musicaSalvaAdapter.atualizarLista(listaMusicaSalva);
                 });
 
         RecyclerView recyclerView = findViewById(R.id.minhas_musicas_salvas_recycler_view_id);
@@ -99,7 +99,6 @@ public class ListaMusicaSalvaActivity
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         listaMusicaViewModel.removerMusica(musicaSalva);
-                        musicaSalvaAdapter.removerMusicaSalva(musicaSalva);
                     }
                 })
                 .setNegativeButton("NÃO", null);

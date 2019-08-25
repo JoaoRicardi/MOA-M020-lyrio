@@ -17,10 +17,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/ver_mais_imagem_artista_image_view"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ver_mais_musica_imagem_artista_image_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,12 +31,12 @@
         android:id="@+id/nome_musica_ver_mais_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:text="nome musica"
         android:textStyle="bold"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ver_mais_imagem_artista_image_view"
+        app:layout_constraintStart_toEndOf="@+id/ver_mais_musica_imagem_artista_image_view"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ToggleButton
