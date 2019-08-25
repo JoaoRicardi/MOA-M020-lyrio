@@ -236,10 +236,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                     musicaSalvaAdapter.atualizarListaDeMusicas(listaMusicas);
                 });
 
-        homeViewModel.getListaMusicasFavoritas()
-                .observe(this, listaMusicas->{
-                    homeViewModel.atualizarListaMusica();
-                });
+//        homeViewModel.getListaMusicasFavoritas()
+//                .observe(this, listaMusicas->{
+//                    homeViewModel.atualizarListaMusica();
+//                });
 
         homeViewModel.getListaArtistaLiveData()
                 .observe(this, listaArtistas->{

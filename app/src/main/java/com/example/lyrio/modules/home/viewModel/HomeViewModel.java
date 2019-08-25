@@ -42,7 +42,7 @@ public class HomeViewModel extends AndroidViewModel {
 
     public void atualizarTodosOsFavoritos(){
 //        Log.i("VAGALUME", " Pedindo para entrar no método de atualizar listas na viewmodel");
-        getFavoritasDoBanco();
+//        getFavoritasDoBanco();
         atualizarListaMusica();
         atualizarListaArtistas();
     }
@@ -68,16 +68,16 @@ public class HomeViewModel extends AndroidViewModel {
         );
     }
 
-    public void getFavoritasDoBanco(){
-        disposable.add(
-                listaMusicasRepository.getAllMusicas(getApplication())
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(listaFavMus -> {
-                            listaMusicasFavoritas.setValue(listaFavMus);
-                        }, throwable -> throwable.printStackTrace())
-        );
-    }
+//    public void getFavoritasDoBanco(){
+//        disposable.add(
+//                listaMusicasRepository.getAllMusicas(getApplication())
+//                        .subscribeOn(Schedulers.newThread())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(listaFavMus -> {
+//                            listaMusicasFavoritas.setValue(listaFavMus);
+//                        }, throwable -> throwable.printStackTrace())
+//        );
+//    }
 
     public void atualizarListaArtistas() {
         disposable.add(

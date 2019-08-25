@@ -3,6 +3,7 @@ package com.example.lyrio.modules.Artista.view;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     private RecyclerView recyclerView;
     private TextView userFriendlyText;
 
+    private List<Musica> listaDeMusicasFavoritasDoBanco;
     private TextView buttonTextTopLyrics;
     private TextView buttonTextAllLyrics;
     private List<Musica> listaTopLyrics;
@@ -81,11 +83,17 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         }
 
         artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
+        listaDeMusicasFavoritasDoBanco = new ArrayList<>();
+        artistasViewModel.getMusicasFavoritasDoBanco();
         artistasViewModel.getArtistaPorUrl(artistaBundle.getUrl().split("/")[1]);
 
         listaTopLyrics = new ArrayList<>();
         listaLyrics = new ArrayList<>();
 
+        artistasViewModel.getListaDeMusicasFavoritasDoBanco()
+                .observe(this, listaMusicas->{
+                    listaDeMusicasFavoritasDoBanco = listaMusicas;
+                });
 
         listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(listaTopLyrics, this, artistaApi);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -191,22 +199,30 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        artistasViewModel.getMusicasFavoritasDoBanco();
+    }
+
+    @Override
     public void onListaMusicasSalvasClicado(Musica musicaSalva) {
 
         Musica tempMusic = new Musica();
         tempMusic.setId(musicaSalva.getId());
+        tempMusic.setFavoritarMusica(false);
 
-//        for(int y=0; y<listaMusicasFavoritas.size(); y++){
-//            if(listaMusicasFavoritas.get(y).getUrl().equals(musicaSalva.getUrl().replace("/",""))) {
-//                tempMusic.setFavoritarMusica(true);
-//            }
-//        }
+        for(int y=0; y<listaDeMusicasFavoritasDoBanco.size(); y++){
+            Log.i("VAGALUME", " Procurando no banco: "+listaDeMusicasFavoritasDoBanco.get(y).getId()+"\nE comparando com o id Original: "+musicaSalva.getId());
+            if(listaDeMusicasFavoritasDoBanco.get(y).getId().equals(musicaSalva.getId())){
+                tempMusic.setFavoritarMusica(true);
+            }
+        }
+
 
         Intent intent = new Intent(this, TelaLetrasActivity.class);
         Bundle bundle = new Bundle();
 
-        bundle.putSerializable("MUSICA_ID", tempMusic.getId());
-        bundle.putBoolean("MUSICA_FAVORITA", tempMusic.isFavoritarMusica());
+        bundle.putSerializable("MUSICA", tempMusic);
         intent.putExtras(bundle);
 
         startActivity(intent);
