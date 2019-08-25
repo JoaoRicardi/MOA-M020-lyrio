@@ -2,9 +2,9 @@ package com.example.lyrio.modules.musica.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -14,17 +14,11 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.lyrio.R;
 import com.example.lyrio.modules.musica.viewmodel.LetrasViewModel;
-import com.example.lyrio.service.api.VagalumeBuscaApi;
 import com.example.lyrio.database.models.Musica;
 import com.example.lyrio.util.Constantes;
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TelaLetrasActivity extends AppCompatActivity {
 
@@ -37,6 +31,7 @@ public class TelaLetrasActivity extends AppCompatActivity {
     private boolean hasTranslation;
     private boolean curTranslation;
     private Button traduzirButton;
+    private ImageView shareMusica;
 
     private String letraOriginal;
     private String letraTraduzida;
@@ -61,6 +56,8 @@ public class TelaLetrasActivity extends AppCompatActivity {
         letraDaMusica = findViewById(R.id.letras_letra_musica_text_view);
         imagemArtista = findViewById(R.id.letras_artist_pic);
         favourite_button = findViewById(R.id.letras_favorito_button);
+        shareMusica = findViewById(R.id.share_musica_button);
+
 
         traduzirButton.setVisibility(View.GONE);
         letrasViewModel.getMusicaPorId(musicaSalvaId);
@@ -125,7 +122,28 @@ public class TelaLetrasActivity extends AppCompatActivity {
                 }
             }
         });
+        shareMusica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                letrasViewModel.getMusicaLiveData()
+                        .observe(TelaLetrasActivity.this, musica -> {
+                            compartilharMusica(musica);
+                        });
+            }
+        });
 
+    }
+
+    private void compartilharMusica(Musica musica) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+
+        intent.setType("text/plain");
+
+        intent.putExtra(Intent.EXTRA_SUBJECT, musica.getName());
+
+        intent.putExtra(Intent.EXTRA_TEXT, "***" + musica.getName() +"***" + "\n"+musica.getText());
+
+        startActivity(Intent.createChooser(intent,  "Compartilhar"));
     }
 
 }

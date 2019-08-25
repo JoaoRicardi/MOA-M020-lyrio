@@ -67,6 +67,10 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                 <ToggleButton
                     android:id="@+id/letras_favorito_button"
                     android:layout_width="32dp"
@@ -78,6 +82,16 @@
                     android:textOn=""
                     tools:layout_editor_absoluteX="347dp"
                     tools:layout_editor_absoluteY="16dp" />
+
+                <ImageView
+                    android:id="@+id/share_musica_button"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:srcCompat="?attr/actionModeShareDrawable"
+                    app:tint="@color/azulBotoes" />
+                </LinearLayout>
 
             </LinearLayout>
 
