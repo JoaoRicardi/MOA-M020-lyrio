@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lyrio.R;
 import com.example.lyrio.modules.Artista.viewmodel.ArtistasViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
-import com.example.lyrio.adapters.ListaMusicasSalvasAdapter;
+import com.example.lyrio.adapters.ArtistaListaMusicasRecyclerAdapter;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
@@ -32,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PaginaArtistaActivity extends AppCompatActivity implements ListaMusicasSalvasListener{
 
     //    private ImageView artistaBg;
-    private ListaMusicasSalvasAdapter listaMusicasSalvasAdapter;
+    private ArtistaListaMusicasRecyclerAdapter artistaListaMusicasRecyclerAdapter;
     private CircleImageView imagemArtistaImageView;
     private TextView nomeArtistaTextView;
     private ToggleButton seguirButton;
@@ -42,15 +42,26 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     private TextView userFriendlyText;
 
     private List<Musica> listaDeMusicasFavoritasDoBanco;
+    private List<Musica> listaDeMusicasFavoritasDoArtista;
+    private List<ApiArtista> listaDeArtistasFavoritasDoBanco;
     private TextView buttonTextTopLyrics;
     private TextView buttonTextAllLyrics;
+    private TextView buttonTextFavLyrics;
     private List<Musica> listaTopLyrics;
     private List<Musica> listaLyrics;
     private String imgUrlBase = "https://www.vagalume.com";
     private ApiArtista artistaBundle;
     private ApiArtista artistaApi;
     private ArtistasViewModel artistasViewModel;
-    private boolean isTopLyrSelected = true;
+    private boolean isFavoritado;
+
+    private String txtFriendlyTop = "OPS!\n\nEste artista ainda\nnão tem Top Músicas\n\n:(";
+    private String txtFriendlyFavs = "OPS!\n\nVocê ainda não favoritou\nmúsicas deste artista\n\n:(";
+
+    //Botões fake
+    private boolean txtButtonTopSongs;
+    private boolean txtButtonAllSongs;
+    private boolean txtButtonFavSongs;
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
     private static final String TAG = "VAGALUME";
@@ -67,6 +78,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         seguirButton = findViewById(R.id.letras_favorito_button);
         buttonTextTopLyrics = findViewById(R.id.artista_txt_button_top_lyrics);
         buttonTextAllLyrics = findViewById(R.id.artista_txt_button_all_lyrics);
+        buttonTextFavLyrics = findViewById(R.id.artista_txt_button_fav_lyrics);
 
         recyclerView = findViewById(R.id.pagina_artista_lista_musicas_recycler_view);
         userFriendlyText = findViewById(R.id.txt_friendly_top_musicas);
@@ -85,7 +97,10 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
         listaDeMusicasFavoritasDoBanco = new ArrayList<>();
         artistasViewModel.getMusicasFavoritasDoBanco();
+        artistasViewModel.atualizarListadeArtistas();
         artistasViewModel.getArtistaPorUrl(artistaBundle.getUrl().split("/")[1]);
+        artistasViewModel.getMusicasFavoritasDoArtista(artistaBundle.getUrl());
+
 
         listaTopLyrics = new ArrayList<>();
         listaLyrics = new ArrayList<>();
@@ -95,14 +110,38 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                     listaDeMusicasFavoritasDoBanco = listaMusicas;
                 });
 
-        listaMusicasSalvasAdapter = new ListaMusicasSalvasAdapter(listaTopLyrics, this, artistaApi);
+        artistasViewModel.getListaDeMusicasFavoritasDoArtista()
+                .observe(this, listMusArt->{
+                    listaDeMusicasFavoritasDoArtista = listMusArt;
+                    if(txtButtonFavSongs){
+                        swichListas("FAV");
+                        artistaListaMusicasRecyclerAdapter.atualizarLista(listaDeMusicasFavoritasDoArtista, artistaApi);
+                    }
+                });
+
+
+        artistasViewModel.getIsFavorito()
+                .observe(this, isFav->{
+                    isFavoritado = isFav;
+                    if(isFavoritado){
+                        seguirButton.setChecked(true);
+                    }else{
+                        seguirButton.setChecked(false);
+                    }
+                });
+
+        artistaListaMusicasRecyclerAdapter = new ArtistaListaMusicasRecyclerAdapter(listaTopLyrics, this, artistaApi);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setAdapter(listaMusicasSalvasAdapter);
+        recyclerView.setAdapter(artistaListaMusicasRecyclerAdapter);
         recyclerView.setLayoutManager(layoutManager);
 
         artistasViewModel.getArtistaLiveData()
                 .observe(this, apiArtista -> {
                     artistaApi = apiArtista;
+                    if(artistaApi.isFavoritarArtista()){
+                        seguirButton.setChecked(true);
+                    }
+
                     nomeArtistaTextView.setText(artistaApi.getDesc());
                     Picasso.get()
                             .load(imgUrlBase+artistaApi.getPic_small())
@@ -114,27 +153,39 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                     listaLyrics = artistaApi.getLyrics().getItem();
 
                     if(listaTopLyrics.size()==0 || listaTopLyrics==null){
-                        isTopLyrSelected = false;
-                        listaMusicasSalvasAdapter.atualizarLista(listaLyrics, artistaApi);
-                        switchTxtButton(buttonTextTopLyrics);
-                        switchTxtButton(buttonTextAllLyrics);
+                        swichListas("ALL");
+                        artistaListaMusicasRecyclerAdapter.atualizarLista(listaLyrics, artistaApi);
                     }else{
-                        isTopLyrSelected = true;
-                        listaMusicasSalvasAdapter.atualizarLista(listaTopLyrics, artistaApi);
+                        swichListas("TOP");
+                        artistaListaMusicasRecyclerAdapter.atualizarLista(listaTopLyrics, artistaApi);
                     }
                 });
+
 
         buttonTextAllLyrics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                swichListas();
+                if(!txtButtonAllSongs){
+                    swichListas("ALL");
+                }
             }
         });
 
         buttonTextTopLyrics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                swichListas();
+                if(!txtButtonTopSongs) {
+                    swichListas("TOP");
+                }
+            }
+        });
+
+        buttonTextFavLyrics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!txtButtonFavSongs){
+                    swichListas("FAV");
+                }
             }
         });
 
@@ -164,44 +215,64 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         });
     }
 
-    private void swichListas(){
-        isTopLyrSelected = !isTopLyrSelected;
-
-        if(isTopLyrSelected){
-            listaMusicasSalvasAdapter.atualizarLista(listaTopLyrics, artistaApi);
-            switchTxtButton(buttonTextTopLyrics);
-            switchTxtButton(buttonTextAllLyrics);
-            if (listaTopLyrics.size() > 0) {
+    private void swichListas(String whatList){
+        switch (whatList){
+            case "TOP":
+                txtButtonTopSongs = true;
+                txtButtonAllSongs = false;
+                txtButtonFavSongs = false;
+                buttonTextTopLyrics.setTextAppearance(R.style.toggleTextSelected);
+                buttonTextAllLyrics.setTextAppearance(R.style.toggleTextOff);
+                buttonTextFavLyrics.setTextAppearance(R.style.toggleTextOff);
+                artistaListaMusicasRecyclerAdapter.atualizarLista(listaTopLyrics, artistaApi);
+                if (listaTopLyrics.size() > 0) {
+                    userFriendlyText.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }else{
+                    userFriendlyText.setText(txtFriendlyTop);
+                    userFriendlyText.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+                break;
+            case "ALL":
+                txtButtonTopSongs = false;
+                txtButtonAllSongs = true;
+                txtButtonFavSongs = false;
+                buttonTextTopLyrics.setTextAppearance(R.style.toggleTextOff);
+                buttonTextAllLyrics.setTextAppearance(R.style.toggleTextSelected);
+                buttonTextFavLyrics.setTextAppearance(R.style.toggleTextOff);
+                artistaListaMusicasRecyclerAdapter.atualizarLista(listaLyrics, artistaApi);
                 userFriendlyText.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-            }else{
-                userFriendlyText.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.GONE);
-            }
-        }else{
-            listaMusicasSalvasAdapter.atualizarLista(listaLyrics, artistaApi);
-            userFriendlyText.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-
-            switchTxtButton(buttonTextTopLyrics);
-            switchTxtButton(buttonTextAllLyrics);
+                break;
+            case "FAV":
+                txtButtonTopSongs = false;
+                txtButtonAllSongs = false;
+                txtButtonFavSongs = true;
+                buttonTextTopLyrics.setTextAppearance(R.style.toggleTextOff);
+                buttonTextAllLyrics.setTextAppearance(R.style.toggleTextOff);
+                buttonTextFavLyrics.setTextAppearance(R.style.toggleTextSelected);
+                artistaListaMusicasRecyclerAdapter.atualizarLista(listaDeMusicasFavoritasDoArtista, artistaApi);
+                if (listaDeMusicasFavoritasDoBanco != null && listaDeMusicasFavoritasDoBanco.size() > 0) {
+                    userFriendlyText.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }else{
+                    userFriendlyText.setText(txtFriendlyFavs);
+                    userFriendlyText.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+                break;
         }
     }
 
-    private void switchTxtButton(TextView textView){
-        if(textView.getTypeface() == Typeface.DEFAULT_BOLD){
-            textView.setTypeface(Typeface.DEFAULT);
-            textView.setTextColor(getResources().getColor(R.color.cinzaEscuro));
-        }else{
-            textView.setTypeface(Typeface.DEFAULT_BOLD);
-            textView.setTextColor(getResources().getColor(R.color.azulBotoes));
-        }
-    }
 
     @Override
     public void onResume() {
         super.onResume();
         artistasViewModel.getMusicasFavoritasDoBanco();
+        artistasViewModel.getMusicasFavoritasDoArtista(artistaBundle.getUrl());
+        artistasViewModel.atualizarListadeArtistas();
+//        artistasViewModel.atualizarTudo();
     }
 
     @Override

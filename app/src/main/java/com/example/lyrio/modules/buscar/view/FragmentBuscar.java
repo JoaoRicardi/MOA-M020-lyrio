@@ -233,8 +233,10 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
     public void favoritarApiItem(ApiItem apiItem) {
         if (!apiItem.getCampoBottom().equals("Ver músicas")) {
             Musica musicaSalva = new Musica();
+            musicaSalva.setDesc(apiItem.getCampoTop());
             musicaSalva.setId(apiItem.getId());
-//            Log.i("VAGALUME","ID DA MUSICA: "+musicaSalva.getId());
+            musicaSalva.setUrlArtista(apiItem.getUrl().split("/")[1]);
+//            Log.i("VAGALUME"," URLARTISTA: "+musicaSalva.getUrlArtista());
 
             buscarViewModel.favoritarMusica(musicaSalva);
         }else{

@@ -29,8 +29,8 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/letras_artist_pic"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_gravity="center"
                     android:src="@drawable/placeholder">
 
@@ -39,7 +39,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center|left"
+                    android:layout_gravity="center|left"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:padding="12dp">
@@ -61,7 +61,7 @@
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:text=""
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -105,28 +105,51 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linear_layout" />
 
-            <Button
-                android:id="@+id/button_traduzir_letra"
-                android:layout_width="100dp"
-                android:layout_height="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+            <LinearLayout
+                android:id="@+id/tela_letras_textos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/letras_div_top"
-                android:layout_marginTop="24dp"
-                android:textAllCaps="false"
-                android:textColor="@color/branco"
-                android:background="@color/azulBotoes"
-                android:text="Ver tradução"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/tela_letras_ver_original"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Original"
+                    android:padding="16dp"
+                    style="@style/toggleTextOff" />
+
+                <TextView
+                    android:id="@+id/tela_letras_ver_traducao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tradução"
+                    android:padding="16dp"
+                    style="@style/toggleTextOff"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/div_traducao"
+                android:layout_width="200dp"
+                android:layout_height="0.5dp"
+                android:background="@color/cinza"
+                app:layout_constraintTop_toBottomOf="@id/tela_letras_textos"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
             <ScrollView
                 android:id="@+id/letras_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/letras_div_top"
+                app:layout_constraintTop_toBottomOf="@id/tela_letras_textos"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:paddingBottom="16dp">
@@ -135,9 +158,11 @@
                     android:id="@+id/letras_letra_musica_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Carregando Letra..."
+                    android:text="\n\nCarregando Letra..."
                     android:textSize="16sp"
-                    android:textAlignment="center"/>
+                    android:paddingStart="8dp"
+                    android:paddingEnd="16dp"
+                    />
 
 
             </ScrollView>

@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.lyrio.R;
+import com.example.lyrio.modules.Artista.model.ApiArtista;
+import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
 import com.example.lyrio.modules.musica.viewmodel.LetrasViewModel;
 import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.util.Constantes;
@@ -38,9 +40,17 @@ public class TelaLetrasActivity extends AppCompatActivity {
     private boolean isFavourite;
     private Musica musicaBundle;
     private Musica musicaApi;
+    private String urlDoArtista;
 
     private String letraOriginal;
     private String letraTraduzida;
+
+    private View divTraducao;
+    private TextView buttonTextVerTradução;
+    private TextView buttonTextVerOriginal;
+    private boolean txtButtonTrad;
+    private boolean txtButtonOrig;
+
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
     private static final String TAG = "VAGALUME";
@@ -56,8 +66,44 @@ public class TelaLetrasActivity extends AppCompatActivity {
         imagemArtista = findViewById(R.id.letras_artist_pic);
         favourite_button = findViewById(R.id.letras_favorito_button);
         shareMusica = findViewById(R.id.share_musica_button);
-        traduzirButton = findViewById(R.id.button_traduzir_letra);
-        traduzirButton.setVisibility(View.GONE);
+//        traduzirButton = findViewById(R.id.button_traduzir_letra);
+        divTraducao = findViewById(R.id.div_traducao);
+        buttonTextVerOriginal = findViewById(R.id.tela_letras_ver_original);
+        buttonTextVerTradução = findViewById(R.id.tela_letras_ver_traducao);
+
+        buttonTextVerOriginal.setVisibility(View.GONE);
+        buttonTextVerTradução.setVisibility(View.GONE);
+        divTraducao.setVisibility(View.GONE);
+
+        buttonTextVerOriginal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(TelaLetrasActivity.this, "VER ORIGINAL", Toast.LENGTH_SHORT).show();
+                if(!txtButtonOrig){
+                    txtButtonOrig = true;
+                    txtButtonTrad = false;
+                    letraDaMusica.setText(letraOriginal);
+                    buttonTextVerOriginal.setTextAppearance(R.style.toggleTextSelected);
+                    buttonTextVerTradução.setTextAppearance(R.style.toggleTextOff);
+                }
+            }
+        });
+
+        buttonTextVerTradução.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(TelaLetrasActivity.this, "VER TRADUCAO", Toast.LENGTH_SHORT).show();
+                if(!txtButtonTrad){
+                    txtButtonOrig = false;
+                    txtButtonTrad = true;
+                    letraDaMusica.setText(letraTraduzida);
+                    buttonTextVerOriginal.setTextAppearance(R.style.toggleTextOff);
+                    buttonTextVerTradução.setTextAppearance(R.style.toggleTextSelected);
+                }
+            }
+        });
+
+
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -81,15 +127,22 @@ public class TelaLetrasActivity extends AppCompatActivity {
                 .observe(this, musica -> {
                     musicaApi = musica;
 
-                    letraOriginal = musicaApi.getText();
-
+                    musicaApi.setDesc(musica.getName());
+                    letraOriginal = "\n"+musicaApi.getText();
+                    urlDoArtista = "/"+musicaApi.getArtista().getUrl().split("/")[3]+"/";
+//                    Log.i(TAG, " GOT URL PARA ARTISTA => "+urlDoArtista.split("/")[3]);
 //                    Log.i(TAG, " CHECAR TRADUCAO:");
                     try{
                         hasTranslation = musicaApi.getTranslate().get(0).getText()!=null;
                         if(hasTranslation){
-                            traduzirButton.setVisibility(View.VISIBLE);
-                            letraTraduzida = "\n\n"+musicaApi.getTranslate().get(0).getText();
-                            letraOriginal = "\n\n"+letraOriginal;
+                            buttonTextVerOriginal.setVisibility(View.VISIBLE);
+                            buttonTextVerTradução.setVisibility(View.VISIBLE);
+                            divTraducao.setVisibility(View.VISIBLE);
+                            txtButtonTrad = false;
+                            txtButtonOrig = true;
+                            buttonTextVerOriginal.setTextAppearance(R.style.toggleTextSelected);
+
+                            letraTraduzida = "\n"+musicaApi.getTranslate().get(0).getText();
 //                            Log.i(TAG, " MÚSICA COM TRADUÇÃO");
                         }
                     }catch(Exception e){
@@ -106,24 +159,6 @@ public class TelaLetrasActivity extends AppCompatActivity {
                             .into(imagemArtista);
                 });
 
-
-
-        curTranslation = false;
-        traduzirButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                curTranslation = !curTranslation;
-                if(curTranslation){
-                    letraDaMusica.setText(letraTraduzida);
-                    traduzirButton.setText("Ver original");
-                }else{
-                    letraDaMusica.setText(letraOriginal);
-                    traduzirButton.setText("Ver tradução");
-                }
-            }
-        });
-
-
         favourite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +167,9 @@ public class TelaLetrasActivity extends AppCompatActivity {
 
                     Musica musica = new Musica();
                     musica.setId(musicaApi.getId());
+                    musica.setDesc(musicaApi.getDesc());
+                    musica.setUrlArtista(urlDoArtista.split("/")[1]);
+                    Log.i(TAG, musica.getUrlArtista());
 
                     letrasViewModel.favoritarMusica(musica);
                     letrasViewModel.atualizarListadeMusicas();
@@ -140,6 +178,7 @@ public class TelaLetrasActivity extends AppCompatActivity {
 
                     Musica delMusic = new Musica();
                     delMusic.setId(musicaApi.getId());
+
 
                     letrasViewModel.removerMusica(delMusic);
                     letrasViewModel.atualizarListadeMusicas();
@@ -156,6 +195,35 @@ public class TelaLetrasActivity extends AppCompatActivity {
                         });
             }
         });
+
+        nomeDoArtista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irParaPaginaDoArtista();
+            }
+        });
+        imagemArtista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                irParaPaginaDoArtista();
+            }
+        });
+
+    }
+
+    private void irParaPaginaDoArtista(){
+
+        ApiArtista apiArtista = new ApiArtista();
+        apiArtista.setUrl(urlDoArtista);
+//        apiArtista.setFavoritarArtista(true);
+
+        Intent intent = new Intent(this, PaginaArtistaActivity.class);
+        Bundle bundle = new Bundle();
+
+        bundle.putSerializable("ARTISTA", apiArtista);
+        intent.putExtras(bundle);
+
+        startActivity(intent);
 
     }
 

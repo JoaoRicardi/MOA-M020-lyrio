@@ -68,7 +68,6 @@ public class ArtistaRepository {
 
     public Observable<ApiArtista> getArtistaPorUrl(String urlArtista){
         String buscaCorreta = urlArtista+"/index.js";
-//        Log.i(TAG, " ArtistaRepository BUSCA CORRETA: "+buscaCorreta);
         return retrofitService.getArtistaApi()
                 .getArtistaApi(buscaCorreta)
                 .map(vagalumeBusca -> vagalumeBusca.getArtist());

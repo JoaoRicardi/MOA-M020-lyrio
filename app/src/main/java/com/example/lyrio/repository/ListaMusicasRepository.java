@@ -44,14 +44,21 @@ public class ListaMusicasRepository {
 
     public Flowable<List<Musica>> getAllMusicas (Context context){
         db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
-        Log.i(TAG, " Tentativa de atualizar lista de músicas no repository");
+//        Log.i(TAG, " Tentativa de atualizar lista de músicas no repository");
         return db.musicasFavoritasDao()
                 .getMusicasFavoritas();
     }
 
+    public Flowable<List<Musica>> getAllMusicasDoArtista (Context context, String urlDoArtista){
+        db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
+        Log.i(TAG, " Buscando musicas do artista: "+urlDoArtista);
+        return db.musicasFavoritasDao()
+                .getAllMusicasDoArtista(urlDoArtista);
+    }
+
     public Completable favoritarMusica(Musica musica, Context context){
         db = Room.databaseBuilder(context, LyrioDatabase.class, LyrioDatabase.DATABASE_NAME).build();
-        Log.i(TAG, " Música "+musica.getId()+" - tentativa de favoritar no repository");
+//        Log.i(TAG, " Música "+musica.getId()+" - tentativa de favoritar no repository");
 
         // transformar de void para completable
         return Completable.fromAction(() -> db.musicasFavoritasDao()
@@ -88,6 +95,7 @@ public class ListaMusicasRepository {
 
                     ApiArtista apiArtista = new ApiArtista();
                     apiArtista.setName(vagalumeBusca.getArt().getName());
+//                    Log.i(TAG, "API GOT URL -> "+vagalumeBusca.getArt().getUrl());
                     apiArtista.setUrl(vagalumeBusca.getArt().getUrl()+"images/profile.jpg");
                     musica.setArtista(apiArtista);
                     musica.setText(vagalumeBusca.getMus().get(0).getText());

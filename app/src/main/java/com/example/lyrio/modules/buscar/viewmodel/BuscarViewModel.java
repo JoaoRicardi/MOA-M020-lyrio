@@ -37,6 +37,7 @@ public class BuscarViewModel extends AndroidViewModel {
     private MutableLiveData<List<ApiItem>> listaMusicasBuscadaLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ApiItem>> listaArtistaBuscadaLiveData = new MutableLiveData<>();
     private MutableLiveData<BuscaLayout> buscaLayoutLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isFavorito = new MutableLiveData<>();
 
     //Repositories
     private ListaMusicasRepository listaMusicasRepository = new ListaMusicasRepository();
@@ -187,6 +188,16 @@ public class BuscarViewModel extends AndroidViewModel {
     }
 
     //Getter e setters
+
+
+    public MutableLiveData<Boolean> getIsFavorito() {
+        return isFavorito;
+    }
+
+    public void setIsFavorito(MutableLiveData<Boolean> isFavorito) {
+        this.isFavorito = isFavorito;
+    }
+
     public BuscarViewModel(@NonNull Application application) {
         super(application);
     }

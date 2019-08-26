@@ -1,6 +1,7 @@
 package com.example.lyrio.modules.Artista.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -19,8 +20,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ArtistasViewModel extends AndroidViewModel {
     private MutableLiveData<List<Musica>> listaDeMusicasFavoritasDoBanco = new MutableLiveData<>();
+    private MutableLiveData<List<Musica>> listaDeMusicasFavoritasDoArtista = new MutableLiveData<>();
     private MutableLiveData<List<ApiArtista>> listaArtistaLiveData = new MutableLiveData<>();
     private MutableLiveData<ApiArtista> artistaLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isFavorito = new MutableLiveData<>();
 
     private CompositeDisposable disposable = new CompositeDisposable();
     private ArtistaRepository apiArtistaRepository = new ArtistaRepository();
@@ -28,6 +31,22 @@ public class ArtistasViewModel extends AndroidViewModel {
 
     public ArtistasViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    public MutableLiveData<List<Musica>> getListaDeMusicasFavoritasDoArtista() {
+        return listaDeMusicasFavoritasDoArtista;
+    }
+
+    public void setListaDeMusicasFavoritasDoArtista(MutableLiveData<List<Musica>> listaDeMusicasFavoritasDoArtista) {
+        this.listaDeMusicasFavoritasDoArtista = listaDeMusicasFavoritasDoArtista;
+    }
+
+    public MutableLiveData<Boolean> getIsFavorito() {
+        return isFavorito;
+    }
+
+    public void setIsFavorito(MutableLiveData<Boolean> isFavorito) {
+        this.isFavorito = isFavorito;
     }
 
     public MutableLiveData<List<ApiArtista>> getListaArtistaLiveData(){
@@ -46,6 +65,12 @@ public class ArtistasViewModel extends AndroidViewModel {
         this.listaDeMusicasFavoritasDoBanco = listaDeMusicasFavoritasDoBanco;
     }
 
+//    public void atualizarTudo(){
+//        getMusicasFavoritasDoBanco();
+//        getMusicasFavoritasDoArtista(artistaLiveData.getValue().getUrl());
+//        atualizarListadeArtistas();
+//    }
+
     public void getMusicasFavoritasDoBanco(){
         disposable.add(
                 listaDeMusicasRepository.getAllMusicas(getApplication())
@@ -56,6 +81,18 @@ public class ArtistasViewModel extends AndroidViewModel {
                         }, throwable -> throwable.printStackTrace())
         );
     }
+
+    public void getMusicasFavoritasDoArtista(String urlDoArtista){
+        disposable.add(
+                listaDeMusicasRepository.getAllMusicasDoArtista(getApplication(), urlDoArtista.split("/")[1])
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(listaMusArt -> {
+                            listaDeMusicasFavoritasDoArtista.setValue(listaMusArt);
+                        }, throwable -> throwable.printStackTrace())
+        );
+    }
+
     public void atualizarListadeArtistas(){
         disposable.add(
                 apiArtistaRepository.getAllArtistas(getApplication())
@@ -63,6 +100,12 @@ public class ArtistasViewModel extends AndroidViewModel {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(listaArtistas -> {
                             listaArtistaLiveData.setValue(listaArtistas);
+//                            for(int i=0; i<listaArtistas.size(); i++){
+//                                if(listaArtistas.get(i).getUrl().equals(artistaLiveData.getValue().getUrl())){
+//                                    isFavorito.setValue(true);
+//                                    break;
+//                                }
+//                            }
                         }, throwable -> throwable.printStackTrace())
         );
     }
@@ -72,8 +115,19 @@ public class ArtistasViewModel extends AndroidViewModel {
                 apiArtistaRepository.getArtistaPorUrl(urlArtista)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(apiArt -> artistaLiveData.setValue(apiArt),
-                                throwable -> throwable.printStackTrace())
+                        .subscribe(apiArt -> {
+                            ApiArtista theArt = new ApiArtista();
+                            theArt = apiArt;
+//                            Log.i("VAGALUME", " valor na lista: "+listaArtistaLiveData.getValue().get(0).getUrl()+
+//                                    ", valor api: "+apiArt.getUrl());
+                            for(int i=0; i<listaArtistaLiveData.getValue().size(); i++){
+                                if(listaArtistaLiveData.getValue().get(i).getUrl().equals(theArt.getUrl().split("/")[1])){
+                                    theArt.setFavoritarArtista(true);
+                                }
+                            }
+                            artistaLiveData.setValue(theArt);
+                        },
+                        throwable -> throwable.printStackTrace())
         );
     }
 

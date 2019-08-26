@@ -21,6 +21,9 @@ public interface MusicasFavoritasDao {
     @Query("select * from musica")
     Flowable<List<Musica>> getMusicasFavoritas();
 
+    @Query("select * from musica where url_artista = :urlDoArtista")
+    Flowable<List<Musica>> getAllMusicasDoArtista(String urlDoArtista);
+
     @Insert
     void inserir(Musica musica);
 
