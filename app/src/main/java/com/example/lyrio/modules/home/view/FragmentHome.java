@@ -61,7 +61,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         PopupMenu.OnMenuItemClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     public FragmentHome() {}
-    private LyrioDatabase db;
     private String gotMail;
     private TextView userName;
     private TextView userStatus;

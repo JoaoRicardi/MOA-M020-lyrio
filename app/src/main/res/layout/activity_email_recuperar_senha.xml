@@ -63,6 +63,7 @@
                     android:backgroundTint="@color/verde"
                     android:onClick="reset"
                     android:text="ENVIAR"
+                    android:textColor="@color/branco"
                     android:layout_marginTop="48dp"/>
 
             </LinearLayout>
@@ -75,6 +76,7 @@
                 android:text="Ir para Login"
                 android:backgroundTint="@color/verde"
                 android:layout_gravity="bottom|right"
+                android:textColor="@color/branco"
                 android:layout_margin="20dp"
                 />
 
