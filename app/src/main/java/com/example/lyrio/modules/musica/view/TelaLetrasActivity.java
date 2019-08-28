@@ -78,7 +78,7 @@ public class TelaLetrasActivity extends AppCompatActivity {
         buttonTextVerOriginal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TelaLetrasActivity.this, "VER ORIGINAL", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(TelaLetrasActivity.this, "VER ORIGINAL", Toast.LENGTH_SHORT).show();
                 if(!txtButtonOrig){
                     txtButtonOrig = true;
                     txtButtonTrad = false;
@@ -92,7 +92,7 @@ public class TelaLetrasActivity extends AppCompatActivity {
         buttonTextVerTradução.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TelaLetrasActivity.this, "VER TRADUCAO", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(TelaLetrasActivity.this, "VER TRADUCAO", Toast.LENGTH_SHORT).show();
                 if(!txtButtonTrad){
                     txtButtonOrig = false;
                     txtButtonTrad = true;

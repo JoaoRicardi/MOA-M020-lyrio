@@ -1,10 +1,10 @@
 package com.example.lyrio.modules.Artista.view;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -54,6 +54,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     private ApiArtista artistaApi;
     private ArtistasViewModel artistasViewModel;
     private boolean isFavoritado;
+    private SearchView searchView;
 
     private String txtFriendlyTop = "OPS!\n\nEste artista ainda\nnão tem Top Músicas\n\n:(";
     private String txtFriendlyFavs = "OPS!\n\nVocê ainda não favoritou\nmúsicas deste artista\n\n:(";
@@ -79,6 +80,8 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         buttonTextTopLyrics = findViewById(R.id.artista_txt_button_top_lyrics);
         buttonTextAllLyrics = findViewById(R.id.artista_txt_button_all_lyrics);
         buttonTextFavLyrics = findViewById(R.id.artista_txt_button_fav_lyrics);
+//        searchView = findViewById(R.id.search_view);
+//        searchView.setInputType(InputType.TYPE_CLASS_TEXT);
 
         recyclerView = findViewById(R.id.pagina_artista_lista_musicas_recycler_view);
         userFriendlyText = findViewById(R.id.txt_friendly_top_musicas);
