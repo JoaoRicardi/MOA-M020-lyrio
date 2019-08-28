@@ -138,13 +138,16 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
+
                 if(status.isSuccess()){
                                 goLogInScreen();
                                 irParaHome();
 
-                    Toast.makeText(getContext(),"logOut efetuado", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(getContext(),"logOut não foi possível", Toast.LENGTH_LONG).show();
+
+                }else if
+                    (status.isCanceled()){
+
+                    Toast.makeText(getContext(), "Você não está logado!", Toast.LENGTH_LONG).show();
                 }
             }
         });
