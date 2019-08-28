@@ -13,5 +13,17 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="toggleTextSelected">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/azulBotoes</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="toggleTextOff">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/cinzaEscuro</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 </resources>
 

@@ -14,13 +14,13 @@ import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
 
 import java.util.List;
 
-public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicasSalvasAdapter.ViewHolder> {
+public class ArtistaListaMusicasRecyclerAdapter extends RecyclerView.Adapter<ArtistaListaMusicasRecyclerAdapter.ViewHolder> {
 
     private List<Musica> listaMusicaSalva;
     private ListaMusicasSalvasListener listaMusicasSalvasListener;
     private ApiArtista apiArtista;
 
-    public ListaMusicasSalvasAdapter(List<Musica> listaMusicaSalva, ListaMusicasSalvasListener listaMusicasSalvasListener, ApiArtista apiArtista) {
+    public ArtistaListaMusicasRecyclerAdapter(List<Musica> listaMusicaSalva, ListaMusicasSalvasListener listaMusicasSalvasListener, ApiArtista apiArtista) {
         this.listaMusicaSalva = listaMusicaSalva;
         this.listaMusicasSalvasListener = listaMusicasSalvasListener;
         this.apiArtista = apiArtista;
@@ -89,7 +89,8 @@ public class ListaMusicasSalvasAdapter extends RecyclerView.Adapter<ListaMusicas
 //            imagemMusicaSalvaImageView.setVisibility(View.GONE);
 //            String imgUrl = "https://www.vagalume.com"+apiArtista.getUrl()+"images/profile.jpg";
 //            buscaCampoBottom.setText(apiArtista.getDesc());
-            numeroMusicaSalvaTextView.setText(num+".");
+            int fixedNum = num+1;
+            numeroMusicaSalvaTextView.setText(fixedNum+".");
             nomeMusicaSalvaTextView.setText(musicaSalva.getDesc());
 //            Picasso.get().load(imgUrl).into(imagemMusicaSalvaImageView);
         }

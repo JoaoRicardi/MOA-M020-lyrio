@@ -30,7 +30,7 @@ public class ListaArtistasSalvosActivity
         extends AppCompatActivity
         implements ListaArtistasSalvosListener {
 
-//    private ImageButton backButton;
+    private ImageButton backButton;
     private ListaArtistaSalvoAdapter listaArtistaSalvoAdapter;
     private List<ApiArtista> listaArtistaSalvo;
     private ListaArtistasFavoritosViewModel listArtFavViewModel;

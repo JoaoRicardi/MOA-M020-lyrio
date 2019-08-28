@@ -180,6 +180,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //ir para Home  - por enquanto esta indo para registro ate criar a Tela
     private void irParaHome(){
         Intent intentHome = new Intent(this, MainActivity.class);
+        Bundle bundle = new Bundle();
+
+        bundle.putInt("NUMERO", 0);
+        intentHome.putExtras(bundle);
+
         startActivity(intentHome);
     }
     // ir para recuperar senha

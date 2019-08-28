@@ -30,8 +30,12 @@ public class Musica implements Serializable {
     private String name;
 
     @SerializedName("desc")
-    @Ignore
+    @ColumnInfo(name = "desc")
     private String desc;
+
+    @SerializedName("urlArtista")
+    @ColumnInfo(name = "url_artista")
+    private String urlArtista;
 
     @SerializedName("url")
     @Ignore
@@ -67,6 +71,14 @@ public class Musica implements Serializable {
     @SerializedName("musicasList")
     @Ignore
     private List<Musica> musicasList;
+
+    public String getUrlArtista() {
+        return urlArtista;
+    }
+
+    public void setUrlArtista(String urlArtista) {
+        this.urlArtista = urlArtista;
+    }
 
     public int getPk() {
         return pk;
