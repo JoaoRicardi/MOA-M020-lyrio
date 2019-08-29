@@ -11,6 +11,7 @@ import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.repository.ArtistaRepository;
 import com.example.lyrio.repository.ListaMusicasRepository;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class HomeViewModel extends AndroidViewModel {
+
+    // Puxar o id do usuario atualmente logado;
+//    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     private static final String TAG = "VAGALUME";
 
