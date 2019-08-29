@@ -1,11 +1,13 @@
 package com.example.lyrio.modules.listaMusicaFavorito.view;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -21,14 +23,16 @@ import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 
 import java.util.List;
 
-public class ListaMusicaSalvaActivity
-        extends AppCompatActivity
+public class ListaMusicaSalvaActivity extends AppCompatActivity
         implements VerMaisMusicaListener {
 
     private ImageButton voltarButton;
     private List<Musica> listaMusicaSalva;
     private VerMaisMusicasAdapter musicaSalvaAdapter;
     private ListaMusicaFavoritaViewModel listaMusicaViewModel;
+    private ProgressBar progressBar;
+
+
 
 
     @Override
@@ -41,10 +45,15 @@ public class ListaMusicaSalvaActivity
         listaMusicaViewModel.atualizarListaDeMusicaFavoritos();
         listaMusicaViewModel.gerarListaMusicasFavoritas();
 
+        progressBar =findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+
         listaMusicaViewModel.getListaMusicaApi()
                 .observe(this, listamusica->{
                     listaMusicaSalva = listamusica;
                     musicaSalvaAdapter.atualizarLista(listaMusicaSalva);
+                    progressBar.setVisibility(View.GONE);
                 });
 
         RecyclerView recyclerView = findViewById(R.id.minhas_musicas_salvas_recycler_view_id);
@@ -80,6 +89,7 @@ public class ListaMusicaSalvaActivity
     public void onResume() {
         super.onResume();
         listaMusicaViewModel.atualizarListaMusicaGeral();
+
     }
 
     @Override
@@ -113,4 +123,7 @@ public class ListaMusicaSalvaActivity
         alert.create();
         alert.show();
     }
+
+
+
 }

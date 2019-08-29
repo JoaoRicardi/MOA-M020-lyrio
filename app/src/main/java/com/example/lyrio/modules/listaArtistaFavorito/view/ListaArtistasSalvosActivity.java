@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -35,11 +36,15 @@ public class ListaArtistasSalvosActivity
     private ListaArtistaSalvoAdapter listaArtistaSalvoAdapter;
     private List<ApiArtista> listaArtistaSalvo;
     private ListaArtistasFavoritosViewModel listArtFavViewModel;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_artistas_salvos);
+
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
 
         listArtFavViewModel = ViewModelProviders.of(this).get(ListaArtistasFavoritosViewModel.class);
         listArtFavViewModel.atualizarListaArtistasFavoritos();
@@ -49,6 +54,7 @@ public class ListaArtistasSalvosActivity
                 .observe(this, listaArtistas->{
                     listaArtistaSalvo = listaArtistas;
                     listaArtistaSalvoAdapter.atualizarListaDeArtistas(listaArtistaSalvo);
+                    progressBar.setVisibility(View.GONE);
                 });
 
         listaArtistaSalvoAdapter = new ListaArtistaSalvoAdapter(this);

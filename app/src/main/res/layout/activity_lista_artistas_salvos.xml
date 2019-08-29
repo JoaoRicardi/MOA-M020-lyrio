@@ -26,22 +26,20 @@
                 android:layout_marginStart="16dp"
                 android:background="@color/branco"
                 android:tint="@color/azulClaro"
+                app:layout_constraintBottom_toTopOf="@id/lista_artistas_salvos_divider_id"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/lista_artistas_salvos_divider_id"
                 app:srcCompat="?attr/actionModeCloseDrawable" />
 
-            <View
-                android:id="@+id/lista_artistas_salvos_divider_id"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:background="@color/cinza"
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/titulo_artistas_salvos_text_view_id" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/titulo_artistas_salvos_text_view_id"
@@ -55,6 +53,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <View
+                android:id="@+id/lista_artistas_salvos_divider_id"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/cinza"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/titulo_artistas_salvos_text_view_id" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lista_artistas_salvos_recycler_view_id"
                 android:layout_width="0dp"
@@ -65,6 +75,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lista_artistas_salvos_divider_id" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>
