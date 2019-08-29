@@ -228,13 +228,21 @@ public class TelaLetrasActivity extends AppCompatActivity {
     }
 
     private void compartilharMusica(Musica musica) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
+        String chamadaLyrio = "Dá uma olhada na música que eu encontrei no Lyrio:\n\n";
 
+        //Definir se o compartilhamento sera feito com a letra traduzida ou original
+        String letra;
+        if(txtButtonOrig){
+            letra = letraOriginal;
+        }else{
+            letra = letraTraduzida;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
 
-        intent.putExtra(Intent.EXTRA_SUBJECT, musica.getName());
-
-        intent.putExtra(Intent.EXTRA_TEXT, "***" + musica.getName() +"***" + "\n"+musica.getText());
+        intent.putExtra(Intent.EXTRA_SUBJECT, musicaApi.getArtista().getName() +" - "+ musicaApi.getDesc());
+        intent.putExtra(Intent.EXTRA_TEXT, chamadaLyrio+"*** " + musicaApi.getArtista().getName() +" - "+ musicaApi.getDesc() +" ***" + "\n"+letra);
 
         startActivity(Intent.createChooser(intent,  "Compartilhar"));
     }
