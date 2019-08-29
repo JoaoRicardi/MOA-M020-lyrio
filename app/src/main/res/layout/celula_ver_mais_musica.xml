@@ -10,8 +10,11 @@
         android:id="@+id/nome_musica_ver_mais_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="1"
         android:layout_marginStart="16dp"
         android:text="nome musica"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textStyle="bold"
 
         app:layout_constraintBottom_toBottomOf="parent"
