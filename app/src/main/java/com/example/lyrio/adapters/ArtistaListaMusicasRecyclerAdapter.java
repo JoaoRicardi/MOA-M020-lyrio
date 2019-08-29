@@ -5,25 +5,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.TextView;
 
+import com.example.lyrio.interfaces.Filterable;
 import com.example.lyrio.modules.Artista.model.ApiArtista;
 import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.R;
 import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ArtistaListaMusicasRecyclerAdapter extends RecyclerView.Adapter<ArtistaListaMusicasRecyclerAdapter.ViewHolder> {
+public class ArtistaListaMusicasRecyclerAdapter extends RecyclerView.Adapter<ArtistaListaMusicasRecyclerAdapter.ViewHolder> implements Filterable {
 
-    private List<Musica> listaMusicaSalva;
+    private List<Musica> listaMusicaDisplay;
     private ListaMusicasSalvasListener listaMusicasSalvasListener;
     private ApiArtista apiArtista;
+    private List<Musica> filteredList;
 
-    public ArtistaListaMusicasRecyclerAdapter(List<Musica> listaMusicaSalva, ListaMusicasSalvasListener listaMusicasSalvasListener, ApiArtista apiArtista) {
-        this.listaMusicaSalva = listaMusicaSalva;
+    public ArtistaListaMusicasRecyclerAdapter(List<Musica> listaDeMusicas, ListaMusicasSalvasListener listaMusicasSalvasListener, ApiArtista apiArtista) {
+        this.listaMusicaDisplay = listaDeMusicas;
         this.listaMusicasSalvasListener = listaMusicasSalvasListener;
         this.apiArtista = apiArtista;
+        this.filteredList = new ArrayList<>(listaMusicaDisplay);
     }
 
     @NonNull
@@ -35,7 +40,7 @@ public class ArtistaListaMusicasRecyclerAdapter extends RecyclerView.Adapter<Art
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        final Musica musicaSalva = listaMusicaSalva.get(i);
+        final Musica musicaSalva = filteredList.get(i);
         viewHolder.setupListaMusicaSalva(musicaSalva, i);
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -49,26 +54,84 @@ public class ArtistaListaMusicasRecyclerAdapter extends RecyclerView.Adapter<Art
 
     @Override
     public int getItemCount() {
-        return listaMusicaSalva.size();
+        return filteredList.size();
     }
 
-    public void adicionarMusica(Musica musicaSalva){
-        listaMusicaSalva.add(musicaSalva);
+//    public void adicionarMusica(Musica musicaSalva){
+//        listaMusicaDisplay.add(musicaSalva);
+//        notifyDataSetChanged();
+//    }
+
+    public void restoreList(){
+        if(filteredList.size()>0){
+            while(filteredList.size()>0){
+                filteredList.remove(0);
+            }
+        }
+        filteredList.addAll(listaMusicaDisplay);
         notifyDataSetChanged();
     }
 
-    public void atualizarLista(List<Musica> listaDeMusicas, ApiArtista apiArt){
-        if(listaMusicaSalva.size()>0){
-            while(listaMusicaSalva.size()>0){
-                listaMusicaSalva.remove(0);
+    public void atualizarLista(List<Musica> listaDeMusicas, ApiArtista apiArt, boolean notify){
+        if(listaMusicaDisplay.size()>0){
+            while(listaMusicaDisplay.size()>0){
+                listaMusicaDisplay.remove(0);
             }
         }
 
-        listaMusicaSalva.addAll(listaDeMusicas);
+        if(filteredList.size()>0){
+            while(filteredList.size()>0){
+                filteredList.remove(0);
+            }
+        }
+
+        listaMusicaDisplay.addAll(listaDeMusicas);
+        filteredList.addAll(listaMusicaDisplay);
         apiArtista = apiArt;
 
-        notifyDataSetChanged();
+        if(notify){
+            notifyDataSetChanged();
+        }
     }
+
+    @Override
+    public Filter getFilter() {
+        return musicasFilter;
+    }
+
+    private Filter musicasFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Musica> toFilter = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+
+                toFilter.addAll(listaMusicaDisplay);
+
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Musica musica : listaMusicaDisplay) {
+                    if (musica.getDesc().toLowerCase().contains(filterPattern)) {
+                        toFilter.add(musica);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = toFilter;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredList.clear();
+            filteredList.addAll((List) results.values);
+            listaMusicasSalvasListener.updateItemCount();
+            notifyDataSetChanged();
+        }
+    };
 
 
     class ViewHolder extends RecyclerView.ViewHolder{

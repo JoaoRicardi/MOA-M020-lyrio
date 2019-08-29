@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,13 +57,13 @@ public class ListaArtistasSalvosActivity
         recyclerView1.setAdapter(listaArtistaSalvoAdapter);
         recyclerView1.setLayoutManager(listaArtistaManager);
 
-//        backButton = findViewById(R.id.back_button_meus_artistas_image_button);
-//        backButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                voltarParaHome();
-//            }
-//        });
+        backButton = findViewById(R.id.back_button_meus_artistas_image_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                voltarParaHome();
+            }
+        });
     }
 
     @Override
@@ -112,12 +113,12 @@ public class ListaArtistasSalvosActivity
     }
 
 
-//    private void voltarParaHome() {
-//        if (getFragmentManager().getBackStackEntryCount() == 0) {
-//            this.finish();
-//        } else {
-//            getFragmentManager().popBackStack();
-//        }
-//    }
+    private void voltarParaHome() {
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            this.finish();
+        } else {
+            getFragmentManager().popBackStack();
+        }
+    }
 
 }

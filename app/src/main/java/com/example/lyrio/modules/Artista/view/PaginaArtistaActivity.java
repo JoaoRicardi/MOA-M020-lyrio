@@ -2,8 +2,10 @@ package com.example.lyrio.modules.Artista.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.Filter;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lyrio.R;
+import com.example.lyrio.interfaces.Filterable;
 import com.example.lyrio.modules.Artista.viewmodel.ArtistasViewModel;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 import com.example.lyrio.adapters.ArtistaListaMusicasRecyclerAdapter;
@@ -29,21 +32,19 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PaginaArtistaActivity extends AppCompatActivity implements ListaMusicasSalvasListener{
+public class PaginaArtistaActivity extends AppCompatActivity implements ListaMusicasSalvasListener {
 
-    //    private ImageView artistaBg;
     private ArtistaListaMusicasRecyclerAdapter artistaListaMusicasRecyclerAdapter;
     private CircleImageView imagemArtistaImageView;
     private TextView nomeArtistaTextView;
     private ToggleButton seguirButton;
-    private List<Musica> listaDeMusicasSalvas;
+    private ToggleButton showSearchview;
 
     private RecyclerView recyclerView;
     private TextView userFriendlyText;
 
     private List<Musica> listaDeMusicasFavoritasDoBanco;
     private List<Musica> listaDeMusicasFavoritasDoArtista;
-    private List<ApiArtista> listaDeArtistasFavoritasDoBanco;
     private TextView buttonTextTopLyrics;
     private TextView buttonTextAllLyrics;
     private TextView buttonTextFavLyrics;
@@ -54,10 +55,13 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
     private ApiArtista artistaApi;
     private ArtistasViewModel artistasViewModel;
     private boolean isFavoritado;
+    private boolean isSearchviewVisible;
     private SearchView searchView;
 
     private String txtFriendlyTop = "OPS!\n\nEste artista ainda\nnão tem Top Músicas\n\n:(";
-    private String txtFriendlyFavs = "OPS!\n\nVocê ainda não favoritou\nmúsicas deste artista\n\n:(";
+    private String txtFriendlyFavs = "OMG!\n\nVocê ainda não favoritou\nmúsicas deste artista\n\n:(";
+    private String txtFriendlyNoResults = "EITA!\n\nNenhuma música com\nesse nome...\n\n:(";
+    private String currentSearch;
 
     //Botões fake
     private boolean txtButtonTopSongs;
@@ -73,22 +77,27 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         setContentView(R.layout.activity_pagina_artista_sem_album);
 
         //Definir as variaveis
-//        artistaBg = findViewById(R.id.artista_imagem_bg);
         nomeArtistaTextView = findViewById(R.id.artista_nome_artista_text_view);
         imagemArtistaImageView = findViewById(R.id.artista_profile_image_view);
         seguirButton = findViewById(R.id.letras_favorito_button);
         buttonTextTopLyrics = findViewById(R.id.artista_txt_button_top_lyrics);
         buttonTextAllLyrics = findViewById(R.id.artista_txt_button_all_lyrics);
         buttonTextFavLyrics = findViewById(R.id.artista_txt_button_fav_lyrics);
-//        searchView = findViewById(R.id.search_view);
-//        searchView.setInputType(InputType.TYPE_CLASS_TEXT);
-
+        showSearchview = findViewById(R.id.artista_toggle_button_filtrar);
         recyclerView = findViewById(R.id.pagina_artista_lista_musicas_recycler_view);
         userFriendlyText = findViewById(R.id.txt_friendly_top_musicas);
 
-        userFriendlyText.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
+        searchView = findViewById(R.id.artista_search_view);
+        searchView.setVisibility(View.GONE);
+        isSearchviewVisible = false;
+        currentSearch = "";
 
+
+        //Inicializar listas
+        listaTopLyrics = new ArrayList<>();
+        listaLyrics = new ArrayList<>();
+
+        //Definir artista com base nas infos que vieram do bundle
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         artistaBundle = (ApiArtista) bundle.getSerializable("ARTISTA");
@@ -97,6 +106,12 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
             seguirButton.setChecked(true);
         }
 
+        //Definir visibilidade do texto user friendly, quando não tem musicas no recycler
+        userFriendlyText.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+
+
+        //Inicializar ViewModel
         artistasViewModel = ViewModelProviders.of(this).get(ArtistasViewModel.class);
         listaDeMusicasFavoritasDoBanco = new ArrayList<>();
         artistasViewModel.getMusicasFavoritasDoBanco();
@@ -104,10 +119,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         artistasViewModel.getArtistaPorUrl(artistaBundle.getUrl().split("/")[1]);
         artistasViewModel.getMusicasFavoritasDoArtista(artistaBundle.getUrl());
 
-
-        listaTopLyrics = new ArrayList<>();
-        listaLyrics = new ArrayList<>();
-
+        //Puxar listas de musicas do banco
         artistasViewModel.getListaDeMusicasFavoritasDoBanco()
                 .observe(this, listaMusicas->{
                     listaDeMusicasFavoritasDoBanco = listaMusicas;
@@ -117,12 +129,13 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                 .observe(this, listMusArt->{
                     listaDeMusicasFavoritasDoArtista = listMusArt;
                     if(txtButtonFavSongs){
-                        swichListas("FAV");
-                        artistaListaMusicasRecyclerAdapter.atualizarLista(listaDeMusicasFavoritasDoArtista, artistaApi);
+                        swichListas("FAV", currentSearch, false);
+                        artistaListaMusicasRecyclerAdapter.atualizarLista(listaDeMusicasFavoritasDoArtista, artistaApi, true);
                     }
                 });
 
 
+        //Conferir no banco se o artista é favorito
         artistasViewModel.getIsFavorito()
                 .observe(this, isFav->{
                     isFavoritado = isFav;
@@ -133,10 +146,49 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                     }
                 });
 
+        //Configuração do recycler
         artistaListaMusicasRecyclerAdapter = new ArtistaListaMusicasRecyclerAdapter(listaTopLyrics, this, artistaApi);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setAdapter(artistaListaMusicasRecyclerAdapter);
         recyclerView.setLayoutManager(layoutManager);
+
+
+        //Toggle Button para alternar visibilidade do SearchView
+        showSearchview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isSearchviewVisible){
+                    currentSearch = "";
+                    searchView.setQuery(currentSearch, true);
+                    artistaListaMusicasRecyclerAdapter.getFilter().filter(currentSearch);
+                    artistaListaMusicasRecyclerAdapter.restoreList();
+                    searchView.setVisibility(View.GONE);
+                }else{
+                    searchView.setVisibility(View.VISIBLE);
+                }
+
+                friendlyIfEmpty();
+                isSearchviewVisible = !isSearchviewVisible;
+            }
+        });
+
+        //Configuração do SearchView
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                currentSearch = newText;
+                artistaListaMusicasRecyclerAdapter.getFilter().filter(currentSearch);
+
+//                friendlyIfEmpty();
+                return false;
+            }
+        });
+
 
         artistasViewModel.getArtistaLiveData()
                 .observe(this, apiArtista -> {
@@ -150,17 +202,17 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                             .load(imgUrlBase+artistaApi.getPic_small())
                             .placeholder(R.drawable.placeholder_logo)
                             .into(imagemArtistaImageView);
-//                    Picasso.get().load(imgUrlBase+artistaApi.getPic_medium()).into(artistaBg);
-//                    Log.i(TAG, " GOT TOPLYR 01 EM ARTISTA: "+artistaApi.getToplyrics().getItem().get(0).getDesc());
                     listaTopLyrics = artistaApi.getToplyrics().getItem();
                     listaLyrics = artistaApi.getLyrics().getItem();
 
                     if(listaTopLyrics.size()==0 || listaTopLyrics==null){
-                        swichListas("ALL");
-                        artistaListaMusicasRecyclerAdapter.atualizarLista(listaLyrics, artistaApi);
+                        swichListas("ALL", currentSearch, false);
+                        artistaListaMusicasRecyclerAdapter.atualizarLista(listaLyrics, artistaApi, true);
+//                        friendlyIfEmpty();
                     }else{
-                        swichListas("TOP");
-                        artistaListaMusicasRecyclerAdapter.atualizarLista(listaTopLyrics, artistaApi);
+                        swichListas("TOP", currentSearch, false);
+                        artistaListaMusicasRecyclerAdapter.atualizarLista(listaTopLyrics, artistaApi, true);
+//                        friendlyIfEmpty();
                     }
                 });
 
@@ -169,7 +221,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
             @Override
             public void onClick(View v) {
                 if(!txtButtonAllSongs){
-                    swichListas("ALL");
+                    swichListas("ALL", currentSearch, false);
                 }
             }
         });
@@ -178,7 +230,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
             @Override
             public void onClick(View v) {
                 if(!txtButtonTopSongs) {
-                    swichListas("TOP");
+                    swichListas("TOP", currentSearch, false);
                 }
             }
         });
@@ -187,11 +239,13 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
             @Override
             public void onClick(View v) {
                 if(!txtButtonFavSongs){
-                    swichListas("FAV");
+                    swichListas("FAV", currentSearch, false);
                 }
             }
         });
 
+
+        //Favoritar ou desfavoritar artista no banco
         seguirButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,7 +272,33 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         });
     }
 
-    private void swichListas(String whatList){
+    //Função que mostra o texto friendly se o recycler estiver vazio
+    private void friendlyIfEmpty(){
+//        Log.i(TAG, " Tamanho da lista: "+artistaListaMusicasRecyclerAdapter.getItemCount());
+        if(artistaListaMusicasRecyclerAdapter.getItemCount()>0){
+            userFriendlyText.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }else{
+            String defineMsg;
+            if(currentSearch.equals("")){
+                if(txtButtonTopSongs){
+                    defineMsg = txtFriendlyTop;
+                }else{
+                    defineMsg = txtFriendlyFavs;
+                }
+            }else{
+                defineMsg = txtFriendlyNoResults;
+            }
+
+            userFriendlyText.setText(defineMsg);
+            userFriendlyText.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+
+    }
+
+    //Função que alterna o conteúdo dos recyclers com base no botão escolhido
+    private void swichListas(String whatList, String curSearch, boolean notify){
         switch (whatList){
             case "TOP":
                 txtButtonTopSongs = true;
@@ -227,15 +307,9 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                 buttonTextTopLyrics.setTextAppearance(R.style.toggleTextSelected);
                 buttonTextAllLyrics.setTextAppearance(R.style.toggleTextOff);
                 buttonTextFavLyrics.setTextAppearance(R.style.toggleTextOff);
-                artistaListaMusicasRecyclerAdapter.atualizarLista(listaTopLyrics, artistaApi);
-                if (listaTopLyrics.size() > 0) {
-                    userFriendlyText.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }else{
-                    userFriendlyText.setText(txtFriendlyTop);
-                    userFriendlyText.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                }
+                artistaListaMusicasRecyclerAdapter.atualizarLista(listaTopLyrics, artistaApi, notify);
+                artistaListaMusicasRecyclerAdapter.getFilter().filter(curSearch);
+                friendlyIfEmpty();
                 break;
             case "ALL":
                 txtButtonTopSongs = false;
@@ -244,9 +318,9 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                 buttonTextTopLyrics.setTextAppearance(R.style.toggleTextOff);
                 buttonTextAllLyrics.setTextAppearance(R.style.toggleTextSelected);
                 buttonTextFavLyrics.setTextAppearance(R.style.toggleTextOff);
-                artistaListaMusicasRecyclerAdapter.atualizarLista(listaLyrics, artistaApi);
-                userFriendlyText.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
+                artistaListaMusicasRecyclerAdapter.atualizarLista(listaLyrics, artistaApi, notify);
+                artistaListaMusicasRecyclerAdapter.getFilter().filter(curSearch);
+                friendlyIfEmpty();
                 break;
             case "FAV":
                 txtButtonTopSongs = false;
@@ -255,15 +329,9 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                 buttonTextTopLyrics.setTextAppearance(R.style.toggleTextOff);
                 buttonTextAllLyrics.setTextAppearance(R.style.toggleTextOff);
                 buttonTextFavLyrics.setTextAppearance(R.style.toggleTextSelected);
-                artistaListaMusicasRecyclerAdapter.atualizarLista(listaDeMusicasFavoritasDoArtista, artistaApi);
-                if (listaDeMusicasFavoritasDoBanco != null && listaDeMusicasFavoritasDoBanco.size() > 0) {
-                    userFriendlyText.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }else{
-                    userFriendlyText.setText(txtFriendlyFavs);
-                    userFriendlyText.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                }
+                artistaListaMusicasRecyclerAdapter.atualizarLista(listaDeMusicasFavoritasDoArtista, artistaApi, notify);
+                artistaListaMusicasRecyclerAdapter.getFilter().filter(curSearch);
+                friendlyIfEmpty();
                 break;
         }
     }
@@ -297,8 +365,14 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         Bundle bundle = new Bundle();
 
         bundle.putSerializable("MUSICA", tempMusic);
+        bundle.putBoolean("VOLTAR_ARTISTA", true);
         intent.putExtras(bundle);
 
         startActivity(intent);
+    }
+
+    @Override
+    public void updateItemCount() {
+        friendlyIfEmpty();
     }
 }

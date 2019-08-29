@@ -50,6 +50,7 @@ public class TelaLetrasActivity extends AppCompatActivity {
     private TextView buttonTextVerOriginal;
     private boolean txtButtonTrad;
     private boolean txtButtonOrig;
+    private boolean voltarArtista;
 
 
     //Associar ao termo "VAGALUME" para filtrar no LOGCAT
@@ -104,10 +105,14 @@ public class TelaLetrasActivity extends AppCompatActivity {
         });
 
 
+        voltarArtista = false;
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         musicaBundle = (Musica) bundle.getSerializable("MUSICA");
+        try{
+            voltarArtista = bundle.getBoolean("VOLTAR_ARTISTA");
+        }catch(Exception e){}
 
         try{
             musicaBundle.isFavoritarMusica();
@@ -120,7 +125,7 @@ public class TelaLetrasActivity extends AppCompatActivity {
             favourite_button.setChecked(true);
         }
 
-
+        hasTranslation = false;
         letrasViewModel = ViewModelProviders.of(this).get(LetrasViewModel.class);
         letrasViewModel.getMusicaPorId(musicaBundle.getId());
         letrasViewModel.getMusicaLiveData()
@@ -199,16 +204,23 @@ public class TelaLetrasActivity extends AppCompatActivity {
         nomeDoArtista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                irParaPaginaDoArtista();
+                if(!voltarArtista){
+                    irParaPaginaDoArtista();
+                }else{
+                    voltarParaArtista();
+                }
             }
         });
         imagemArtista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                irParaPaginaDoArtista();
+                if(!voltarArtista){
+                    irParaPaginaDoArtista();
+                }else{
+                    voltarParaArtista();
+                }
             }
         });
-
     }
 
     private void irParaPaginaDoArtista(){
@@ -224,19 +236,37 @@ public class TelaLetrasActivity extends AppCompatActivity {
         intent.putExtras(bundle);
 
         startActivity(intent);
+        this.finish();
 
     }
 
     private void compartilharMusica(Musica musica) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
+        String chamadaLyrio = "Dá uma olhada na música que eu encontrei no Lyrio:\n\n";
 
+        //Definir se o compartilhamento sera feito com a letra traduzida ou original
+        String letra;
+        if(hasTranslation && txtButtonTrad){
+            letra = letraTraduzida;
+        }else{
+            letra = letraOriginal;
+        }
+
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
 
-        intent.putExtra(Intent.EXTRA_SUBJECT, musica.getName());
-
-        intent.putExtra(Intent.EXTRA_TEXT, "***" + musica.getName() +"***" + "\n"+musica.getText());
+        intent.putExtra(Intent.EXTRA_SUBJECT, musicaApi.getArtista().getName() +" - "+ musicaApi.getDesc());
+        intent.putExtra(Intent.EXTRA_TEXT, chamadaLyrio+"*** " + musicaApi.getArtista().getName() +" - "+ musicaApi.getDesc() +" ***" + "\n"+letra);
 
         startActivity(Intent.createChooser(intent,  "Compartilhar"));
+    }
+
+    public void voltarParaArtista(){
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            this.finish();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 
 }
