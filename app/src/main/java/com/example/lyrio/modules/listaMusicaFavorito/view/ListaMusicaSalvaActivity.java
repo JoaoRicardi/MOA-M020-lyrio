@@ -11,16 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.example.lyrio.R;
-import com.example.lyrio.adapters.MusicaSalvaAdapter;
 import com.example.lyrio.adapters.VerMaisMusicasAdapter;
-import com.example.lyrio.database.LyrioDatabase;
 import com.example.lyrio.interfaces.VerMaisMusicaListener;
 import com.example.lyrio.modules.listaMusicaFavorito.viewmodel.ListaMusicaFavoritaViewModel;
 import com.example.lyrio.modules.musica.model.Musica;
-import com.example.lyrio.interfaces.ListaMusicasSalvasListener;
 import com.example.lyrio.modules.musica.view.TelaLetrasActivity;
 
 import java.util.List;

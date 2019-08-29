@@ -159,7 +159,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
             public void onClick(View v) {
                 if(isSearchviewVisible){
                     currentSearch = "";
-//                    searchView.setQuery(currentSearch, true);
+                    searchView.setQuery(currentSearch, true);
                     artistaListaMusicasRecyclerAdapter.getFilter().filter(currentSearch);
                     artistaListaMusicasRecyclerAdapter.restoreList();
                     searchView.setVisibility(View.GONE);
@@ -274,7 +274,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 
     //Função que mostra o texto friendly se o recycler estiver vazio
     private void friendlyIfEmpty(){
-        Log.i(TAG, " Tamanho da lista: "+artistaListaMusicasRecyclerAdapter.getItemCount());
+//        Log.i(TAG, " Tamanho da lista: "+artistaListaMusicasRecyclerAdapter.getItemCount());
         if(artistaListaMusicasRecyclerAdapter.getItemCount()>0){
             userFriendlyText.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
@@ -365,6 +365,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         Bundle bundle = new Bundle();
 
         bundle.putSerializable("MUSICA", tempMusic);
+        bundle.putBoolean("VOLTAR_ARTISTA", true);
         intent.putExtras(bundle);
 
         startActivity(intent);
