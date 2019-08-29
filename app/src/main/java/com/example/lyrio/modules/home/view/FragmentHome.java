@@ -60,6 +60,10 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         MusicaSalvaListener,
         PopupMenu.OnMenuItemClickListener, GoogleApiClient.OnConnectionFailedListener {
 
+    //Funções de usuário
+    private String loggedUserId = null;
+    private boolean isUserLoggedIn = false;
+
     public FragmentHome() {}
     private String gotMail;
     private TextView userName;
@@ -115,10 +119,12 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
     // Login com Google
     private void handleSignInResult(GoogleSignInAccount account) {
         if (account != null){
+            isUserLoggedIn = true;
+            loggedUserId = account.getId();
+
             userName.setText(account.getDisplayName());
+            Glide.with(this).load(account.getPhotoUrl()).placeholder(R.drawable.placeholder_logo).into(imagemUsuario);
 
-
-            Glide.with(this).load(account.getPhotoUrl()).into(imagemUsuario);
 
         }else {
 //            goLogInScreen();
@@ -146,7 +152,6 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
 
                 }else if
                     (status.isCanceled()){
-
                     Toast.makeText(getContext(), "Você não está logado!", Toast.LENGTH_LONG).show();
                 }
             }
@@ -220,6 +225,7 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
         }
 
 
+        // ESTE MÉTODO NAO ESTA FUNCIONANDO ---
         // receber informações de um Usuario
         setupUser();
 
@@ -228,6 +234,11 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
                 .setDisplayName("Jane Q. User")
                 .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
                 .build();
+
+
+//        Log.i(TAG, "ID DO USUARIO LOGADO: "+loggedUserId);
+
+
 
 
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
@@ -313,6 +324,8 @@ public class FragmentHome extends Fragment implements ArtistaSalvoListener,
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getIdToken() instead.
             String uid = user.getUid();
+
+//            Log.i(TAG, " ID DO USUÁRIO LOGADO: "+name);
 
             userName.setText(name);
         }
