@@ -91,6 +91,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         searchView.setVisibility(View.GONE);
         isSearchviewVisible = false;
         currentSearch = "";
+        seguirButton.setVisibility(View.GONE);
 
 
         //Inicializar listas
@@ -102,9 +103,10 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         Bundle bundle = intent.getExtras();
         artistaBundle = (ApiArtista) bundle.getSerializable("ARTISTA");
 
-        if(artistaBundle.isFavoritarArtista()){
-            seguirButton.setChecked(true);
-        }
+//        if(artistaBundle.isFavoritarArtista()){
+//            seguirButton.setVisibility(View.VISIBLE);
+//            seguirButton.setChecked(true);
+//        }
 
         //Definir visibilidade do texto user friendly, quando não tem musicas no recycler
         userFriendlyText.setVisibility(View.GONE);
@@ -139,6 +141,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         artistasViewModel.getIsFavorito()
                 .observe(this, isFav->{
                     isFavoritado = isFav;
+                    seguirButton.setVisibility(View.VISIBLE);
                     if(isFavoritado){
                         seguirButton.setChecked(true);
                     }else{
@@ -183,7 +186,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
             public boolean onQueryTextChange(String newText) {
                 currentSearch = newText;
                 artistaListaMusicasRecyclerAdapter.getFilter().filter(currentSearch);
-
 //                friendlyIfEmpty();
                 return false;
             }
@@ -193,6 +195,10 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         artistasViewModel.getArtistaLiveData()
                 .observe(this, apiArtista -> {
                     artistaApi = apiArtista;
+
+                    //Mostrar botão de seguir apenas quando o artista for carregado
+                    seguirButton.setVisibility(View.VISIBLE);
+
                     if(artistaApi.isFavoritarArtista()){
                         seguirButton.setChecked(true);
                     }
