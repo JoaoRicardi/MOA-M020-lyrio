@@ -120,7 +120,7 @@ public class TelaLetrasActivity extends AppCompatActivity {
             favourite_button.setChecked(true);
         }
 
-
+        hasTranslation = false;
         letrasViewModel = ViewModelProviders.of(this).get(LetrasViewModel.class);
         letrasViewModel.getMusicaPorId(musicaBundle.getId());
         letrasViewModel.getMusicaLiveData()
@@ -232,11 +232,12 @@ public class TelaLetrasActivity extends AppCompatActivity {
 
         //Definir se o compartilhamento sera feito com a letra traduzida ou original
         String letra;
-        if(txtButtonOrig){
-            letra = letraOriginal;
-        }else{
+        if(hasTranslation && txtButtonTrad){
             letra = letraTraduzida;
+        }else{
+            letra = letraOriginal;
         }
+
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
