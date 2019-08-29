@@ -71,10 +71,13 @@ public class TelaLetrasActivity extends AppCompatActivity {
         divTraducao = findViewById(R.id.div_traducao);
         buttonTextVerOriginal = findViewById(R.id.tela_letras_ver_original);
         buttonTextVerTradução = findViewById(R.id.tela_letras_ver_traducao);
-
         buttonTextVerOriginal.setVisibility(View.GONE);
         buttonTextVerTradução.setVisibility(View.GONE);
         divTraducao.setVisibility(View.GONE);
+        favourite_button.setVisibility(View.GONE);
+        shareMusica.setVisibility(View.GONE);
+
+
 
         buttonTextVerOriginal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +135,10 @@ public class TelaLetrasActivity extends AppCompatActivity {
                 .observe(this, musica -> {
                     musicaApi = musica;
 
+                    //Habilita os botões Favorito e Compartilhar depois que a musica carregar
+                    favourite_button.setVisibility(View.VISIBLE);
+                    shareMusica.setVisibility(View.VISIBLE);
+
                     musicaApi.setDesc(musica.getName());
                     letraOriginal = "\n"+musicaApi.getText();
                     urlDoArtista = "/"+musicaApi.getArtista().getUrl().split("/")[3]+"/";
@@ -167,27 +174,26 @@ public class TelaLetrasActivity extends AppCompatActivity {
         favourite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (favourite_button.isChecked()) {
-                    Toast.makeText(TelaLetrasActivity.this, Constantes.TOAST_MUSICA_FAVORITA_ADICIONAR, Toast.LENGTH_SHORT).show();
+                    if (favourite_button.isChecked()) {
+                        Toast.makeText(TelaLetrasActivity.this, Constantes.TOAST_MUSICA_FAVORITA_ADICIONAR, Toast.LENGTH_SHORT).show();
 
-                    Musica musica = new Musica();
-                    musica.setId(musicaApi.getId());
-                    musica.setDesc(musicaApi.getDesc());
-                    musica.setUrlArtista(urlDoArtista.split("/")[1]);
-                    Log.i(TAG, musica.getUrlArtista());
+                        Musica musica = new Musica();
+                        musica.setId(musicaApi.getId());
+                        musica.setDesc(musicaApi.getDesc());
+                        musica.setUrlArtista(urlDoArtista.split("/")[1]);
+                        Log.i(TAG, musica.getUrlArtista());
 
-                    letrasViewModel.favoritarMusica(musica);
-                    letrasViewModel.atualizarListadeMusicas();
-                } else {
-                    Toast.makeText(TelaLetrasActivity.this, Constantes.TOAST_MUSICA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
+                        letrasViewModel.favoritarMusica(musica);
+                        letrasViewModel.atualizarListadeMusicas();
+                    } else {
+                        Toast.makeText(TelaLetrasActivity.this, Constantes.TOAST_MUSICA_FAVORITA_EXCLUIR, Toast.LENGTH_SHORT).show();
 
-                    Musica delMusic = new Musica();
-                    delMusic.setId(musicaApi.getId());
+                        Musica delMusic = new Musica();
+                        delMusic.setId(musicaApi.getId());
 
-
-                    letrasViewModel.removerMusica(delMusic);
-                    letrasViewModel.atualizarListadeMusicas();
-                }
+                        letrasViewModel.removerMusica(delMusic);
+                        letrasViewModel.atualizarListadeMusicas();
+                    }
             }
         });
 
