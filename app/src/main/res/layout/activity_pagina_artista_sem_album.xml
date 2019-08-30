@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".modules.Artista.view.PaginaArtistaActivity"
-    android:background="@drawable/bg_light">
+    android:background="@drawable/bg_light"
+    tools:context=".modules.Artista.view.PaginaArtistaActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -38,16 +38,17 @@
                     android:id="@+id/artista_profile_image_view"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
                     android:src="@drawable/bg_light_flip" />
 
                 <TextView
                     android:id="@+id/artista_nome_artista_text_view"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="56dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="56dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
                     android:ellipsize="end"
                     android:maxLines="2"
@@ -57,17 +58,82 @@
 
             </LinearLayout>
 
+            <SearchView
+                android:id="@+id/artista_search_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:iconifiedByDefault="false"
+                android:queryHint="Filtrar"
+                android:theme="@style/AppSearchView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_div">
+
+            </SearchView>
+
             <TextView
                 android:id="@+id/artista_campo_musicas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 android:text="Músicas:"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/artista_txt_button_top_lyrics"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+            <TextView
+                android:id="@+id/artista_txt_button_top_lyrics"
+                style="@style/toggleTextOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Top"
+                app:layout_constraintBottom_toBottomOf="@+id/artista_campo_musicas"
+                app:layout_constraintEnd_toStartOf="@+id/artista_txt_button_all_lyrics"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/artista_campo_musicas"
+                app:layout_constraintTop_toTopOf="@+id/artista_campo_musicas" />
+
+            <TextView
+                android:id="@+id/artista_txt_button_all_lyrics"
+                style="@style/toggleTextOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Todas"
+                app:layout_constraintBottom_toBottomOf="@+id/artista_txt_button_top_lyrics"
+                app:layout_constraintEnd_toStartOf="@+id/artista_txt_button_fav_lyrics"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/artista_txt_button_top_lyrics"
+                app:layout_constraintTop_toTopOf="@id/artista_txt_button_top_lyrics" />
+
+            <TextView
+                android:id="@+id/artista_txt_button_fav_lyrics"
+                style="@style/toggleTextOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Favoritas"
+                app:layout_constraintBottom_toBottomOf="@+id/artista_txt_button_top_lyrics"
+                app:layout_constraintEnd_toStartOf="@+id/artista_toggle_button_filtrar"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/artista_txt_button_all_lyrics"
+                app:layout_constraintTop_toTopOf="@id/artista_txt_button_top_lyrics" />
+
+            <TextView
+                android:id="@+id/txt_friendly_top_musicas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/artista_search_view" />
 
             <ToggleButton
                 android:id="@+id/letras_favorito_button"
@@ -80,105 +146,45 @@
                 android:text=""
                 android:textOff=""
                 android:textOn=""
+                app:layout_constraintBottom_toBottomOf="@id/artista_imagem_bg"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/artista_imagem_bg"/>
-
-            <TextView
-                android:id="@+id/artista_txt_button_top_lyrics"
-                style="@style/toggleTextOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Top"
-                app:layout_constraintBottom_toBottomOf="@+id/artista_campo_musicas"
-                app:layout_constraintStart_toEndOf="@id/artista_campo_musicas"
-                app:layout_constraintTop_toTopOf="@+id/artista_campo_musicas" />
-
-            <TextView
-                android:id="@+id/artista_txt_button_all_lyrics"
-                style="@style/toggleTextOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Todas"
-                app:layout_constraintBottom_toBottomOf="@+id/artista_txt_button_top_lyrics"
-                app:layout_constraintStart_toEndOf="@+id/artista_txt_button_top_lyrics"
-                app:layout_constraintTop_toTopOf="@id/artista_txt_button_top_lyrics" />
-
-            <TextView
-                android:id="@+id/artista_txt_button_fav_lyrics"
-                style="@style/toggleTextOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Favoritas"
-                app:layout_constraintBottom_toBottomOf="@+id/artista_txt_button_top_lyrics"
-                app:layout_constraintStart_toEndOf="@+id/artista_txt_button_all_lyrics"
-                app:layout_constraintTop_toTopOf="@id/artista_txt_button_top_lyrics" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ToggleButton
                 android:id="@+id/artista_toggle_button_filtrar"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:background="@drawable/ic_toggle_search_view"
                 android:checked="false"
                 android:text=""
                 android:textOff=""
                 android:textOn=""
-                app:layout_constraintStart_toEndOf="@id/artista_txt_button_fav_lyrics"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout2"
-                app:layout_constraintBottom_toTopOf="@id/view_div"
-                />
+                app:layout_constraintBottom_toBottomOf="@+id/artista_txt_button_fav_lyrics"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/artista_txt_button_fav_lyrics"
+                app:layout_constraintTop_toTopOf="@+id/artista_txt_button_fav_lyrics" />
 
             <View
                 android:id="@+id/view_div"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/cinza"
                 app:layout_constraintTop_toBottomOf="@id/artista_txt_button_top_lyrics"
-                />
-
-            <SearchView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:queryHint="Filtrar"
-                android:iconifiedByDefault="false"
-                android:layout_marginEnd="8dp"
-                android:theme="@style/AppSearchView"
-                app:layout_constraintTop_toBottomOf="@id/view_div"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/artista_search_view">
-
-            </SearchView>
+                tools:layout_editor_absoluteX="-12dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/pagina_artista_lista_musicas_recycler_view"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/artista_search_view"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <TextView
-                android:id="@+id/txt_friendly_top_musicas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/artista_search_view"
-                android:layout_marginTop="32dp"
-                android:textSize="16dp"
-                android:textAlignment="center"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/txt_friendly_top_musicas" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
