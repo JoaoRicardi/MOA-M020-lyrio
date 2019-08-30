@@ -93,6 +93,9 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         currentSearch = "";
         seguirButton.setVisibility(View.GONE);
 
+        //Definir visibilidade do texto user friendly, quando não tem musicas no recycler
+        userFriendlyText.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
 
         //Inicializar listas
         listaTopLyrics = new ArrayList<>();
@@ -107,10 +110,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 //            seguirButton.setVisibility(View.VISIBLE);
 //            seguirButton.setChecked(true);
 //        }
-
-        //Definir visibilidade do texto user friendly, quando não tem musicas no recycler
-        userFriendlyText.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
 
 
         //Inicializar ViewModel
@@ -131,8 +130,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                 .observe(this, listMusArt->{
                     listaDeMusicasFavoritasDoArtista = listMusArt;
                     if(txtButtonFavSongs){
-                        swichListas("FAV", currentSearch, false);
-                        artistaListaMusicasRecyclerAdapter.atualizarLista(listaDeMusicasFavoritasDoArtista, artistaApi, true);
+                        swichListas("FAV", currentSearch, true);
                     }
                 });
 
@@ -141,7 +139,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
         artistasViewModel.getIsFavorito()
                 .observe(this, isFav->{
                     isFavoritado = isFav;
-                    seguirButton.setVisibility(View.VISIBLE);
                     if(isFavoritado){
                         seguirButton.setChecked(true);
                     }else{
@@ -186,7 +183,6 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
             public boolean onQueryTextChange(String newText) {
                 currentSearch = newText;
                 artistaListaMusicasRecyclerAdapter.getFilter().filter(currentSearch);
-//                friendlyIfEmpty();
                 return false;
             }
         });
@@ -379,6 +375,9 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
 
     @Override
     public void updateItemCount() {
-        friendlyIfEmpty();
+        if(currentSearch!=null && !currentSearch.equals("")){
+            Log.i(TAG, " chegando do listener");
+            friendlyIfEmpty();
+        }
     }
 }
