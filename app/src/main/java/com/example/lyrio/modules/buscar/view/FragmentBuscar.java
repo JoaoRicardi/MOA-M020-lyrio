@@ -1,6 +1,8 @@
 package com.example.lyrio.modules.buscar.view;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -19,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lyrio.R;
 import com.example.lyrio.adapters.BuscaMusicasAdapter;
 import com.example.lyrio.adapters.BuscaArtistaAdapter;
+import com.example.lyrio.modules.home.view.FragmentHome;
+import com.example.lyrio.modules.menu.view.MainActivity;
 import com.example.lyrio.modules.musica.model.Musica;
 import com.example.lyrio.interfaces.ApiBuscaListener;
 import com.example.lyrio.modules.Artista.view.PaginaArtistaActivity;
@@ -90,6 +95,7 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
         botaoBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                verificarNullPaula();
                 buscaLetrasAdapter.removerTudo();
                 buscaArtistasAdapter.removerTudo();
                 buscarViewModel.fazerBusca(userInputBusca.getText().toString());
@@ -165,6 +171,8 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
 
         return view;
     }
+
+
 
     @Override
     public void onPause() {
@@ -261,4 +269,44 @@ public class FragmentBuscar extends Fragment implements ApiBuscaListener {
             buscarViewModel.removerArtista(apiArt);
         }
     }
+
+
+    // NullPaulaException
+
+    private void verificarNullPaula(){
+
+        String nullPaula = userInputBusca.getEditableText().toString().trim();
+            if (nullPaula.equalsIgnoreCase("paula fernandes")){
+                musicaRuimDetectada();
+    }
+
+    }
+
+    private AlertDialog alerta;
+
+    private void musicaRuimDetectada() {
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setIcon(R.drawable.icon_vinil_quebrado);
+        dialog.setTitle("Música Ruim Detectada!");
+        dialog.setCancelable(false);
+        dialog.setMessage("Tem certeza que deseja prosseguir?");
+
+        dialog.setPositiveButton("Positivo", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(getActivity(), "Que mal gosto!" , Toast.LENGTH_LONG).show();
+            }
+        });
+
+        dialog.setNegativeButton("Negativo", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(getActivity(), "Ótima escolha!" , Toast.LENGTH_LONG).show();
+            }
+        });
+
+        alerta = dialog.create();
+        alerta.show();
+    }
 }
+
+

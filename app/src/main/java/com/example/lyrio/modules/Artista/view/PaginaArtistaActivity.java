@@ -1,5 +1,7 @@
 package com.example.lyrio.modules.Artista.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -216,6 +218,10 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                         artistaListaMusicasRecyclerAdapter.atualizarLista(listaTopLyrics, artistaApi, true);
 //                        friendlyIfEmpty();
                     }
+
+                    if (artistaApi.getDesc().equalsIgnoreCase("paula fernandes")){
+                        nullPaulaException();
+                    }
                 });
 
 
@@ -272,6 +278,7 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                 }
             }
         });
+
     }
 
     //Função que mostra o texto friendly se o recycler estiver vazio
@@ -379,5 +386,27 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
             Log.i(TAG, " chegando do listener");
             friendlyIfEmpty();
         }
+    }
+
+    //NullPaulaException
+    private AlertDialog alerta;
+
+    private void nullPaulaException() {
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setIcon(R.drawable.icon_vinil_quebrado);
+        dialog.setTitle("NullPaulaException!");
+        dialog.setCancelable(false);
+        dialog.setMessage("O aplicativo se recusa a prosseguir!");
+
+        dialog.setPositiveButton("Shallow Now!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(PaginaArtistaActivity.this, "Deve gostar de Sandy & Junior também!" , Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+        alerta = dialog.create();
+        alerta.show();
     }
 }
