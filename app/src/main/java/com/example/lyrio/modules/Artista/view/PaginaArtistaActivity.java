@@ -212,11 +212,11 @@ public class PaginaArtistaActivity extends AppCompatActivity implements ListaMus
                     if(listaTopLyrics.size()==0 || listaTopLyrics==null){
                         swichListas("ALL", currentSearch, false);
                         artistaListaMusicasRecyclerAdapter.atualizarLista(listaLyrics, artistaApi, true);
-//                        friendlyIfEmpty();
+                        friendlyIfEmpty();
                     }else{
                         swichListas("TOP", currentSearch, false);
                         artistaListaMusicasRecyclerAdapter.atualizarLista(listaTopLyrics, artistaApi, true);
-//                        friendlyIfEmpty();
+                        friendlyIfEmpty();
                     }
 
                     if (artistaApi.getDesc().equalsIgnoreCase("paula fernandes")){
